@@ -26,6 +26,10 @@
             android:name="com.nti.SigaaBiblio.LoginActivity"
             android:label="@string/title_activity_login" >
         </activity>
+        <activity
+            android:name="com.nti.SigaaBiblio.BuscaLivroActivity"
+            android:label="@string/title_activity_busca_livro" >
+        </activity>
     </application>
 
 </manifest>
