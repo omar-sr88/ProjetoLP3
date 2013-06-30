@@ -11,5 +11,6 @@
     <string name="title_activity_historico">HistoricoActivity</string>
     <string name="header_renovacao"> Renovar Empréstimo </string>
     <string name="title_activity_renovacao">RenovacaoActivity</string>
+    <string name="title_activity_menu">MenuActivity</string>
 
 </resources>
