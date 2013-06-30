@@ -11,5 +11,12 @@
     <string name="title_activity_historico">HistoricoActivity</string>
     <string name="header_renovacao"> Renovar Empréstimo </string>
     <string name="title_activity_renovacao">RenovacaoActivity</string>
+    <string name="title_busca_livro">Pesquisa de Livros</string>
+    <string name="text_busca_livro">Preencha pelo menos um dos campos abaixo</string>
+    
+    
+    
+    
+    
 
 </resources>
