@@ -1,4 +1,6 @@
-package com.nti.SigaaBiblio;
+package com.nti.SigaaBiblio.activities;
+
+import com.nti.SigaaBiblio.R;
 
 import android.os.Bundle;
 import android.app.Activity;
