@@ -31,7 +31,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
         <activity
             android:name="com.nti.SigaaBiblio.activities.MenuActivity"
             android:label="@string/title_activity_menu" >
@@ -41,7 +40,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
+        <activity
+            android:name="com.nti.SigaaBiblio.activities.SituacaoUsuarioActivity"
+            android:label="@string/title_activity_situacao_usuario" >
+        </activity>
     </application>
 
 </manifest>

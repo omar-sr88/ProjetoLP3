@@ -14,6 +14,7 @@
     <string name="title_activity_menu">MenuActivity</string>
     <string name="title_busca_livro">Pesquisa de Livros</string>
     <string name="text_busca_livro">Preencha pelo menos um dos campos abaixo</string>
- 
+    <string name="title_activity_situacao_usuario">SituacaoUsuarioActivity</string>
+    <string name="titleActivitySituacaoUsuario">Situação do Usuário</string>
 
 </resources>
