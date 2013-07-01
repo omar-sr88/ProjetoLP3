@@ -36,12 +36,12 @@ public class RenovacaoActivity extends Activity {
 		 */
 		
 		String[] livros_emprestados = new String[] { "Código do livro\nAutor\nTítulo\n" +
-				"Anon"+"Data de empréstimo, data de devolução\n",
+				"Ano\n"+"Data de empréstimo, data de devolução",
 				"Código do livro\nAutor\nTítulo\n" +
-						"Anon"+"Data de empréstimo, data de devolução\n","Código do livro\nAutor\nTítulo\n" +
-								"Anon"+"Data de empréstimo, data de devolução\n","Código do livro\nAutor\nTítulo\n" +
-										"Anon"+"Data de empréstimo, data de devolução\n","Código do livro\nAutor\nTítulo\n" +
-												"Anon"+"Data de empréstimo, data de devolução\n",};
+						"Ano\n"+"Data de empréstimo, data de devolução","Código do livro\nAutor\nTítulo\n" +
+								"Ano\n"+"Data de empréstimo, data de devolução","Código do livro\nAutor\nTítulo\n" +
+										"Ano\n"+"Data de empréstimo, data de devolução","Código do livro\nAutor\nTítulo\n" +
+												"Ano\n"+"Data de empréstimo, data de devolução",};
 		
 		       ArrayList<Emprestimo> lista_para_adapter = new ArrayList<Emprestimo>();
 		       

@@ -16,5 +16,6 @@
     <string name="text_busca_livro">Preencha pelo menos um dos campos abaixo</string>
     <string name="title_activity_situacao_usuario">SituacaoUsuarioActivity</string>
     <string name="titleActivitySituacaoUsuario">Situação do Usuário</string>
-
+    <string name="title_activity_resultado_busca">ResultadoBuscaActivity</string>
+	<string name="header_resultados"> Resultados da Busca</string>
 </resources>
