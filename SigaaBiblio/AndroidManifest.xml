@@ -56,8 +56,12 @@
         </activity>
         -->
         <activity
-            android:name="com.nti.SigaaBiblio.BuscaArtigo"
+            android:name="com.nti.SigaaBiblio.activities.BuscaArtigo"
             android:label="@string/title_activity_busca_artigo" >
+        </activity>
+        <activity
+            android:name="com.nti.SigaaBiblio.DadosDoTitulo"
+            android:label="@string/title_activity_dados_do_titulo" >
         </activity>
     </application>
 

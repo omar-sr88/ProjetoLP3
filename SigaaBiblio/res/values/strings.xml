@@ -18,8 +18,10 @@
     <string name="titleActivitySituacaoUsuario">Situação do Usuário</string>
     <string name="title_activity_resultado_busca">ResultadoBuscaActivity</string>
     <string name="header_resultados"> Resultados da Busca</string>
-    <string name="title_activity_busca_artigo">BuscaArtigo</string> 
+    <string name="title_activity_busca_artigo">BuscaArtigo</string>
     <string name="title_busca_artigo">Pesquisa de Artigos</string>
     <string name="text_busca_artigo">Preencha pelo menos um dos campos abaixo</string>
-
+    <string name="title_activity_dados_do_titulo">DadosDoTitulo</string>
+	<string name="title_dados_titulo">Dados do Título</string>
+    
 </resources>
