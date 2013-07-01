@@ -40,7 +40,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-         
         <activity
             android:name="com.nti.SigaaBiblio.activities.SituacaoUsuarioActivity"
             android:label="@string/title_activity_situacao_usuario" >
@@ -50,10 +49,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <!--<activity
+        <!--
+        <activity
             android:name="com.nti.SigaaBiblio.ResultadoBuscaActivity"
             android:label="@string/title_activity_resultado_busca" >
-        </activity>-->
+        </activity>
+        -->
+        <activity
+            android:name="com.nti.SigaaBiblio.BuscaArtigo"
+            android:label="@string/title_activity_busca_artigo" >
+        </activity>
     </application>
 
 </manifest>
