@@ -24,5 +24,8 @@
     <string name="title_activity_dados_do_titulo">DadosDoTitulo</string>
     <string name="title_dados_titulo">Dados do Título</string>
     <string name="title_activity_dados_titulo">DadosTitulo</string>
-
+    <string name="title_activity_exemplares">Exemplares</string>
+	<string name="title_exemplares">Exemplares de %s</string>
+    
+    
 </resources>

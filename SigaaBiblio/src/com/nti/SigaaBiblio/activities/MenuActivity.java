@@ -39,7 +39,7 @@ public class MenuActivity extends Activity {
 					
 					@Override
 					public void onClick(View v) {
-						Intent intent = new Intent(MenuActivity.this, BuscaArtigo.class );
+						Intent intent = new Intent(MenuActivity.this, BuscaArtigoActivity.class );
 						startActivity(intent);
 						
 					}

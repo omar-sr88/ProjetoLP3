@@ -19,16 +19,28 @@
 	        android:textColor="@android:color/white"
 	        android:textSize="25dp" />
 	</LinearLayout>
-  	
-	<TextView
-	    android:id="@+id/textViewTextBuscaArtigo"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_gravity="center"
-	    android:layout_margin="10dp"
-	    android:text="@string/text_busca_artigo"
-		android:gravity="center"
-	    android:textSize="20dp" />
+
+	<ScrollView
+	    android:id="@+id/scrollView1"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" >
+
+		<LinearLayout
+	    	android:layout_width="match_parent"
+	    	android:layout_height="wrap_content"
+	    	android:gravity="center" 
+	    	android:orientation="vertical">
+	    	
+	    	<TextView
+	    		android:id="@+id/textViewTextBuscaArtigo"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				android:layout_margin="10dp"
+				android:text="@string/text_busca_artigo"
+				android:gravity="center"
+				android:textSize="20dp" />
+	    
 	
 	<LinearLayout
 	    android:layout_width="match_parent"
@@ -106,7 +118,7 @@
 	    android:gravity="center" >
 
 		<TextView
-		    android:id="@+id/textViewBibliotecaArtigo"
+		    android:id="@+id/textViewBibliotecaLivro"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"	    
 		    android:text="Biblioteca:"
@@ -115,18 +127,23 @@
 		     />
 
 		<Spinner
-		    android:id="@+id/spinnerBibliotecaArtigo"
+		    android:id="@+id/spinnerBibliotecaLivro"
 		    android:layout_width="wrap_content"
 		    android:layout_height="50dp" />
 	    
 	</LinearLayout>
 	
+	
 	<Button
-	    android:id="@+id/buttonBuscarArtigo"
+	    android:id="@+id/buttonBuscarLivro"
 	    android:layout_width="230dp"
 	    android:layout_height="wrap_content"
 	    android:layout_gravity="center"
 	    android:layout_marginTop="30dp"
 	    android:text="Pesquisar" />
   
+	
+	</LinearLayout>
+	</ScrollView>
+	
 </LinearLayout>
