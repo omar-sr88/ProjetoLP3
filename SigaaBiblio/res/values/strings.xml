@@ -22,6 +22,7 @@
     <string name="title_busca_artigo">Pesquisa de Artigos</string>
     <string name="text_busca_artigo">Preencha pelo menos um dos campos abaixo</string>
     <string name="title_activity_dados_do_titulo">DadosDoTitulo</string>
-	<string name="title_dados_titulo">Dados do Título</string>
-    
+    <string name="title_dados_titulo">Dados do Título</string>
+    <string name="title_activity_dados_titulo">DadosTitulo</string>
+
 </resources>

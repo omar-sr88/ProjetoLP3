@@ -60,8 +60,13 @@
             android:label="@string/title_activity_busca_artigo" >
         </activity>
         <activity
-            android:name="com.nti.SigaaBiblio.DadosDoTitulo"
-            android:label="@string/title_activity_dados_do_titulo" >
+            android:name="com.nti.SigaaBiblio.activities.DadosTituloActivity"
+            android:label="@string/title_activity_dados_titulo" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
     </application>
 
