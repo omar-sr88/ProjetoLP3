@@ -21,8 +21,18 @@ public class DadosTituloActivity extends Activity {
 	    String[] values = new String[] { "Titulo: Programação Android", "Autor: Alguem do Google ", "Paginas: Um monte",
 	        "Windows", "Ubuntu", "Android", "iPhone", "Windows" };
 	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-	        android.R.layout.simple_list_item_1, values);
-	    
+	        android.R.layout.simple_list_item_1, values){
+	    	  
+	    	  /*
+	    	   * Desabilita o focus da listView que aqui foi utilizada apenas por
+	    	   * questão de estetica.  
+	    	   */
+	    	  @Override 
+	    	  public boolean isEnabled(int position) 
+	            { 
+	                    return false; 
+	            } 
+	        };
 	   
 	    l.setAdapter(adapter);
 	}

@@ -58,6 +58,20 @@
         <activity
             android:name="com.nti.SigaaBiblio.activities.BuscaArtigo"
             android:label="@string/title_activity_busca_artigo" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.nti.SigaaBiblio.activities.BuscaLivroActivity"
+            android:label="@string/title_activity_busca_livro" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.nti.SigaaBiblio.activities.DadosTituloActivity"
