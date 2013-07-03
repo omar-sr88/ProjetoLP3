@@ -24,15 +24,15 @@
 
 	<ScrollView
 	    android:id="@+id/scrollView1"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent" 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content" 
 	    >
 	<HorizontalScrollView 
 	    android:layout_width="wrap_content"
-	    android:layout_height="match_parent"
+	    android:layout_height="wrap_content"
 	    >
 	    <LinearLayout
-	        android:layout_width="match_parent"
+	        android:layout_width="wrap_content"
 	        android:layout_height="match_parent"
 	        android:orientation="vertical" >
 
@@ -45,10 +45,10 @@
 
             <TableRow
                 android:id="@+id/tableRow1"
-                android:layout_margin="1dp"
-                android:background="#000000" 
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
                 
-                >
+                android:background="#000000" >
 
                 <TextView android:text="Código \nde Barras"
                     android:layout_margin="1dp"
@@ -88,10 +88,67 @@
                 android:id="@+id/tableRow2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-             >
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginBottom="1dp"
+                android:background="#000000">
+                
+            
+                <TextView android:text="Código \nde Barras"
+                    android:layout_margin="1dp"
+                    android:layout_marginRight="0dp"
+                android:background="#FFFFFF"
+                android:padding="15dip" />
+
+                <TextView android:text="Tipo do \nmaterial" 
+                    android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:layout_marginLeft="0dp"
+                android:padding="15dip"/>
+                
+                <TextView android:text="Coleção" 
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:padding="15dip"
+                android:layout_height="match_parent"
+               
+               
+                />
+                
+                <TextView android:text="Status" 
+                    android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:padding="15dip"
+                android:layout_height="match_parent"/>
+                
+                <TextView android:text="Situação" 
+                    android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:padding="15dip"
+                android:layout_height="match_parent"/>     
+                
+                
+                
+                
             </TableRow>
         </TableLayout>
 
+        </LinearLayout>
+        </HorizontalScrollView>
+        </ScrollView>
+        
+	<ScrollView
+	    android:id="@+id/scrollView2"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" 
+	    
+	    >
+	
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical" >
+	
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
@@ -117,20 +174,20 @@
         <Button
             android:id="@+id/button1"
             android:layout_width="103dp"
-            
+            android:layout_margin="15dp"
             android:layout_height="wrap_content"
             android:text="Button" />
         
         <Button
             android:id="@+id/button1"
             android:layout_width="103dp"
-            
+            android:layout_margin="15dp"
             android:layout_height="wrap_content"
             android:text="Button" />
         </LinearLayout>
         
+     
         </LinearLayout>
-        </HorizontalScrollView>
         </ScrollView>
 
 </LinearLayout>
