@@ -19,6 +19,16 @@
 	        android:textColor="@android:color/white"
 	        android:textSize="25dp" />
 	</LinearLayout>
+	
+	<ScrollView
+	    android:id="@+id/scrollView1"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" >
+
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:orientation="vertical" >
   	
 	<TextView
 	    android:id="@+id/textViewTextBuscaLivro"
@@ -129,5 +139,8 @@
 	    android:layout_gravity="center"
 	    android:layout_marginTop="50dp"
 	    android:text="Pesquisar" />
+	
+	</LinearLayout>
+	</ScrollView>
   
 </LinearLayout>
