@@ -51,13 +51,13 @@
 		    android:layout_height="wrap_content"
 		    android:text="Título: " 
 		    android:textSize="20dp"
-		    android:layout_margin="10dp"/>
+		    android:layout_margin="7dp"/>
 
 		<EditText
 		    android:id="@+id/editTextTituloLivro"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:layout_marginLeft="15dp"
+		    android:layout_marginLeft="18dp"
 		    android:ems="10">
 		</EditText>
 	    
@@ -137,7 +137,7 @@
 	    android:layout_width="230dp"
 	    android:layout_height="wrap_content"
 	    android:layout_gravity="center"
-	    android:layout_marginTop="50dp"
+	    android:layout_marginTop="30dp"
 	    android:text="Pesquisar" />
 	
 	</LinearLayout>

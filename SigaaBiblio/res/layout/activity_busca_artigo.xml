@@ -52,13 +52,13 @@
 		    android:layout_height="wrap_content"
 		    android:text="Título: " 
 		    android:textSize="20dp"
-		    android:layout_margin="10dp"/>
+		    android:layout_margin="7dp"/>
 
 		<EditText
 		    android:id="@+id/editTextTituloArtigo"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:layout_marginLeft="15dp"
+		    android:layout_marginLeft="17dp"
 		    android:ems="10">
 		</EditText>
 	    
@@ -81,7 +81,7 @@
 		    android:id="@+id/editTextAutorArtigo"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:layout_marginLeft="26dp"
+		    android:layout_marginLeft="27dp"
 		    android:ems="10"
 		    />
 	    
@@ -98,14 +98,15 @@
 		    android:layout_height="wrap_content"
 		    android:text="Palavra-\nChave:"
 		    android:textSize="20dp"
-		    android:layout_margin="10dp"
+		    android:layout_marginRight="10dp"
+		    android:layout_marginLeft="7dp"
 		     />
 
 		<EditText
 		    android:id="@+id/editTextPalavraChaveArtigo"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:layout_marginLeft="4dp"
+		    android:layout_marginLeft="-4dp"
 		    android:ems="10"
 		    />
 	    
