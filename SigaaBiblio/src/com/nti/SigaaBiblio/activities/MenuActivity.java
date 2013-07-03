@@ -14,6 +14,7 @@ public class MenuActivity extends Activity {
 	Button renovacao;
 	Button buscaAcervo;
 	Button buscaArtigo;
+	Button sair;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,7 @@ public class MenuActivity extends Activity {
 		buscaArtigo= (Button)findViewById(R.id.button2);
 		situacao = (Button)findViewById(R.id.button4);
 		renovacao = (Button) findViewById(R.id.button3);
+		sair = (Button) findViewById(R.id.button6);
 		
 		buscaAcervo.setOnClickListener(new OnClickListener() {
 					
@@ -65,6 +67,16 @@ public class MenuActivity extends Activity {
 				
 			}
 		});
+		
+		sair.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						Intent intent = new Intent(MenuActivity.this, LoginActivity.class );
+						startActivity(intent);
+						
+					}
+				});
 		
 	}
 
