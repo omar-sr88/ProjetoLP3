@@ -22,7 +22,15 @@
             android:textSize="25dp" />
     </LinearLayout>
 
+    
+    <ScrollView
+        android:layout_width="match_parent"
+	    android:layout_height="match_parent" >
 
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:orientation="vertical" >
 
         <TableLayout
             android:layout_width="wrap_content"
@@ -33,12 +41,15 @@
 
             <TableRow
                 android:id="@+id/tableRow1"
-                android:layout_margin="1dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="1dp"
                 android:background="#000000" 
                 
                 >
 
-                <TextView android:text="Código \nde Barras"
+                <TextView 
+                    android:text="Código \nde Barras"
                     android:layout_margin="1dp"
                     android:layout_marginRight="0dp"
                 android:background="#FFFFFF"
@@ -47,7 +58,7 @@
                 <TextView android:text="Tipo do \nmaterial" 
                     android:layout_margin="1dp"
                 android:background="#FFFFFF"
-                android:layout_marginLeft="0dp"
+                
                 android:padding="15dip"/>
                 
                 <TextView android:text="Coleção" 
@@ -76,7 +87,49 @@
                 android:id="@+id/tableRow2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginBottom="1dp"
+                
+                android:background="#000000" 
              >
+                
+                
+                <TextView 
+                    android:text="Dados de Teste"
+                    android:layout_margin="1dp"
+                    android:layout_marginRight="0dp"
+                android:background="#FFFFFF"
+                android:padding="15dip" />
+
+                <TextView android:text="Papel Jornal" 
+                    android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                
+                android:padding="15dip"/>
+                
+                <TextView android:text="HenryBooks" 
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:padding="15dip"
+                android:layout_height="match_parent"
+               
+               
+                />
+                
+                <TextView android:text="Novo" 
+                    android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:padding="15dip"
+                android:layout_height="match_parent"/>
+                
+                <TextView android:text="Disponivel" 
+                    android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:padding="15dip"
+                android:layout_height="match_parent"/>
+                
+                
             </TableRow>
         </TableLayout>
 
@@ -116,5 +169,8 @@
             android:layout_height="wrap_content"
             android:text="Button" />
         </LinearLayout>
-
+        
+        </LinearLayout>
+        
+        </ScrollView>
 </LinearLayout>
