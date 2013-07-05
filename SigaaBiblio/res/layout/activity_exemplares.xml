@@ -22,15 +22,14 @@
             android:textSize="25dp" />
     </LinearLayout>
 
-	<ScrollView
-	    android:id="@+id/scrollView1"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content" 
+
+    	<ScrollView
+	    android:id="@+id/scrollView2"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" 
+	    
 	    >
-	<HorizontalScrollView 
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    >
+    
 	    <LinearLayout
 	        android:layout_width="wrap_content"
 	        android:layout_height="match_parent"
@@ -56,98 +55,119 @@
                 android:background="#FFFFFF"
                 android:padding="15dip" />
 
-                <TextView android:text="Tipo do \nmaterial" 
-                    android:layout_margin="1dp"
-                android:background="#FFFFFF"
-                android:layout_marginLeft="0dp"
-                android:padding="15dip"/>
-                
-                <TextView android:text="Coleção" 
-                android:layout_margin="1dp"
-                android:background="#FFFFFF"
-                android:padding="15dip"
-                android:layout_height="match_parent"
-               
-               
-                />
-                
-                <TextView android:text="Status" 
-                    android:layout_margin="1dp"
-                android:background="#FFFFFF"
-                android:padding="15dip"
-                android:layout_height="match_parent"/>
-                
-                <TextView android:text="Situação" 
-                    android:layout_margin="1dp"
-                android:background="#FFFFFF"
-                android:padding="15dip"
-                android:layout_height="match_parent"/>
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/tableRow2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginBottom="1dp"
-                android:background="#000000">
-                
-            
-                <TextView android:text="Código \nde Barras"
+                 <TextView android:id="@+id/InfoCodigoBarra" 
+                    android:text="1234456"
+                    
                     android:layout_margin="1dp"
                     android:layout_marginRight="0dp"
-                android:background="#FFFFFF"
-                android:padding="15dip" />
-
-                <TextView android:text="Tipo do \nmaterial" 
+                    android:layout_height="match_parent"
+                    
+                	android:background="#FFFFFF"
+                	android:padding="15dip" />
+                
+                
+                </TableRow>
+                
+                <TableRow
+                android:id="@+id/tableRow1"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:background="#000000">
+                
+                
+                <TextView 
+                    android:text="Tipo do \nmaterial" 
                     android:layout_margin="1dp"
                 android:background="#FFFFFF"
                 android:layout_marginLeft="0dp"
                 android:padding="15dip"/>
+                
+                <TextView android:id="@+id/InfoMaterial" 
+                    android:text="Papel Revista"                   
+                    android:layout_margin="1dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_height="match_parent"                  
+                	android:background="#FFFFFF"
+                	android:padding="15dip" />
+                
+                </TableRow>
+                
+        		<TableRow
+                android:id="@+id/tableRow1"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:background="#000000">
                 
                 <TextView android:text="Coleção" 
                 android:layout_margin="1dp"
                 android:background="#FFFFFF"
                 android:padding="15dip"
                 android:layout_height="match_parent"
-               
-               
+              
                 />
                 
+                
+                <TextView android:id="@+id/InfoColecao" 
+                    android:text="Papel Revista"                   
+                    android:layout_margin="1dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_height="match_parent"                  
+                	android:background="#FFFFFF"
+                	android:padding="15dip" />
+                </TableRow>
+                
+        		<TableRow
+                android:id="@+id/tableRow1"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:background="#000000"
+                >
                 <TextView android:text="Status" 
                     android:layout_margin="1dp"
                 android:background="#FFFFFF"
                 android:padding="15dip"
                 android:layout_height="match_parent"/>
                 
+                
+                <TextView android:id="@+id/InfoStatus" 
+                    android:text="Status 200"                   
+                    android:layout_margin="1dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_height="match_parent"                  
+                	android:background="#FFFFFF"
+                	android:padding="15dip" />
+                </TableRow>
+                
+                
+        		<TableRow
+                android:id="@+id/tableRow1"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:background="#000000">
+                
                 <TextView android:text="Situação" 
                     android:layout_margin="1dp"
                 android:background="#FFFFFF"
                 android:padding="15dip"
-                android:layout_height="match_parent"/>     
+                android:layout_height="match_parent"/>
                 
-                
-                
-                
-            </TableRow>
+                <TextView android:id="@+id/InfoStatus" 
+                    android:text="Esgotado"                   
+                    android:layout_margin="1dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_height="match_parent"                  
+                	android:background="#FFFFFF"
+                	android:padding="15dip" />
+                </TableRow>
+           		
+
+          
         </TableLayout>
 
-        </LinearLayout>
-        </HorizontalScrollView>
-        </ScrollView>
         
-	<ScrollView
-	    android:id="@+id/scrollView2"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent" 
-	    
-	    >
+       
 	
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:orientation="vertical" >
+
 	
         <TextView
             android:id="@+id/textView1"
@@ -186,8 +206,8 @@
             android:text="Button" />
         </LinearLayout>
         
-     
-        </LinearLayout>
+		</LinearLayout>
+		     
         </ScrollView>
 
 </LinearLayout>
