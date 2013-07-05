@@ -63,7 +63,9 @@
                     android:layout_height="match_parent"
                     
                 	android:background="#FFFFFF"
-                	android:padding="15dip" />
+                	android:paddingTop="15dip" 
+                	android:paddingLeft="15dip"
+                	></TextView>
                 
                 
                 </TableRow>
@@ -108,7 +110,7 @@
                 
                 
                 <TextView android:id="@+id/InfoColecao" 
-                    android:text="Papel Revista"                   
+                    android:text="Game of Thrones"                   
                     android:layout_margin="1dp"
                     android:layout_marginRight="0dp"
                     android:layout_height="match_parent"                  
@@ -196,14 +198,16 @@
             android:layout_width="103dp"
             android:layout_margin="15dp"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            
+            android:text="Retornar a Pesquisa" />
         
         <Button
             android:id="@+id/button1"
             android:layout_width="103dp"
             android:layout_margin="15dp"
+           	
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="Retornar ao Menu" />
         </LinearLayout>
         
 		</LinearLayout>
