@@ -194,7 +194,7 @@
             android:gravity="center"
             >
         <Button
-            android:id="@+id/consultarHistorico"
+            android:id="@+id/retornarPesquisa"
             android:layout_width="103dp"
             android:layout_margin="15dp"
             android:layout_height="wrap_content"
@@ -202,7 +202,7 @@
             android:text="Retornar a Pesquisa" />
         
         <Button
-            android:id="@+id/consultarHistorico"
+            android:id="@+id/retornarMenu"
             android:layout_width="103dp"
             android:layout_margin="15dp"
            	

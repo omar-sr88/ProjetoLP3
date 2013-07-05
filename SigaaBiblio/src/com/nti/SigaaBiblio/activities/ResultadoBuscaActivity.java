@@ -6,7 +6,10 @@ import com.nti.SigaaBiblio.R.menu;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -30,7 +33,19 @@ public class ResultadoBuscaActivity extends Activity {
 	        android.R.layout.simple_list_item_1, values);
 	    
 	    listaResultados.setAdapter(adapter);
-	}
+	    
+		listaResultados.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, final View view, int position,
+					long id) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(ResultadoBuscaActivity.this, DadosTituloActivity.class );
+				startActivity(intent);
+			}
+		     
+		});
+		
+	}	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -38,5 +53,7 @@ public class ResultadoBuscaActivity extends Activity {
 		getMenuInflater().inflate(R.menu.resultado_busca, menu);
 		return true;
 	}
+	
+
 
 }
