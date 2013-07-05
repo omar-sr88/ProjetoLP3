@@ -176,27 +176,16 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             >
-        <Button
-<<<<<<< HEAD
-            android:id="@+id/button1"
+	
+        <Button     
             android:layout_width="wrap_content"
-=======
             android:id="@+id/consultarHistorico"
-            android:layout_width="103dp"
->>>>>>> 01039ab7399c62196661d07f9c9bfc7d6562b8ea
-            
             android:layout_height="wrap_content"
             android:text="Retornar a Pesquisa" />
         
         <Button
-<<<<<<< HEAD
-            android:id="@+id/button1"
             android:layout_width="wrap_content"
-=======
-            android:id="@+id/consultarHistorico"
-            android:layout_width="103dp"
->>>>>>> 01039ab7399c62196661d07f9c9bfc7d6562b8ea
-            
+            android:id="@+id/consultarHistorico2"     
             android:layout_height="wrap_content"
             android:text="Retornar ao Menu" />
         </LinearLayout>
