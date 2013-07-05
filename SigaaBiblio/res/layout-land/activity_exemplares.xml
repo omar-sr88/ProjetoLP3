@@ -177,14 +177,14 @@
             android:gravity="center"
             >
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/consultarHistorico"
             android:layout_width="103dp"
             
             android:layout_height="wrap_content"
             android:text="Button" />
         
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/consultarHistorico"
             android:layout_width="103dp"
             
             android:layout_height="wrap_content"
