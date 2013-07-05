@@ -2,14 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+     android:background="#EFF3FA" >
 
     <!-- android:background="#2932aa" -->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="@drawable/borda"
+        android:background="@drawable/background1"
         android:gravity="center"
         android:orientation="horizontal" >
 
@@ -52,7 +53,7 @@
                 <TextView android:text="Código \nde Barras"
                     android:layout_margin="1dp"
                     android:layout_marginRight="0dp"
-                android:background="#FFFFFF"
+                android:background="#C8D5EC"
                 android:padding="15dip" />
 
                  <TextView android:id="@+id/InfoCodigoBarra" 
@@ -80,7 +81,7 @@
                 <TextView 
                     android:text="Tipo do \nmaterial" 
                     android:layout_margin="1dp"
-                android:background="#FFFFFF"
+                android:background="#C8D5EC"
                 android:layout_marginLeft="0dp"
                 android:padding="15dip"/>
                 
@@ -102,7 +103,7 @@
                 
                 <TextView android:text="Coleção" 
                 android:layout_margin="1dp"
-                android:background="#FFFFFF"
+                android:background="#C8D5EC"
                 android:padding="15dip"
                 android:layout_height="match_parent"
               
@@ -126,7 +127,7 @@
                 >
                 <TextView android:text="Status" 
                     android:layout_margin="1dp"
-                android:background="#FFFFFF"
+                android:background="#C8D5EC"
                 android:padding="15dip"
                 android:layout_height="match_parent"/>
                 
@@ -149,12 +150,12 @@
                 
                 <TextView android:text="Situação" 
                     android:layout_margin="1dp"
-                android:background="#FFFFFF"
+                android:background="#C8D5EC"
                 android:padding="15dip"
                 android:layout_height="match_parent"/>
                 
                 <TextView android:id="@+id/InfoStatus" 
-                    android:text="Esgotado"                   
+                    android:text="Disponível"                   
                     android:layout_margin="1dp"
                     android:layout_marginRight="0dp"
                     android:layout_height="match_parent"                  
@@ -213,5 +214,12 @@
 		</LinearLayout>
 		     
         </ScrollView>
+
+    	<LinearLayout
+    	    android:layout_width="match_parent"
+    	    android:layout_height="wrap_content"
+    	    android:orientation="vertical"
+    	    android:background="@drawable/background3" >
+    	</LinearLayout>
 
 </LinearLayout>

@@ -54,6 +54,8 @@ public class ResultadoBuscaActivity extends Activity {
 		return true;
 	}
 	
+	
+	
 
 
 }

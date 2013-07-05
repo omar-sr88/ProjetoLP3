@@ -2,7 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="#EFF3FA"
+    android:weightSum="1" >
 	 <!-- android:background="#2932aa"-->
 	<LinearLayout
 	    android:layout_width="match_parent"
@@ -25,15 +27,19 @@
 	        android:textColor="@android:color/white"
 	        android:textSize="25dp" />
 	</LinearLayout>
+
   	<ScrollView
-	    android:id="@+id/scrollView1"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent" >
+  	    android:id="@+id/scrollView1"
+  	    android:layout_width="match_parent"
+  	    android:layout_height="wrap_content"
+  	    android:layout_weight="0.80" >
 
 	    <LinearLayout
 	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:orientation="vertical">
+	        android:layout_height="298dp"
+	        android:orientation="vertical"
+	         >
+
 	<TextView
 	    android:id="@+id/textViewDataEmprestimo"
 	    android:layout_width="wrap_content"
@@ -42,7 +48,8 @@
 	    android:layout_margin="10dp"
 	    android:text="Informe seu cadastro no SIGAA UFPB"
 		android:gravity="center"
-	    android:textSize="20dp" />
+	    android:textSize="20dp"
+	    android:background="#C4D2EB" />
 	
 	<LinearLayout
 	    android:layout_width="match_parent"
@@ -104,6 +111,15 @@
 	    android:text="Entrar" />
   </LinearLayout>
 	</ScrollView>
-  	    
+
+  	<LinearLayout
+  	    android:layout_width="match_parent"
+  	    android:layout_height="wrap_content"
+  	    android:layout_gravity="bottom"
+  	    android:background="@drawable/background3"
+  	    android:orientation="vertical"
+  	    android:layout_weight="0.20" >
+
+  	</LinearLayout>
   	    
 </LinearLayout>
