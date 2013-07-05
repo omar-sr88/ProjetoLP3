@@ -28,7 +28,7 @@ public class RenovacaoActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_renovacao);
 		
-		ListView listaLivros = (ListView) findViewById(R.id.listView1);
+		ListView listaLivros = (ListView) findViewById(R.id.listViewResultados);
 		
 		/*
 		 * A variavel livros_emprestados se tornará uma lista quando

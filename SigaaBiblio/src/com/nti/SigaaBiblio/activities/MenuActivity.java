@@ -14,6 +14,7 @@ public class MenuActivity extends Activity {
 	Button renovacao;
 	Button buscaAcervo;
 	Button buscaArtigo;
+	Button historico;
 	Button sair;
 	
 	@Override
@@ -21,10 +22,11 @@ public class MenuActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_menu);
 		
-		buscaAcervo = (Button)findViewById(R.id.button1);
+		buscaAcervo = (Button)findViewById(R.id.consultarHistorico);
 		buscaArtigo= (Button)findViewById(R.id.button2);
 		situacao = (Button)findViewById(R.id.button4);
 		renovacao = (Button) findViewById(R.id.button3);
+		historico = (Button) findViewById(R.id.button5);
 		sair = (Button) findViewById(R.id.button6);
 		
 		buscaAcervo.setOnClickListener(new OnClickListener() {
@@ -77,6 +79,15 @@ public class MenuActivity extends Activity {
 						
 					}
 				});
+		historico.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MenuActivity.this, SelecionarHistoricoActivity.class );
+				startActivity(intent);
+				
+			}
+		});
 		
 	}
 

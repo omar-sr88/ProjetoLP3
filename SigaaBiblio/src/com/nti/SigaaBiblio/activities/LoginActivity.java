@@ -19,7 +19,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		
-		login = (Button)findViewById(R.id.button1);
+		login = (Button)findViewById(R.id.consultarHistorico);
 		
 		login.setOnClickListener(this);
 	}

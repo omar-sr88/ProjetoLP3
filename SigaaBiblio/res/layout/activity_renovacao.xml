@@ -25,7 +25,7 @@
         android:layout_height="wrap_content" >
 
         <ListView
-            android:id="@+id/listView1"
+            android:id="@+id/listViewResultados"
             android:layout_width="wrap_content"
             android:layout_height="337dp" >
 
@@ -39,7 +39,7 @@
         android:layout_gravity="center" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/consultarHistorico"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/header_renovacao" />
