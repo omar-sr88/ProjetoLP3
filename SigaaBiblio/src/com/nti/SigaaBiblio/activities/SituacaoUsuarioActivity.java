@@ -1,22 +1,24 @@
 package com.nti.SigaaBiblio.activities;
 
 import com.nti.SigaaBiblio.R;
-import com.nti.SigaaBiblio.R.layout;
-import com.nti.SigaaBiblio.R.menu;
+import com.nti.SigaaBiblio.model.Historico;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
-import android.view.Menu;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
-import android.widget.ViewSwitcher;
 
 public class SituacaoUsuarioActivity extends Activity {
     ViewFlipper page;
@@ -43,6 +45,16 @@ public class SituacaoUsuarioActivity extends Activity {
 				return gestureDetector.onTouchEvent(event);
 			}
 		});
+        
+        
+        
+        LinearLayout ll1 = Historico.TabelaHistorico(this,"Central","15/03/2013","30/03/2013","15/04/2013",true,"Informações do Livro: NOME; AUTOR");
+        LinearLayout ll2 = Historico.TabelaHistorico(this,"Setorial","30/03/2013","15/04/2013","15/04/2013",false,"Informações do Livro: NOME; AUTOR");
+        
+       
+        page.addView(ll1);
+        page.addView(ll2);
+        
 	}
 	
 	private void SwipeRight(){
@@ -70,7 +82,7 @@ public class SituacaoUsuarioActivity extends Activity {
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
 
-			float sensitvity = 20;
+			float sensitvity = 50;
 			if((e1.getX() - e2.getX()) > sensitvity){
 				SwipeLeft();
 			}else if((e2.getX() - e1.getX()) > sensitvity){
