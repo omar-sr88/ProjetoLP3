@@ -17,18 +17,18 @@ import android.widget.ListView;
 public class DadosTituloActivity extends Activity {
 
 	Button buttonVerifDisp;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dados_titulo);
-		
+
 		ListView l = (ListView) findViewById(R.id.listViewDadosTitulo);
 	    String[] values = new String[] { "Titulo: Programação Android", "Autor: Alguem do Google ", "Paginas: Um monte",
 	        "Windows", "Ubuntu", "Android", "iPhone", "Windows" };
 	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 	        android.R.layout.simple_list_item_1, values){
-	    	  
+
 	    	  /*
 	    	   * Desabilita o focus da listView que aqui foi utilizada apenas por
 	    	   * questão de estetica.  
@@ -39,18 +39,18 @@ public class DadosTituloActivity extends Activity {
 	                    return false; 
 	            } 
 	        };
-	   
+
 	    l.setAdapter(adapter);
-	    
+
 	    buttonVerifDisp=(Button) findViewById(R.id.buttonVerifDisp);
-	    
+
 	    buttonVerifDisp.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(DadosTituloActivity.this, ExemplaresActivity.class );
 				startActivity(intent);
-				
+
 			}
 		});
 
@@ -62,7 +62,7 @@ public class DadosTituloActivity extends Activity {
 		getMenuInflater().inflate(R.menu.dados_titulo, menu);
 		return true;
 	}
-	
-	
+
+
 
 }

@@ -13,21 +13,21 @@ import android.widget.Button;
 public class BuscaArtigoActivity extends Activity {
 
 	Button goResultados;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_busca_artigo);
-		
+
 		goResultados = (Button)findViewById(R.id.buttonBuscarArtigo);
-		
+
 		goResultados.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(BuscaArtigoActivity.this, ResultadoBuscaActivity.class );
 				startActivity(intent);
-				
+
 			}
 		});
 	}

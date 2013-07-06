@@ -103,5 +103,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.nti.SigaaBiblio.activities.HistoricoEmprestimosActivity"
+            android:label="@string/title_activity_historico_emprestimos" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                </intent-filter>
+        </activity>
     </application>
+
 </manifest>

@@ -8,10 +8,10 @@
         android:topRightRadius="10dp" />
 
 
-    <solid android:color="#C4D2EB" />
+    <solid android:color="#00a6ff" />
    
    
    <stroke
         android:width="3dip"
-        android:color="#EFEBDE" />
+        android:color="#FFB90F" />
 </shape>

@@ -176,18 +176,19 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             >
-	
-        <Button     
-            android:layout_width="wrap_content"
+        <Button
             android:id="@+id/consultarHistorico"
+            android:layout_width="103dp"
+            
             android:layout_height="wrap_content"
-            android:text="Retornar a Pesquisa" />
+            android:text="Button" />
         
         <Button
-            android:layout_width="wrap_content"
-            android:id="@+id/consultarHistorico2"     
+            android:id="@+id/consultarHistorico"
+            android:layout_width="103dp"
+            
             android:layout_height="wrap_content"
-            android:text="Retornar ao Menu" />
+            android:text="Button" />
         </LinearLayout>
         </LinearLayout>
         </ScrollView>

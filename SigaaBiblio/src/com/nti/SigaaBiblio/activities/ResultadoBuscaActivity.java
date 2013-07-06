@@ -20,7 +20,7 @@ public class ResultadoBuscaActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_resultado_busca);
 		ListView listaResultados = (ListView) findViewById(R.id.listViewResultados);
-	   
+
 		//variavel values apenas para fins de demonstração da interface
 		String[] values = new String[] {"Autor, Titulo, Edição, Ano, Quantidade",
 	    								"Autor, Titulo, Edição, Ano, Quantidade",
@@ -31,9 +31,9 @@ public class ResultadoBuscaActivity extends Activity {
 							    		"Autor, Titulo, Edição, Ano, Quantidade"};
 	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 	        android.R.layout.simple_list_item_1, values);
-	    
+
 	    listaResultados.setAdapter(adapter);
-	    
+
 		listaResultados.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, final View view, int position,
@@ -42,9 +42,9 @@ public class ResultadoBuscaActivity extends Activity {
 				Intent intent = new Intent(ResultadoBuscaActivity.this, DadosTituloActivity.class );
 				startActivity(intent);
 			}
-		     
+
 		});
-		
+
 	}	
 
 	@Override
@@ -53,9 +53,9 @@ public class ResultadoBuscaActivity extends Activity {
 		getMenuInflater().inflate(R.menu.resultado_busca, menu);
 		return true;
 	}
-	
-	
-	
+
+
+
 
 
 }

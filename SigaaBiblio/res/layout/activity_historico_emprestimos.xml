@@ -2,28 +2,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-     android:background="#EFF3FA" >
+    android:orientation="vertical" >
 
     <!-- android:background="#2932aa" -->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="@drawable/background1"
+        android:background="@drawable/borda"
         android:gravity="center"
         android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/textViewExemplares"
+            android:id="@+id/textViewHistorico"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_exemplares"
+            android:text="@string/titleHistorico"
             android:textColor="@android:color/white"
             android:textSize="25dp" />
     </LinearLayout>
-
-
+    
+    
     	<ScrollView
 	    android:id="@+id/scrollView2"
 	    android:layout_width="match_parent"
@@ -50,14 +49,14 @@
                 
                 android:background="#000000" >
 
-                <TextView android:text="Código \nde Barras"
+                <TextView android:text="Tipo de Empréstimo"
                     android:layout_margin="1dp"
                     android:layout_marginRight="0dp"
                 android:background="#C8D5EC"
                 android:padding="15dip" />
 
-                 <TextView android:id="@+id/InfoCodigoBarra" 
-                    android:text="1234456"
+                 <TextView android:id="@+id/InfoTipoEmprestimo" 
+                    android:text="Simples"
                     
                     android:layout_margin="1dp"
                     android:layout_marginRight="0dp"
@@ -79,14 +78,14 @@
                 
                 
                 <TextView 
-                    android:text="Tipo do \nmaterial" 
+                    android:text="Data Emprestimo" 
                     android:layout_margin="1dp"
                 android:background="#C8D5EC"
                 android:layout_marginLeft="0dp"
                 android:padding="15dip"/>
                 
-                <TextView android:id="@+id/InfoMaterial" 
-                    android:text="Papel Revista"                   
+                <TextView android:id="@+id/InfoDataEmprestimo" 
+                    android:text="03/05/13"                   
                     android:layout_margin="1dp"
                     android:layout_marginRight="0dp"
                     android:layout_height="match_parent"                  
@@ -101,7 +100,7 @@
                 android:layout_marginRight="1dp"
                 android:background="#000000">
                 
-                <TextView android:text="Coleção" 
+                <TextView android:text="Data Renovação" 
                 android:layout_margin="1dp"
                 android:background="#C8D5EC"
                 android:padding="15dip"
@@ -110,8 +109,8 @@
                 />
                 
                 
-                <TextView android:id="@+id/InfoColecao" 
-                    android:text="Game of Thrones"                   
+                <TextView android:id="@+id/InfoRenovacao" 
+                    android:text="---"                   
                     android:layout_margin="1dp"
                     android:layout_marginRight="0dp"
                     android:layout_height="match_parent"                  
@@ -125,15 +124,15 @@
                 android:layout_marginRight="1dp"
                 android:background="#000000"
                 >
-                <TextView android:text="Status" 
+                <TextView android:text="Prazo Devolução" 
                     android:layout_margin="1dp"
                 android:background="#C8D5EC"
                 android:padding="15dip"
                 android:layout_height="match_parent"/>
                 
                 
-                <TextView android:id="@+id/InfoStatus" 
-                    android:text="Status 200"                   
+                <TextView android:id="@+id/InfoPrazoDevolucao" 
+                    android:text="15 dias"                   
                     android:layout_margin="1dp"
                     android:layout_marginRight="0dp"
                     android:layout_height="match_parent"                  
@@ -148,14 +147,14 @@
                 android:layout_marginRight="1dp"
                 android:background="#000000">
                 
-                <TextView android:text="Situação" 
+                <TextView android:text="Data Devolução" 
                     android:layout_margin="1dp"
                 android:background="#C8D5EC"
                 android:padding="15dip"
                 android:layout_height="match_parent"/>
                 
-                <TextView android:id="@+id/InfoStatus" 
-                    android:text="Disponível"                   
+                <TextView android:id="@+id/InfoDataDevolucao" 
+                    android:text="28/03/13"                   
                     android:layout_margin="1dp"
                     android:layout_marginRight="0dp"
                     android:layout_height="match_parent"                  
@@ -223,3 +222,4 @@
     	</LinearLayout>
 
 </LinearLayout>
+    

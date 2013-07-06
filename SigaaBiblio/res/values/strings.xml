@@ -17,7 +17,7 @@
     <string name="title_activity_situacao_usuario">SituacaoUsuarioActivity</string>
     <string name="titleActivitySituacaoUsuario">Situação do Usuário</string>
     <string name="title_activity_resultado_busca">ResultadoBuscaActivity</string>
-    <string name="header_resultados"> Títulos Encontrados</string>
+    <string name="header_resultados"> Resultados da Busca</string>
     <string name="header_historico"> Histórico de Empréstimos</string>
     <string name="prompt_periodo_historico"> Período dos Empréstimos</string>
     <string name="prompt_periodo_historico_inicial"> Data Inicial:</string>
@@ -33,5 +33,6 @@
     <string name="title_exemplares">Exemplares de %s</string>
     <string name="title_activity_selecionar_historico">SelecionarHistoricoActivity</string>
     <string name="title_activity_historico_emprestimos">HIstoricoEmprestimosActivity</string>
+    <string name="titleHistorico">Historico de Empréstimos</string>
 
 </resources>

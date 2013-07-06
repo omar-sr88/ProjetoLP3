@@ -16,34 +16,34 @@ public class ExemplaresActivity extends Activity {
 
 	Button retornarPesquisa;
 	Button retornarMenu;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_exemplares);
 		retornarPesquisa = (Button) findViewById(R.id.retornarPesquisa);
 		retornarMenu = (Button) findViewById(R.id.retornarMenu);
-		
+
 		retornarPesquisa.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(ExemplaresActivity.this, BuscaLivroActivity.class );
 				startActivity(intent);
-				
+
 			}
 		});
-		
+
 		retornarMenu.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(ExemplaresActivity.this, MenuActivity.class );
 				startActivity(intent);
 			}
 		});
-		
-		
+
+
 	}
 
 	@Override
