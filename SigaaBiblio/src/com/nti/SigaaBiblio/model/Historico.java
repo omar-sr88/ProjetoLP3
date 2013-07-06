@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 public class Historico {
 	
+	
+	//@Author :Iron Araújo 06/07/2013
 	public static LinearLayout TabelaHistorico(Activity activity, String biblioteca, String dataEmprestimo,
 			String dataRenovacao, String dataDevolucao, Boolean renovavel, String informacoes){
 		

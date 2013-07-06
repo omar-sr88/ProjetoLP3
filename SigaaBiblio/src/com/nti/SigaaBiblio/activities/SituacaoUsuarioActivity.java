@@ -20,13 +20,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+// @Author :Iron Araújo 06/07/2013
+
 public class SituacaoUsuarioActivity extends Activity {
-    ViewFlipper page;
-    Animation animFlipInForeward;
-    Animation animFlipOutForeward;
-    Animation animFlipInBackward;
-    Animation animFlipOutBackward;
-	
+	ViewFlipper page;
+    	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,6 +46,7 @@ public class SituacaoUsuarioActivity extends Activity {
         
         
         
+        // Conteudo das tabelas que serão exibidas
         LinearLayout ll1 = Historico.TabelaHistorico(this,"Central","15/03/2013","30/03/2013","15/04/2013",true,"Informações do Livro: NOME; AUTOR");
         LinearLayout ll2 = Historico.TabelaHistorico(this,"Setorial","30/03/2013","15/04/2013","15/04/2013",false,"Informações do Livro: NOME; AUTOR");
         
@@ -55,7 +54,17 @@ public class SituacaoUsuarioActivity extends Activity {
         page.addView(ll1);
         page.addView(ll2);
         
+        //
+        
 	}
+	
+	
+	// Implementacao da mudanca entre tabelas
+	//
+	Animation animFlipInForeward;
+    Animation animFlipOutForeward;
+    Animation animFlipInBackward;
+    Animation animFlipOutBackward;
 	
 	private void SwipeRight(){
     	page.setInAnimation(animFlipInBackward);
