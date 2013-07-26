@@ -73,7 +73,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <com.nti.SigaaBiblio.layouts.DashboardLayout
+            <br.nti.SigaaBiblio.layouts.DashboardLayout
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:layout_weight="1.53" >
@@ -113,7 +113,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Sair" />
-            </com.nti.SigaaBiblio.layouts.DashboardLayout>
+            </br.nti.SigaaBiblio.layouts.DashboardLayout>
         </LinearLayout>
 
 		</ScrollView>

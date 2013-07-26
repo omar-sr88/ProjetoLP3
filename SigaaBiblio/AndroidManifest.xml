@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.nti.SigaaBiblio.activities.LoginActivity"
+            android:name="br.nti.SigaaBiblio.activities.LoginActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.nti.SigaaBiblio.activities.RenovacaoActivity"
+            android:name="br.nti.SigaaBiblio.activities.RenovacaoActivity"
             android:label="@string/title_activity_renovacao" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -32,7 +32,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.nti.SigaaBiblio.activities.MenuActivity"
+            android:name="br.nti.SigaaBiblio.activities.MenuActivity"
             android:label="@string/title_activity_menu" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -41,7 +41,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.nti.SigaaBiblio.activities.SituacaoUsuarioActivity"
+            android:name="br.nti.SigaaBiblio.activities.SituacaoUsuarioActivity"
             android:label="@string/title_activity_situacao_usuario" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -50,7 +50,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.nti.SigaaBiblio.activities.ResultadoBuscaActivity"
+            android:name="br.nti.SigaaBiblio.activities.ResultadoBuscaActivity"
             android:label="@string/title_activity_resultado_busca" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -59,7 +59,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.nti.SigaaBiblio.activities.BuscaArtigoActivity"
+            android:name="br.nti.SigaaBiblio.activities.BuscaArtigoActivity"
             android:label="@string/title_activity_busca_artigo" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -68,7 +68,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.nti.SigaaBiblio.activities.BuscaLivroActivity"
+            android:name="br.nti.SigaaBiblio.activities.BuscaLivroActivity"
             android:label="@string/title_activity_busca_livro" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -77,7 +77,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.nti.SigaaBiblio.activities.DadosTituloActivity"
+            android:name="br.nti.SigaaBiblio.activities.DadosTituloActivity"
             android:label="@string/title_activity_dados_titulo" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -86,7 +86,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.nti.SigaaBiblio.activities.ExemplaresActivity"
+            android:name="br.nti.SigaaBiblio.activities.ExemplaresActivity"
             android:label="@string/title_activity_exemplares" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -95,7 +95,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.nti.SigaaBiblio.activities.SelecionarHistoricoActivity"
+            android:name="br.nti.SigaaBiblio.activities.SelecionarHistoricoActivity"
             android:label="@string/title_activity_selecionar_historico" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -104,7 +104,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.nti.SigaaBiblio.activities.HistoricoEmprestimosActivity"
+            android:name="br.nti.SigaaBiblio.activities.HistoricoEmprestimosActivity"
             android:label="@string/title_activity_historico_emprestimos" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

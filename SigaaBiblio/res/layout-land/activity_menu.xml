@@ -66,7 +66,7 @@
 	        </LinearLayout>
         </LinearLayout>
         
-        <com.nti.SigaaBiblio.layouts.DashboardLayout
+        <br.nti.SigaaBiblio.layouts.DashboardLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
@@ -106,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:text="Sair" />
 		    
-		</com.nti.SigaaBiblio.layouts.DashboardLayout>
+		</br.nti.SigaaBiblio.layouts.DashboardLayout>
         
 </LinearLayout>
 
