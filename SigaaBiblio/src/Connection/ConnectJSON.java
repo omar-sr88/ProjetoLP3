@@ -12,68 +12,60 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
-public class ConnectJSON extends AsyncTask<String, Void, String>{
+public class ConnectJSON extends AsyncTask<String, Void, JSONObject>{
 
-	private static String HOST = "http://150.165.250.55:8080/SigaaAndroidSupport";
+	public static String HOST = "http://150.165.250.55:8080/sigaa/public/biblioteca/SigaaAndroidServlet";
 	private ProgressDialog pd;
-	private Activity act;
-	
+	private Activity act;	
 	private JSONObject jsonResult;
-	
-	
+
+
 	public ConnectJSON(Activity act){
 		this.act = act;
 	}
-	
+
 	@Override
 	protected void onPreExecute() {
 		pd = ProgressDialog.show(act,"Aguarde", "Processando...", true, false);
 	}
-	
+
 	@Override
-	protected String doInBackground(String... params) {
-			
+	protected JSONObject doInBackground(String... params) {
+
 		String jsonString = "";
 		try {
 
 			// JSONObject pode ser um String, HashMap ou um MBean
 			Map<String,String> map = new HashMap<String,String>();
-			map.put("Nome",params[0]);
+			map.put("Login",params[0]);
+			map.put("Senha",params[1]);
 			JSONObject inputsJson = new JSONObject(map); 
 
 			//Parametros: HOST, Identificador do Hash, Hash
-			jsonString = HttpUtils.urlContentPost(HOST, "sigaaTesting", inputsJson.toString());
-			
-					
+			jsonString = HttpUtils.urlContentPost(HOST, "sigaaLogin", inputsJson.toString());
+
+			return jsonResult = new JSONObject(jsonString);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return jsonString;
+		return null;
 	}
 
 
 	@Override
-	protected void onPostExecute(String result) {
+	protected void onPostExecute(JSONObject result) {
 		super.onPostExecute(result);
-		try {
-			jsonResult = new JSONObject(result);
-			//Captura parametros do Hash resultado;
-//			jsonResult.getString(arg1);
-//			jsonResult.getDouble(arg2);
-//			jsonResult.get(name); //Retorna object
-//			...
-			
-		} catch (JSONException e) {
-			//Tratar Error
-			e.printStackTrace();
-		}finally{
-			pd.dismiss();
-		}
+		//Captura parametros do Hash resultado;
+		pd.dismiss();
+
 
 	}
-	
+
 	public JSONObject getJsonResult() {
 		return jsonResult;
 	}
