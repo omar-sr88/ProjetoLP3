@@ -91,7 +91,7 @@
 	         android:textSize="15dp" />
 
 	     <EditText
-	         android:id="@+id/dataFinalText"
+	         android:id="@+id/editTextLoginUsuario"
 	         android:layout_width="126dp"
 	         android:layout_height="wrap_content"
 	         android:layout_margin="7dp"

@@ -51,7 +51,7 @@
 		    android:layout_margin="10dp"/>
 
 		<EditText
-		    android:id="@+id/dataFinalText"
+		    android:id="@+id/editTextLoginUsuario"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignLeft="@+id/textViewDataRenovacao"
@@ -72,11 +72,11 @@
 		     />
 
 		<EditText
-		    android:id="@+id/editText2"
+		    android:id="@+id/editTextSenhaUsuario"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:layout_alignLeft="@+id/dataFinalText"
-		    android:layout_alignRight="@+id/dataFinalText"
+		    android:layout_alignLeft="@+id/editTextLoginUsuario"
+		    android:layout_alignRight="@+id/editTextLoginUsuario"
 		    android:layout_alignTop="@+id/textViewDataDevolucao"
 		    android:ems="10"
 		    android:inputType="textPassword" />
@@ -85,9 +85,9 @@
 		    android:id="@+id/consultarHistorico"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:layout_alignRight="@+id/editText2"
+		    android:layout_alignRight="@+id/editTextSenhaUsuario"
 		    android:layout_marginRight="-60dp"
-		    android:layout_alignTop="@+id/editText2"
+		    android:layout_alignTop="@+id/editTextSenhaUsuario"
 		    android:text="Entrar" />
 		
 	</RelativeLayout>

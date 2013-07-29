@@ -60,7 +60,7 @@
 		    android:layout_margin="10dp"/>
 
 		<EditText
-		    android:id="@+id/dataFinalText"
+		    android:id="@+id/editTextLoginUsuario"
 		    android:layout_width="206dp"
 		    android:layout_height="wrap_content"
 		    android:ems="10"
@@ -85,7 +85,7 @@
 		     />
 
 		<EditText
-		    android:id="@+id/editText2"
+		    android:id="@+id/editTextSenhaUsuario"
 		    android:layout_width="206dp"
 		    android:layout_height="wrap_content"
 		    android:layout_marginLeft="22dp"

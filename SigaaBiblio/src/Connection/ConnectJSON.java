@@ -43,7 +43,7 @@ public class ConnectJSON extends AsyncTask<String, Void, JSONObject>{
 
 			//Parametros: HOST, Identificador do Hash, Hash
 			jsonString = HttpUtils.urlContentPost(HOST, "sigaaLogin", inputsJson.toString());
-
+			
 			return jsonResult = new JSONObject(jsonString);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
@@ -52,19 +52,21 @@ public class ConnectJSON extends AsyncTask<String, Void, JSONObject>{
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally{
+			pd.dismiss();
 		}
 		return null;
 	}
 
 
-	@Override
+	/*@Override
 	protected void onPostExecute(JSONObject result) {
 		super.onPostExecute(result);
 		//Captura parametros do Hash resultado;
 		pd.dismiss();
 
 
-	}
+	}*/
 
 	public JSONObject getJsonResult() {
 		return jsonResult;

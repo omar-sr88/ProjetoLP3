@@ -45,7 +45,7 @@ public class SelecionarHistoricoActivity extends Activity {
 		dataInicialButton = (ImageButton) findViewById(R.id.calendario_img1);
 		dataFinalButton = (ImageButton) findViewById(R.id.calendario_img2);
 		inputDataInicial = (EditText) findViewById(R.id.dataInicialText);
-		inputDataFinal= (EditText) findViewById(R.id.dataFinalText);
+		inputDataFinal= (EditText) findViewById(R.id.editTextLoginUsuario);
 
 		//obtem a instancia do calendario
 		formatDateTime=DateFormat.getDateTimeInstance();
