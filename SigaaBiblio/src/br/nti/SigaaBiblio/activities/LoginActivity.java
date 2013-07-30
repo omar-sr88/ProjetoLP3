@@ -1,7 +1,5 @@
 package br.nti.SigaaBiblio.activities;
 
-import java.util.concurrent.TimeUnit;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
