@@ -37,7 +37,7 @@ public class GeneralOperationAndroid {
 		if(userGeral == null){
 			error = "Usuário não existe";
 		}
-		else if(!UserAutenticacao.autenticaUsuario(request, login.toLowerCase(), senha, true)){
+		else if(!UserAutenticacao.autenticaUsuario(request, login.toLowerCase(), senha, false)){ //False para verificar Dados Criptografados
 			error = "Senha Inválida";
 		}else{
 

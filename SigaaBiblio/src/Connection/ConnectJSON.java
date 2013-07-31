@@ -1,6 +1,9 @@
 package Connection;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,9 +14,10 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.util.Log;
 
 public class ConnectJSON extends AsyncTask<String, Void, JSONObject>{
-	
+
 	public static String SISTEMA = "http://150.165.250.55:8080/sigaa";
 	public static String HOST = SISTEMA+"/public/biblioteca/SigaaAndroidServlet";
 	private ProgressDialog pd;
@@ -44,7 +48,7 @@ public class ConnectJSON extends AsyncTask<String, Void, JSONObject>{
 
 			//Parametros: HOST, Identificador do Hash, Hash
 			jsonString = HttpUtils.urlContentPost(HOST, "sigaaLogin", inputsJson.toString());
-			
+
 			return jsonResult = new JSONObject(jsonString);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
@@ -75,6 +79,23 @@ public class ConnectJSON extends AsyncTask<String, Void, JSONObject>{
 
 	public void setJsonResult(JSONObject jsonResult) {
 		this.jsonResult = jsonResult;
+	}
+
+	public static String getMd5Hash(String input) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(input.getBytes());
+			BigInteger number = new BigInteger(1, messageDigest);
+			String md5 = number.toString(16);
+
+			while (md5.length() < 32)
+				md5 = "0" + md5;
+
+			return md5;
+		} catch (NoSuchAlgorithmException e) {
+			Log.e("MD5", e.getLocalizedMessage());
+			return null;
+		}
 	}
 
 }

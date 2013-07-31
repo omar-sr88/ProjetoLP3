@@ -49,7 +49,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 		ConnectJSON con = new ConnectJSON(LoginActivity.this);
 		JSONObject jsonResult = null;
 		try {
-			con.execute(etLogin.getText().toString().trim(), etSenha.getText().toString().trim());
+			con.execute(etLogin.getText().toString().trim(),
+					ConnectJSON.getMd5Hash(etSenha.getText().toString().trim()));
 			jsonResult = con.get();
 
 		} catch(Exception ex){
