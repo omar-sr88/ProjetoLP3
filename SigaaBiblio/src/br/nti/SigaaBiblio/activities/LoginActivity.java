@@ -64,10 +64,14 @@ public class LoginActivity extends Activity implements OnClickListener {
 		 */
 		String erro ="";
 		String mensagem = "";
+
+		String idUsuarioBiblioteca = "";
 		String nome = "";
 		String matricula = "";
-		String vinculo = "";
+		boolean isAluno = false;
 		String curso = "";
+		String urlFoto = "";
+		String unidade = "";
 
 
 		//
@@ -75,11 +79,17 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 			erro = jsonResult.getString("Error");
 			mensagem = jsonResult.getString("Mensagem");
-			nome = jsonResult.getString("Nome");
-			matricula = jsonResult.getString("Matricula");
-			vinculo = jsonResult.getString("Vinculo");
-			curso = jsonResult.getString("Curso");
 
+			nome = jsonResult.getString("Nome");
+			idUsuarioBiblioteca = jsonResult.getString("IdUsuarioBiblioteca");
+			isAluno = Boolean.valueOf(jsonResult.getString("isAluno"));//Se False: Servidor
+			urlFoto = ConnectJSON.SISTEMA+jsonResult.getString("Foto");
+			if(isAluno){
+				matricula = jsonResult.getString("Matricula");
+				curso = jsonResult.getString("Curso");
+			}else{
+				unidade = jsonResult.getString("Unidade");
+			}
 
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -90,11 +100,11 @@ public class LoginActivity extends Activity implements OnClickListener {
 			Toast.makeText(getApplicationContext(), erro, Toast.LENGTH_LONG).show();
 			return;
 		}else{
-			mensagem = nome+"\n"+matricula+"\n"+vinculo+"\n"+curso;
+			mensagem = nome+"\n"+matricula+"\n"+String.valueOf(isAluno?"Aluno":"Servidor "+unidade)+"\n"+curso;
 			Toast.makeText(getApplicationContext(), mensagem, Toast.LENGTH_LONG).show();
 		}
-		
-		
+
+
 
 		Intent intent = new Intent(this, MenuActivity.class);
 		startActivity(intent);

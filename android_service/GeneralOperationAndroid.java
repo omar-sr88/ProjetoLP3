@@ -9,6 +9,8 @@ import br.ufrn.arq.erros.ArqException;
 import br.ufrn.arq.erros.NegocioException;
 import br.ufrn.arq.negocio.AbstractProcessador;
 import br.ufrn.arq.usuarios.UserAutenticacao;
+import br.ufrn.arq.util.UFRNUtils;
+import br.ufrn.comum.dao.ServidorDAO;
 import br.ufrn.comum.dominio.UsuarioGeral;
 import br.ufrn.sigaa.arq.dao.DiscenteDao;
 import br.ufrn.sigaa.arq.dao.UsuarioDao;
@@ -39,6 +41,7 @@ public class GeneralOperationAndroid {
 			error = "Senha Inválida";
 		}else{
 
+
 			user = usuarioDao.findByPrimaryKey(userGeral.getId());
 			usuarioDao.close(); // Encerra conexão
 
@@ -63,7 +66,11 @@ public class GeneralOperationAndroid {
 				//CAPTURAR INFORMAÇÕES DO USUARIO
 
 				map.put("Nome", user.getNome());
-				map.put("Vinculo", usuarioBiblioteca.getVinculo().getDescricao());
+				map.put("isAluno", String.valueOf(usuarioBiblioteca.getVinculo().isVinculoAluno()));
+				map.put("IdUsuarioBiblioteca", String.valueOf(usuarioBiblioteca.getId()));
+				map.put("Foto", userGeral.getIdFoto() == null? "/img/no_picture.png":
+					"/verFoto?idArquivo="+userGeral.getIdFoto()+"&key="+UFRNUtils.generateArquivoKey(userGeral.getIdFoto()));
+
 
 				//Identificação vinculo
 				if(usuarioBiblioteca.getVinculo().isVinculoAluno()){
@@ -78,6 +85,9 @@ public class GeneralOperationAndroid {
 					discenteDao.close();//Encerra Conexão
 				}else{
 					//INFORMAÇÕES DO SERVIDOR
+
+					map.put("Unidade", user.getUnidade().getNome());
+
 				}
 
 			}

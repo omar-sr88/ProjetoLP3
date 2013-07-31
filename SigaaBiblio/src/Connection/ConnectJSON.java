@@ -13,8 +13,9 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 public class ConnectJSON extends AsyncTask<String, Void, JSONObject>{
-
-	public static String HOST = "http://150.165.250.55:8080/sigaa/public/biblioteca/SigaaAndroidServlet";
+	
+	public static String SISTEMA = "http://150.165.250.55:8080/sigaa";
+	public static String HOST = SISTEMA+"/public/biblioteca/SigaaAndroidServlet";
 	private ProgressDialog pd;
 	private Activity act;	
 	private JSONObject jsonResult;
