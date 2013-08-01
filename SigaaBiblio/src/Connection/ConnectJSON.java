@@ -18,7 +18,7 @@ import android.util.Log;
 
 public class ConnectJSON extends AsyncTask<String, Void, JSONObject>{
 	
-	public static String SISTEMA = "http://sig-teste.bbn.ufpb.br:8080/sigaa";
+	public static String SISTEMA = "http://testes.nti.ufpb.br/sigaa";
 //	public static String SISTEMA = "http://150.165.250.55:8080/sigaa";
 	public static String HOST = SISTEMA+"/public/biblioteca/SigaaAndroidServlet";
 	private ProgressDialog pd;
