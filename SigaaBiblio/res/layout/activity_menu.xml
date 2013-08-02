@@ -21,15 +21,16 @@
             android:layout_marginLeft="20dp"
             android:text="Dados do usuário"
             android:textColor="@android:color/white"
-            android:textSize="23dp" />
-
-        <ImageButton
-            android:id="@+id/imageButton1"
+            android:textSize="15dp" />
+        
+        <ImageView
+            android:id="@+id/imageView1"
             android:layout_width="75dp"
             android:layout_height="100dp"
             android:layout_margin="10dp"
             android:layout_weight="0.12"
             android:src="@drawable/contact" />
+        
     </LinearLayout>
     
  

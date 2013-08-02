@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import Connection.ConnectJSON;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -63,6 +64,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 		/**
 		 * Atributos
 		 */
+		Intent intent = new Intent(this, MenuActivity.class);
+				
 		String erro ="";
 		String mensagem = "";
 
@@ -81,15 +84,17 @@ public class LoginActivity extends Activity implements OnClickListener {
 			erro = jsonResult.getString("Error");
 			mensagem = jsonResult.getString("Mensagem");
 
-			nome = jsonResult.getString("Nome");
-			idUsuarioBiblioteca = jsonResult.getString("IdUsuarioBiblioteca");
-			isAluno = Boolean.valueOf(jsonResult.getString("isAluno"));//Se False: Servidor
-			urlFoto = ConnectJSON.SISTEMA+jsonResult.getString("Foto");
+			intent.putExtra("Nome", nome = jsonResult.getString("Nome"));
+			intent.putExtra("IdUsuarioBiblioteca",idUsuarioBiblioteca = jsonResult.getString("IdUsuarioBiblioteca"));
+			intent.putExtra("isAluno",isAluno = Boolean.valueOf(jsonResult.getString("isAluno")));//Se False: Servidor		
+			intent.putExtra("Foto", urlFoto = ConnectJSON.SISTEMA+jsonResult.getString("Foto"));
+			
+			
 			if(isAluno){
-				matricula = jsonResult.getString("Matricula");
-				curso = jsonResult.getString("Curso");
+				intent.putExtra("Matricula", matricula = jsonResult.getString("Matricula"));
+				intent.putExtra("Curso",curso = jsonResult.getString("Curso"));
 			}else{
-				unidade = jsonResult.getString("Unidade");
+				intent.putExtra("Unidade",unidade = jsonResult.getString("Unidade"));
 			}
 
 		} catch (JSONException e) {
@@ -105,9 +110,13 @@ public class LoginActivity extends Activity implements OnClickListener {
 			Toast.makeText(getApplicationContext(), mensagem, Toast.LENGTH_LONG).show();
 		}
 
+		/**
+		 * URL url = new URL("http://image10.bizrate-images.com/resize?sq=60&uid=2216744464");
+			Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+			imageView.setImageBitmap(bmp);
+		 */
 
-
-		Intent intent = new Intent(this, MenuActivity.class);
+		
 		startActivity(intent);
 
 	}
