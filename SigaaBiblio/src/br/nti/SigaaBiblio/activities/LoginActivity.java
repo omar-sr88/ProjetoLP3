@@ -34,6 +34,22 @@ public class LoginActivity extends Activity implements OnClickListener {
 		etSenha = (EditText)findViewById(R.id.editTextSenhaUsuario);
 
 		login.setOnClickListener(this);
+		
+		//verifica
+		if(Prefs.getLembrar(this)){
+			String log,senha;
+			log = "";
+			senha = "";
+			if(getPreferences(MODE_PRIVATE).contains("login"))			
+				log = getPreferences(MODE_PRIVATE).getString("login", "");
+			
+			if(getPreferences(MODE_PRIVATE).contains("senha"))
+				senha = getPreferences(MODE_PRIVATE).getString("senha", "");
+			
+			etLogin.setText(log);
+			etSenha.setText(senha);
+			
+		}
 	}
 
 	@Override
@@ -116,10 +132,21 @@ public class LoginActivity extends Activity implements OnClickListener {
 			imageView.setImageBitmap(bmp);
 		 */
 
-		
+		if(Prefs.getLembrar(this)){
+			String login = etLogin.getText().toString().trim();
+			String senha = etSenha.getText().toString().trim();
+			
+			if(!login.isEmpty() && login!=null && !senha.isEmpty() && senha!=null){	
+				getPreferences(MODE_PRIVATE).edit().putString("login", login).commit();
+				getPreferences(MODE_PRIVATE).edit().putString("senha", ConnectJSON.getMd5Hash(senha)).commit();		
+			}
+			
+		}
 		startActivity(intent);
 
 	}
+	
+	
 
 
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<CheckBoxPreference
+	    android:key="music"
+		android:title="@string/lembrar"
+		android:summary="@string/lembrar_texto"
+		android:defaultValue="false" />
+	<CheckBoxPreference
+	    android:key="hints"
+		android:title="@string/cor"
+		android:summary="@string/cor_texto"
+		android:defaultValue="false" />
+</PreferenceScreen>

@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nti.SigaaBiblio.R;
+
 
 public class MenuActivity extends Activity {
 	Button situacao;
@@ -176,6 +178,16 @@ public class MenuActivity extends Activity {
 		return true;
 	}
 
+	@Override
+	  public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case R.id.action_settings:
+	      startActivity(new Intent(this, Prefs.class));
+	      return true;
+	      // More items go here (if any) ...
+	    }
+	    return false;
+	  }
 
 
 }
