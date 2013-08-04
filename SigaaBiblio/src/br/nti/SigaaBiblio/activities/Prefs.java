@@ -20,7 +20,7 @@ public class Prefs extends PreferenceActivity {
     addPreferencesFromResource(R.layout.settings);
   }
 
-  /** Get the current value of the music option */
+  /** Get the current value of the Lembrar option */
   public static boolean getLembrar(Context context) {
     return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
         OPT_LEMBRAR, OPT_LEMBRAR_DEF);

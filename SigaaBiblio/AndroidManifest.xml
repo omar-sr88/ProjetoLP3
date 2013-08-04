@@ -115,6 +115,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 </intent-filter>
         </activity>
+        
+        
+        <activity android:name="br.nti.SigaaBiblio.activities.Prefs" android:label="Preferências"/>
     </application>
 
 </manifest>

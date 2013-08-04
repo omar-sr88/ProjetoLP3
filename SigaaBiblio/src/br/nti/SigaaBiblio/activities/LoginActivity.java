@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -36,20 +37,20 @@ public class LoginActivity extends Activity implements OnClickListener {
 		login.setOnClickListener(this);
 		
 		//verifica
-		if(Prefs.getLembrar(this)){
-			String log,senha;
-			log = "";
-			senha = "";
-			if(getPreferences(MODE_PRIVATE).contains("login"))			
-				log = getPreferences(MODE_PRIVATE).getString("login", "");
-			
-			if(getPreferences(MODE_PRIVATE).contains("senha"))
-				senha = getPreferences(MODE_PRIVATE).getString("senha", "");
-			
-			etLogin.setText(log);
-			etSenha.setText(senha);
-			
-		}
+				if(Prefs.getLembrar(this)){
+					String log,senha;
+					log = "";
+					senha = "";
+					if(getPreferences(MODE_PRIVATE).contains("login"))			
+						log = getPreferences(MODE_PRIVATE).getString("login", "");
+					
+					if(getPreferences(MODE_PRIVATE).contains("senha"))
+						senha = getPreferences(MODE_PRIVATE).getString("senha", "");
+					
+					etLogin.setText(log);
+					etSenha.setText(senha);
+					
+				}
 	}
 
 	@Override
@@ -146,6 +147,16 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 	}
 	
+	@Override
+	  public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case R.id.action_settings:
+	      startActivity(new Intent(this, Prefs.class));
+	      return true;
+	      // More items go here (if any) ...
+	    }
+	    return false;
+	  }
 	
 
 
