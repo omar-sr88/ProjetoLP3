@@ -23,32 +23,33 @@ public class LoginActivity extends Activity implements OnClickListener {
 	Button login;
 	EditText etLogin;
 	EditText etSenha;
-
+	String logPref,senhaPref;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-
+		
+		logPref = "";
+		senhaPref = "";
+		
 		login = (Button)findViewById(R.id.consultarHistorico);
 		etLogin = (EditText)findViewById(R.id.editTextLoginUsuario);
 		etSenha = (EditText)findViewById(R.id.editTextSenhaUsuario);
 
 		login.setOnClickListener(this);
 		
-		//verifica
+		
 				if(Prefs.getLembrar(this)){
-					String log,senha;
-					log = "";
-					senha = "";
+									
 					if(getPreferences(MODE_PRIVATE).contains("login"))			
-						log = getPreferences(MODE_PRIVATE).getString("login", "");
+						logPref = getPreferences(MODE_PRIVATE).getString("login", "");
 					
 					if(getPreferences(MODE_PRIVATE).contains("senha"))
-						senha = getPreferences(MODE_PRIVATE).getString("senha", "");
+						senhaPref = getPreferences(MODE_PRIVATE).getString("senha", "");
 					
-					etLogin.setText(log);
-					etSenha.setText(senha);
+					if(!logPref.isEmpty() && logPref!=null && !senhaPref.isEmpty() && senhaPref!=null)
+					login.performClick();
 					
 				}
 	}
@@ -67,8 +68,13 @@ public class LoginActivity extends Activity implements OnClickListener {
 		ConnectJSON con = new ConnectJSON(LoginActivity.this);
 		JSONObject jsonResult = null;
 		try {
-			con.execute(etLogin.getText().toString().trim(),
-					ConnectJSON.getMd5Hash(etSenha.getText().toString().trim()));
+			if(!Prefs.getLembrar(this)){
+				con.execute(etLogin.getText().toString().trim(),
+						ConnectJSON.getMd5Hash(etSenha.getText().toString().trim()));
+			}else{
+				con.execute(logPref, senhaPref);
+			}
+			
 			jsonResult = con.get();
 
 		} catch(Exception ex){
