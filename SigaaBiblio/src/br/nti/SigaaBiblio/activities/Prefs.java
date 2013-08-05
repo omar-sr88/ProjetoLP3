@@ -13,6 +13,11 @@ public class Prefs extends PreferenceActivity {
   private static final boolean OPT_LEMBRAR_DEF = false;
   private static final String OPT_COR = "cor";
   private static final boolean OPT_COR_DEF = false;
+  
+  private static final String OPT_HISTORICO = "historico";
+  private static final boolean OPT_HISTORICO_DEF = false;
+  private static final String OPT_PESQUISA = "pesquisa";
+  private static final boolean OPT_PESQUISA_DEF = false;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -30,5 +35,16 @@ public class Prefs extends PreferenceActivity {
   public static boolean getCor(Context context) {
     return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
         OPT_COR, OPT_COR_DEF);
+  }
+  
+  /** Get the current value of the Historico Livros option */
+  public static boolean gethistorico(Context context) {
+    return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
+    		OPT_HISTORICO, OPT_HISTORICO_DEF);
+  }
+  /** Get the current value of the hints option */
+  public static boolean getPesquisa(Context context) {
+    return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
+    		OPT_PESQUISA, OPT_PESQUISA_DEF);
   }
 }

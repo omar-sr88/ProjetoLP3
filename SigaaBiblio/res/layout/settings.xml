@@ -10,4 +10,18 @@
 		android:title="@string/cor"
 		android:summary="@string/cor_texto"
 		android:defaultValue="false" />
+	
+	<CheckBoxPreference
+	    android:key="hints"
+		android:title="@string/guardarHist"
+		android:summary="@string/guardar_texto"
+		android:defaultValue="false" />
+	
+	<CheckBoxPreference
+	    android:key="hints"
+		android:title="@string/guardarPesquisas"
+		android:summary="@string/pesquisas_texto"
+		android:defaultValue="false" />
+	
+	
 </PreferenceScreen>
