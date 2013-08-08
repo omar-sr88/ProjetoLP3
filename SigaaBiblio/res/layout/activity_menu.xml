@@ -59,14 +59,14 @@
                     android:orientation="vertical" >
 
                     <TextView
-                        android:id="@+id/textViewDataEmprestimo"
+                        android:id="@+id/textViewTotalEmprestimos"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Total de Empréstimos em Aberto: N"
                         android:textSize="17dp" />
 
                     <TextView
-                        android:id="@+id/textViewDataRenovacao"
+                        android:id="@+id/textViewPodeFazerEmprestimo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Posso fazer Empréstimos: SIM"

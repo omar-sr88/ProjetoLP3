@@ -11,68 +11,58 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import br.nti.SigaaBiblio.activities.LoginActivity;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
-public class ConnectJSON extends AsyncTask<String, Void, JSONObject>{
-	
+/**
+ * @author iron
+ *
+ */
+public class ConnectJSON  extends AsyncTask<String, Void, JSONObject>{
+
 	public static String SISTEMA = "http://testes.nti.ufpb.br/sigaa";
 //	public static String SISTEMA = "http://150.165.250.55:8080/sigaa";
-	public static String HOST = SISTEMA+"/public/biblioteca/SigaaAndroidServlet";
+	public static String HOST = SISTEMA
+			+ "/public/biblioteca/SigaaAndroidServlet";
 	private ProgressDialog pd;
-	private Activity act;	
+	private Activity act;
 	private JSONObject jsonResult;
 
-
-	public ConnectJSON(Activity act){
+	public ConnectJSON(Activity act) {
 		this.act = act;
 	}
 
 	@Override
-	protected void onPreExecute() {
-		pd = ProgressDialog.show(act,"Aguarde", "Processando...", true, false);
-	}
-
-	@Override
 	protected JSONObject doInBackground(String... params) {
-
+		
 		String jsonString = "";
 		try {
-
 			// JSONObject pode ser um String, HashMap ou um MBean
-			Map<String,String> map = new HashMap<String,String>();
-			map.put("Login",params[0]);
-			map.put("Senha",params[1]);
-			JSONObject inputsJson = new JSONObject(map); 
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("Login", params[0]);
+			map.put("Senha", params[1]);
+			JSONObject inputsJson = new JSONObject(map);
 
-			//Parametros: HOST, Identificador do Hash, Hash
+			// Parametros: HOST, Identificador do Hash, Hash
 			jsonString = HttpUtils.urlContentPost(HOST, "sigaaLogin", inputsJson.toString());
 
 			return jsonResult = new JSONObject(jsonString);
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally{
-			pd.dismiss();
-		}
+		} catch (Exception e) {
+			try {
+				throw new Exception(e);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} 
 		return null;
-	}
-
-
-	/*@Override
-	protected void onPostExecute(JSONObject result) {
-		super.onPostExecute(result);
-		//Captura parametros do Hash resultado;
-		pd.dismiss();
-
-
-	}*/
+	}	
 
 	public JSONObject getJsonResult() {
 		return jsonResult;

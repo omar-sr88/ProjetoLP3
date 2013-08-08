@@ -1,12 +1,14 @@
 package br.nti.SigaaBiblio.activities;
 
+import java.util.concurrent.TimeUnit;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import Connection.ConnectJSON;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import br.nti.SigaaBiblio.model.Usuario;
 
 import com.nti.SigaaBiblio.R;
 
@@ -23,35 +26,34 @@ public class LoginActivity extends Activity implements OnClickListener {
 	Button login;
 	EditText etLogin;
 	EditText etSenha;
-	String logPref,senhaPref;
+	String logPref, senhaPref;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		
+
 		logPref = "";
 		senhaPref = "";
-		
-		login = (Button)findViewById(R.id.consultarHistorico);
-		etLogin = (EditText)findViewById(R.id.editTextLoginUsuario);
-		etSenha = (EditText)findViewById(R.id.editTextSenhaUsuario);
 
+		login = (Button) findViewById(R.id.consultarHistorico);
+		etLogin = (EditText) findViewById(R.id.editTextLoginUsuario);
+		etSenha = (EditText) findViewById(R.id.editTextSenhaUsuario);
 		login.setOnClickListener(this);
-		
-		
-				if(Prefs.getLembrar(this)){
-									
-					if(getPreferences(MODE_PRIVATE).contains("login"))			
-						logPref = getPreferences(MODE_PRIVATE).getString("login", "");
-					
-					if(getPreferences(MODE_PRIVATE).contains("senha"))
-						senhaPref = getPreferences(MODE_PRIVATE).getString("senha", "");
-					
-					if(!logPref.isEmpty() && logPref!=null && !senhaPref.isEmpty() && senhaPref!=null)
-					login.performClick();
-					
-				}
+
+		if (Prefs.getLembrar(this)) {
+
+			if (getPreferences(MODE_PRIVATE).contains("login"))
+				logPref = getPreferences(MODE_PRIVATE).getString("login", "");
+
+			if (getPreferences(MODE_PRIVATE).contains("senha"))
+				senhaPref = getPreferences(MODE_PRIVATE).getString("senha", "");
+
+			if (!logPref.isEmpty() && logPref != null && !senhaPref.isEmpty()
+					&& senhaPref != null)
+				login.performClick();
+
+		}
 	}
 
 	@Override
@@ -63,107 +65,109 @@ public class LoginActivity extends Activity implements OnClickListener {
 	}
 
 	@Override
-	public void onClick(View v) {		
+	public void onClick(View v) {
 
 		ConnectJSON con = new ConnectJSON(LoginActivity.this);
 		JSONObject jsonResult = null;
+		ProgressDialog pd = ProgressDialog.show(this, "Aguarde...", "Processando", true);
+		String login = etLogin.getText().toString().trim();
+		String senha = ConnectJSON.getMd5Hash(etSenha.getText().toString().trim());		
+		 		
 		try {
-			if(!Prefs.getLembrar(this)){
-				con.execute(etLogin.getText().toString().trim(),
-						ConnectJSON.getMd5Hash(etSenha.getText().toString().trim()));
-			}else{
+			if (!Prefs.getLembrar(this)) {
+				con.execute(login, senha);
+			} else {
 				con.execute(logPref, senhaPref);
 			}
-			
-			jsonResult = con.get();
 
-		} catch(Exception ex){
+			jsonResult = con.get(20,TimeUnit.SECONDS);
+
+		} catch (Exception ex) {
+			Toast.makeText(getApplicationContext(), "Ocorreu um error com a conexão!", Toast.LENGTH_LONG).show();
 			ex.printStackTrace();
 			return;
+		}finally{
+			pd.dismiss();
 		}
+		
 		jsonResult = con.getJsonResult();
-
 
 		/**
 		 * Atributos
 		 */
 		Intent intent = new Intent(this, MenuActivity.class);
-				
-		String erro ="";
+		Usuario.prepareUsuario();
+		Usuario user = Usuario.INSTANCE;
+		String erro = "";
 		String mensagem = "";
-
-		String idUsuarioBiblioteca = "";
-		String nome = "";
-		String matricula = "";
-		boolean isAluno = false;
-		String curso = "";
-		String urlFoto = "";
-		String unidade = "";
-
-
+		
 		//
 		try {
-
 			erro = jsonResult.getString("Error");
 			mensagem = jsonResult.getString("Mensagem");
-
-			intent.putExtra("Nome", nome = jsonResult.getString("Nome"));
-			intent.putExtra("IdUsuarioBiblioteca",idUsuarioBiblioteca = jsonResult.getString("IdUsuarioBiblioteca"));
-			intent.putExtra("isAluno",isAluno = Boolean.valueOf(jsonResult.getString("isAluno")));//Se False: Servidor		
-			intent.putExtra("Foto", urlFoto = ConnectJSON.SISTEMA+jsonResult.getString("Foto"));
 			
+			if(!erro.isEmpty()){
+				Toast.makeText(getApplicationContext(), erro, Toast.LENGTH_LONG)
+				.show();
+				return;
+			}
 			
-			if(isAluno){
-				intent.putExtra("Matricula", matricula = jsonResult.getString("Matricula"));
-				intent.putExtra("Curso",curso = jsonResult.getString("Curso"));
-			}else{
-				intent.putExtra("Unidade",unidade = jsonResult.getString("Unidade"));
+			user.setNome(jsonResult.getString("Nome"));
+			user.setIdUsuarioBiblioteca(jsonResult.getString("IdUsuarioBiblioteca"));
+			user.setAluno( Boolean.valueOf(jsonResult.getString("isAluno")));
+			user.setUrlFoto(ConnectJSON.SISTEMA	+ jsonResult.getString("Foto"));
+			user.setPodeRealizarEmprestimo(jsonResult.getBoolean("PodeRealizarEmprestimo"));
+			user.setEmprestimosAbertos(jsonResult.getInt("EmprestimosAbertos"));
+			
+			if (user.isAluno()) {
+				user.setMatricula(jsonResult.getString("Matricula"));
+				user.setCurso(jsonResult.getString("Curso"));
+							
+			} else {
+				user.setUnidade(jsonResult.getString("Unidade"));
 			}
 
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
+			Toast.makeText(getApplicationContext(), "Ocorreu um erro!", Toast.LENGTH_LONG)
+			.show();
 			e.printStackTrace();
-		}
-
-		if(!erro.isEmpty()){
-			Toast.makeText(getApplicationContext(), erro, Toast.LENGTH_LONG).show();
 			return;
-		}else{
-			mensagem = nome+"\n"+matricula+"\n"+String.valueOf(isAluno?"Aluno":"Servidor "+unidade)+"\n"+curso;
-			Toast.makeText(getApplicationContext(), mensagem, Toast.LENGTH_LONG).show();
 		}
 
-		/**
-		 * URL url = new URL("http://image10.bizrate-images.com/resize?sq=60&uid=2216744464");
-			Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-			imageView.setImageBitmap(bmp);
-		 */
-
-		if(Prefs.getLembrar(this)){
-			String login = etLogin.getText().toString().trim();
-			String senha = etSenha.getText().toString().trim();
+		if (!erro.isEmpty()) {
+			Toast.makeText(getApplicationContext(), erro, Toast.LENGTH_LONG)
+					.show();
+			return;
+		} else {
+			Toast.makeText(getApplicationContext(), user.toString(), Toast.LENGTH_LONG)
+					.show();
+		}
+		
+		if (Prefs.getLembrar(this)) {
 			
-			if(!login.isEmpty() && login!=null && !senha.isEmpty() && senha!=null){	
-				getPreferences(MODE_PRIVATE).edit().putString("login", login).commit();
-				getPreferences(MODE_PRIVATE).edit().putString("senha", ConnectJSON.getMd5Hash(senha)).commit();		
+			if (!login.isEmpty() && login != null && !senha.isEmpty()
+					&& senha != null) {
+				getPreferences(MODE_PRIVATE).edit().putString("login", login)
+						.commit();
+				getPreferences(MODE_PRIVATE).edit()
+						.putString("senha", ConnectJSON.getMd5Hash(senha))
+						.commit();
 			}
-			
+
 		}
 		startActivity(intent);
 
 	}
-	
-	@Override
-	  public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	    case R.id.action_settings:
-	      startActivity(new Intent(this, Prefs.class));
-	      return true;
-	      // More items go here (if any) ...
-	    }
-	    return false;
-	  }
-	
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_settings:
+			startActivity(new Intent(this, Prefs.class));
+			return true;
+			// More items go here (if any) ...
+		}
+		return false;
+	}
 
 }

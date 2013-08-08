@@ -1,7 +1,6 @@
 package br.nti.SigaaBiblio.activities;
 
 import java.net.URL;
-import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import br.nti.SigaaBiblio.model.Usuario;
 
 import com.nti.SigaaBiblio.R;
 
@@ -28,6 +28,8 @@ public class MenuActivity extends Activity {
 	Button historico;
 	Button sair;
 	TextView textViewSituacaoUsuario;
+	TextView textViewPodeFazerEmprestimo;
+	TextView textViewTotalEmprestimosAbertos;
 	ImageView imageView1;
 
 	@Override
@@ -35,9 +37,9 @@ public class MenuActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_menu);
 
-
-
 		textViewSituacaoUsuario = (TextView)findViewById(R.id.textViewSituacaoUsuario1);
+		textViewPodeFazerEmprestimo = (TextView)findViewById(R.id.textViewPodeFazerEmprestimo);
+		textViewTotalEmprestimosAbertos = (TextView)findViewById(R.id.textViewTotalEmprestimos);
 		imageView1 = (ImageView)findViewById(R.id.imageView1);
 		buscaAcervo = (Button)findViewById(R.id.consultarHistorico);
 		buscaArtigo= (Button)findViewById(R.id.button2);
@@ -111,41 +113,25 @@ public class MenuActivity extends Activity {
 
 	}
 
-	private void carregaDados() {
-
-		String idUsuarioBiblioteca = "";
-		String nome = "";
-		String matricula = "";
-		boolean isAluno = false;
-		String curso = "";
-		String urlFoto = "";
-		String unidade = "";
-		
+	private void carregaDados() {		
+		Usuario user = Usuario.INSTANCE;	
 		String situacaoUsuario = "";
-
-		nome = getIntent().getExtras().getString("Nome");
-		idUsuarioBiblioteca = getIntent().getExtras().getString("IdUsuarioBiblioteca");
-
-		if(isAluno = getIntent().getExtras().getBoolean("isAluno")){
-			curso = getIntent().getExtras().getString("Curso");
-			matricula = getIntent().getExtras().getString("Matricula");
-			
-			String nom[] = nome.split(" ");
-			situacaoUsuario = matricula+"\n"+nom[0]+" "+nom[1]+
-							  "\n"+curso.substring(0, curso.length() > 18 ? 18 : curso.length());
-			
+		
+		if(user.isAluno()){
+		
+			String nom[] = user.getNome().split(" ");
+			situacaoUsuario = user.getMatricula()+"\n"+nom[0]+" "+nom[1]+ "\n"
+			+user.getCurso().substring(0, user.getCurso().length() > 18 ? 18 : user.getCurso().length());
+		
 		}else{
-			
-			unidade = getIntent().getExtras().getString("Unidade");
-			situacaoUsuario = nome+"\n"+unidade;
+			situacaoUsuario = user.getNome()+"\n"+user.getUnidade();
 		}
-
+		
 		try {
-			urlFoto = getIntent().getExtras().getString("Foto");
-			async.execute(urlFoto);
-	
 			textViewSituacaoUsuario.setText(situacaoUsuario);
-			imageView1.setImageBitmap(async.get());
+			imageView1.setImageBitmap(user.geraBitmap());
+			textViewPodeFazerEmprestimo.setText("Posso fazer Empréstimos: "+(user.isPodeRealizarEmprestimo()?"SIM":"NÃO"));
+			textViewTotalEmprestimosAbertos.setText("Total de Empréstimos em Aberto: "+user.getEmprestimosAbertos());
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -154,22 +140,6 @@ public class MenuActivity extends Activity {
 
 	}
 
-	AsyncTask<String, Void, Bitmap> async = new AsyncTask<String, Void, Bitmap>(){
-
-		@Override
-		protected Bitmap doInBackground(String... urlFoto) {
-			try{
-
-				URL url = new URL(urlFoto[0]);
-				return BitmapFactory.decodeStream(url.openConnection().getInputStream());
-			}catch(Exception ex){
-				ex.printStackTrace();
-			}
-			return null;
-		}
-
-
-	};
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
