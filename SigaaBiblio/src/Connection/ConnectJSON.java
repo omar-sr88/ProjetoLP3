@@ -36,7 +36,19 @@ public class ConnectJSON  extends AsyncTask<String, Void, JSONObject>{
 
 	public ConnectJSON(Activity act) {
 		this.act = act;
+		pd = new ProgressDialog(act);
+		pd.setMessage("Processando...");
+		pd.setTitle("Aguarde");
+		pd.setIndeterminate(false);		
 	}
+	
+	@Override
+	protected void onPreExecute() {
+		// TODO Auto-generated method stub
+		super.onPreExecute();
+		pd.show();
+	}
+
 
 	@Override
 	protected JSONObject doInBackground(String... params) {
@@ -62,7 +74,16 @@ public class ConnectJSON  extends AsyncTask<String, Void, JSONObject>{
 			}
 		} 
 		return null;
-	}	
+	}
+	
+	@Override
+	protected void onPostExecute(JSONObject result) {
+		// TODO Auto-generated method stub
+		super.onPostExecute(result);
+		if(pd!= null && pd.isShowing())
+			pd.dismiss();
+	}
+
 
 	public JSONObject getJsonResult() {
 		return jsonResult;

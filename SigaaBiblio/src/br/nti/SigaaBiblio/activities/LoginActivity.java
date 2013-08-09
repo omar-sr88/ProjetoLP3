@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -68,8 +69,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 
 		ConnectJSON con = new ConnectJSON(LoginActivity.this);
-		JSONObject jsonResult = null;
-		ProgressDialog pd = ProgressDialog.show(this, "Aguarde...", "Processando", true);
+		JSONObject jsonResult = null;		
 		String login = etLogin.getText().toString().trim();
 		String senha = ConnectJSON.getMd5Hash(etSenha.getText().toString().trim());		
 		 		
@@ -81,13 +81,11 @@ public class LoginActivity extends Activity implements OnClickListener {
 			}
 
 			jsonResult = con.get(20,TimeUnit.SECONDS);
-
+			
 		} catch (Exception ex) {
 			Toast.makeText(getApplicationContext(), "Ocorreu um error com a conexão!", Toast.LENGTH_LONG).show();
 			ex.printStackTrace();
 			return;
-		}finally{
-			pd.dismiss();
 		}
 		
 		jsonResult = con.getJsonResult();
@@ -156,6 +154,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 		}
 		startActivity(intent);
+		finish();
 
 	}
 
