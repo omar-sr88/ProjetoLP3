@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -35,6 +36,7 @@ public class MenuActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_menu);
 
 		textViewSituacaoUsuario = (TextView)findViewById(R.id.textViewSituacaoUsuario1);
@@ -130,8 +132,8 @@ public class MenuActivity extends Activity {
 		try {
 			textViewSituacaoUsuario.setText(situacaoUsuario);
 			imageView1.setImageBitmap(user.geraBitmap());
-			textViewPodeFazerEmprestimo.setText("Posso fazer Empréstimos: "+(user.isPodeRealizarEmprestimo()?"SIM":"NÃO"));
-			textViewTotalEmprestimosAbertos.setText("Total de Empréstimos em Aberto: "+user.getEmprestimosAbertos());
+			textViewPodeFazerEmprestimo.setText("Posso fazer Empréstimos: "+(user.getUserVinculo().isPodeRealzarEmprestimos()?"SIM":"NÃO"));
+			textViewTotalEmprestimosAbertos.setText("Total de Empréstimos em Aberto: "+user.getUserVinculo().getTotalEmprestimosAbertos());
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

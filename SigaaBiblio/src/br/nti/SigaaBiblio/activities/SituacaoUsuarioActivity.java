@@ -12,6 +12,7 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
@@ -21,7 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
-// @Author :Iron Araújo 06/07/2013
+
 
 public class SituacaoUsuarioActivity extends Activity {
 	ViewFlipper page;
@@ -29,6 +30,7 @@ public class SituacaoUsuarioActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_situacao_usuario);
 		
 		page = (ViewFlipper)findViewById(R.id.viewFlipper1);	      

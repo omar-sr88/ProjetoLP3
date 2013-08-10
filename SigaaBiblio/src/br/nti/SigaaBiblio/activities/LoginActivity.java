@@ -15,10 +15,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import br.nti.SigaaBiblio.model.Usuario;
+import br.nti.SigaaBiblio.model.VinculoUsuarioSistema;
 
 import com.nti.SigaaBiblio.R;
 
@@ -32,6 +34,10 @@ public class LoginActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
 		setContentView(R.layout.activity_login);
 
 		logPref = "";
@@ -114,8 +120,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 			user.setIdUsuarioBiblioteca(jsonResult.getString("IdUsuarioBiblioteca"));
 			user.setAluno( Boolean.valueOf(jsonResult.getString("isAluno")));
 			user.setUrlFoto(ConnectJSON.SISTEMA	+ jsonResult.getString("Foto"));
-			user.setPodeRealizarEmprestimo(jsonResult.getBoolean("PodeRealizarEmprestimo"));
-			user.setEmprestimosAbertos(jsonResult.getInt("EmprestimosAbertos"));
+			user.setUserVinculo(new VinculoUsuarioSistema(jsonResult.getInt("EmprestimosAbertos"),jsonResult.getBoolean("PodeRealizarEmprestimo")));
 			
 			if (user.isAluno()) {
 				user.setMatricula(jsonResult.getString("Matricula"));

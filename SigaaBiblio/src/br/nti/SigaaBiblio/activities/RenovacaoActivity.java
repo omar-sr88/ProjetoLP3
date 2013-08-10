@@ -3,7 +3,6 @@ package br.nti.SigaaBiblio.activities;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.nti.SigaaBiblio.model.Emprestimo;
 
 import com.nti.SigaaBiblio.R;
 import com.nti.SigaaBiblio.R.layout;
@@ -16,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -27,6 +27,7 @@ public class RenovacaoActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_renovacao);
 		
 		ListView listaLivros = (ListView) findViewById(R.id.listViewResultados);
@@ -44,12 +45,12 @@ public class RenovacaoActivity extends Activity {
 										"Ano\n"+"Data de empréstimo, data de devolução","Código do livro\nAutor\nTítulo\n" +
 												"Ano\n"+"Data de empréstimo, data de devolução",};
 		
-		       ArrayList<Emprestimo> lista_para_adapter = new ArrayList<Emprestimo>();
+		       ArrayList<EmprestimoAdapterUtils> lista_para_adapter = new ArrayList<EmprestimoAdapterUtils>();
 		       
 		       for (int i = 0; i < livros_emprestados.length; ++i) {
-		    	   lista_para_adapter.add(new Emprestimo(livros_emprestados[i]));
+		    	   lista_para_adapter.add(new EmprestimoAdapterUtils(livros_emprestados[i]));
 		       }
-		       ArrayAdapter<Emprestimo> adapter = new EmprestimoAdapter(this,lista_para_adapter);
+		       ArrayAdapter<EmprestimoAdapterUtils> adapter = new EmprestimoAdapter(this,lista_para_adapter);
 		       //ArrayAdapter<String> listViewAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, lista_para_adapter);	 
 		       listaLivros.setAdapter(adapter);
 	
@@ -62,11 +63,11 @@ public class RenovacaoActivity extends Activity {
 		return true;
 	}
 	
-	private class EmprestimoAdapter extends ArrayAdapter<Emprestimo> {
+	private class EmprestimoAdapter extends ArrayAdapter<EmprestimoAdapterUtils> {
 
-		  private  List<Emprestimo> lista_emprestimos;
+		  private  List<EmprestimoAdapterUtils> lista_emprestimos;
 
-		  public EmprestimoAdapter(Context context, List<Emprestimo> lista) {
+		  public EmprestimoAdapter(Context context, List<EmprestimoAdapterUtils> lista) {
 		    super(context, R.layout.emprestimos_layout, lista);
 		    
 		    this.lista_emprestimos = lista;
@@ -92,7 +93,7 @@ public class RenovacaoActivity extends Activity {
 		            @Override
 		            public void onCheckedChanged(CompoundButton buttonView,
 		                boolean isChecked) {
-		              Emprestimo element = (Emprestimo) viewHolder.checkbox.getTag();
+		              EmprestimoAdapterUtils element = (EmprestimoAdapterUtils) viewHolder.checkbox.getTag();
 		              element.setSelected(buttonView.isChecked());
 
 		            }

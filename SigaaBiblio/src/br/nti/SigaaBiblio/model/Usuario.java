@@ -22,9 +22,16 @@ public class Usuario {
 	private String curso;
 	private String urlFoto;
 	private String unidade;
-	private boolean podeRealizarEmprestimo;
-	private int emprestimosAbertos;
+	//private boolean podeRealizarEmprestimo;
+	//private int emprestimosAbertos;
+	private VinculoUsuarioSistema userVinculo;
 		
+	public VinculoUsuarioSistema getUserVinculo() {
+		return userVinculo;
+	}
+	public void setUserVinculo(VinculoUsuarioSistema userVinculo) {
+		this.userVinculo = userVinculo;
+	}
 	public String getIdUsuarioBiblioteca() {
 		return idUsuarioBiblioteca;
 	}
@@ -67,18 +74,18 @@ public class Usuario {
 	public void setUnidade(String unidade) {
 		this.unidade = unidade;
 	}	
-	public boolean isPodeRealizarEmprestimo() {
-		return podeRealizarEmprestimo;
-	}
-	public void setPodeRealizarEmprestimo(boolean podeRealizarEmprestimo) {
-		this.podeRealizarEmprestimo = podeRealizarEmprestimo;
-	}	
-	public int getEmprestimosAbertos() {
-		return emprestimosAbertos;
-	}
-	public void setEmprestimosAbertos(int emprestimosAbertos) {
-		this.emprestimosAbertos = emprestimosAbertos;
-	}
+//	public boolean isPodeRealizarEmprestimo() {
+//		return podeRealizarEmprestimo;
+//	}
+//	public void setPodeRealizarEmprestimo(boolean podeRealizarEmprestimo) {
+//		this.podeRealizarEmprestimo = podeRealizarEmprestimo;
+//	}	
+//	public int getEmprestimosAbertos() {
+//		return emprestimosAbertos;
+//	}
+//	public void setEmprestimosAbertos(int emprestimosAbertos) {
+//		this.emprestimosAbertos = emprestimosAbertos;
+//	}
 	@Override
 	public String toString(){
 		return nome + "\n" + matricula + "\n"
