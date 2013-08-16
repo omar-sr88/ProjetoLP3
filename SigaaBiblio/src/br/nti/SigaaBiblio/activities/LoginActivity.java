@@ -184,7 +184,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 				try {
 					jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
 					resposta = new JSONObject(jsonString);
-					Log.d("IRON DEBUG", resposta.getJSONObject("Bibliotecas").toString());
+					//Log.d("IRON DEBUG", resposta.getJSONObject("Bibliotecas").toString());
 				} catch (Exception ex){
 					ex.printStackTrace();
 				}
@@ -210,7 +210,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 					try {
 						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
 						resposta = new JSONObject(jsonString);
-						Log.d("IRON DEBUG", resposta.getJSONObject("Livros").toString());//ou Artigos
+						Log.d("IRON_DEBUG", resposta.getJSONObject("Livros").toString());//ou Artigos
 					} catch (Exception ex){
 						ex.printStackTrace();
 					}

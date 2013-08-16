@@ -1,13 +1,23 @@
 package br.nti.SigaaBiblio.activities;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
+import org.json.JSONObject;
+
+import Connection.ConnectJSON;
+import Connection.HttpUtils;
+import Connection.Operations;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +26,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import br.nti.SigaaBiblio.model.Usuario;
 
 import com.nti.SigaaBiblio.R;
@@ -32,7 +43,9 @@ public class MenuActivity extends Activity {
 	TextView textViewPodeFazerEmprestimo;
 	TextView textViewTotalEmprestimosAbertos;
 	ImageView imageView1;
+	String bibliotecas;
 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,17 +64,20 @@ public class MenuActivity extends Activity {
 		sair = (Button) findViewById(R.id.button6);
 
 		carregaDados();
-
-
-		buscaAcervo.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(MenuActivity.this, BuscaLivroActivity.class );
-				startActivity(intent);
-
-			}
-		});
+		
+		
+//		buscaAcervo.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				
+//				Intent intent = new Intent(MenuActivity.this, BuscaLivroActivity.class );
+//				intent.putExtra("Bibliotecas", bibliotecas);
+//				startActivity(intent);
+//				
+//
+//			}
+//		});
 
 		buscaArtigo.setOnClickListener(new OnClickListener() {
 
@@ -160,7 +176,79 @@ public class MenuActivity extends Activity {
 	    }
 	    return false;
 	  }
+	
+	
+		public void consultarAcervo(View v){
+			
+			
+			final ProgressDialog pd = new ProgressDialog(MenuActivity.this);
+			pd.setMessage("Processando...");
+			pd.setTitle("Aguarde");
+			pd.setIndeterminate(false);
+			
+			bibliotecas=null;
 
+			
+			/*
+			 * OBTEM O NOMES DAS BIBLIOTECAS ATIVAS
+			 */
+			new AsyncTask<Void,Void,Void>(){
+
+				
+				@Override
+				protected void onPreExecute() {
+					// TODO Auto-generated method stub
+					super.onPreExecute();
+					pd.show();
+				}
+				
+				@Override
+				protected Void doInBackground(Void... arg0) {
+					Map<String, String> map = new HashMap<String, String>();
+					String jsonString;
+					map.put("Operacao", String.valueOf(Operations.LISTAR_BIBLIOTECAS));
+					JSONObject inputsJson = new JSONObject(map);
+					JSONObject resposta;
+					try {
+						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+						resposta = new JSONObject(jsonString);
+						String bibliotecas=resposta.getString("Bibliotecas");
+						Intent intent = new Intent(MenuActivity.this, BuscaLivroActivity.class );
+						intent.putExtra("Bibliotecas", bibliotecas);
+						startActivity(intent);
+						
+						//Log.d("MARCILIO_DEBUG", "isso é uma key "+resposta.getString("Bibliotecas"));
+						//JSONObject bibliotecas=resposta.getJSONObject("Bibliotecas");
+//						Iterator<String> keys = bibliotecas.keys(); //descobre as chaves que são os ids das bibliotecas
+//						while(keys.hasNext()){
+//							String key=keys.next();
+//							Log.d("MARCILIO_DEBUG", "isso é uma key "+key);
+//						}
+						
+					} catch (Exception ex){
+						String erro = "Não foi possivel completar a requisição, por favor tente novamente";
+						Toast.makeText(getApplicationContext(), erro, Toast.LENGTH_LONG)
+						.show();
+						ex.printStackTrace();
+					}
+					return null;
+				}
+				
+//				
+				@Override
+				protected void onPostExecute(Void v) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(v);
+					if(pd!= null && pd.isShowing())
+						pd.dismiss();
+				}
+				
+			}.execute();
+			
+			
+
+		}
+		
 
 }
 
