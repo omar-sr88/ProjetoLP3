@@ -1,16 +1,24 @@
 package br.nti.SigaaBiblio.activities;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import Connection.ConnectJSON;
+import Connection.HttpUtils;
+import Connection.Operations;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -158,6 +166,61 @@ public class LoginActivity extends Activity implements OnClickListener {
 			}
 
 		}
+		
+		/**
+		 * CAPTURA BIBLIOTECAS QUE ESTÃO NO BANCO
+		 * COLOCAR NO LUGAR CORRETO!
+		 */
+		new AsyncTask<Void,Void,Void>(){
+
+			@Override
+			protected Void doInBackground(Void... arg0) {
+				Map<String, String> map = new HashMap<String, String>();
+				String jsonString;
+				map.put("Operacao", String.valueOf(Operations.LISTAR_BIBLIOTECAS));
+				JSONObject inputsJson = new JSONObject(map);
+				JSONObject resposta;
+				
+				try {
+					jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+					resposta = new JSONObject(jsonString);
+					Log.d("IRON DEBUG", resposta.getJSONObject("Bibliotecas").toString());
+				} catch (Exception ex){
+					ex.printStackTrace();
+				}
+				return null;
+			}
+			
+			}.execute();
+			
+			new AsyncTask<Void,Void,Void>(){
+				//IdBiblioteca":"9763","TituloBusca":"Metodologia","AutorBusca":"","AssuntoBusca":""}
+				@Override
+				protected Void doInBackground(Void... arg0) {
+					Map<String, String> map = new HashMap<String, String>();
+					String jsonString;
+					map.put("Operacao", String.valueOf(Operations.CONSULTAR_ACERVO_LIVRO));
+					map.put("IdBiblioteca","9763");
+					map.put("TituloBusca", "Metodologia");
+					map.put("AutorBusca", "");
+					map.put("AssuntoBusca","");
+					JSONObject inputsJson = new JSONObject(map);
+					JSONObject resposta;
+					
+					try {
+						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+						resposta = new JSONObject(jsonString);
+						Log.d("IRON DEBUG", resposta.getJSONObject("Livros").toString());//ou Artigos
+					} catch (Exception ex){
+						ex.printStackTrace();
+					}
+					return null;
+				}
+				
+			}.execute();
+		
+		
+		//
 		startActivity(intent);
 		finish();
 

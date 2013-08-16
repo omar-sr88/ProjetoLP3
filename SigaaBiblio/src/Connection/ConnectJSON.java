@@ -26,8 +26,8 @@ import android.widget.Toast;
  */
 public class ConnectJSON  extends AsyncTask<String, Void, JSONObject>{
 
-	public static String SISTEMA = "http://testes.nti.ufpb.br/sigaa";
-//	public static String SISTEMA = "http://150.165.250.55:8080/sigaa";
+//	public static String SISTEMA = "http://testes.nti.ufpb.br/sigaa";
+	public static String SISTEMA = "http://150.165.250.55:8080/sigaa";
 	public static String HOST = SISTEMA
 			+ "/public/biblioteca/SigaaAndroidServlet";
 	private ProgressDialog pd;
@@ -57,12 +57,13 @@ public class ConnectJSON  extends AsyncTask<String, Void, JSONObject>{
 		try {
 			// JSONObject pode ser um String, HashMap ou um MBean
 			Map<String, String> map = new HashMap<String, String>();
+			map.put("Operacao", String.valueOf(Operations.LOGIN));
 			map.put("Login", params[0]);
 			map.put("Senha", params[1]);
 			JSONObject inputsJson = new JSONObject(map);
 
 			// Parametros: HOST, Identificador do Hash, Hash
-			jsonString = HttpUtils.urlContentPost(HOST, "sigaaLogin", inputsJson.toString());
+			jsonString = HttpUtils.urlContentPost(HOST, "sigaaAndroid", inputsJson.toString());
 
 			return jsonResult = new JSONObject(jsonString);
 		} catch (Exception e) {
