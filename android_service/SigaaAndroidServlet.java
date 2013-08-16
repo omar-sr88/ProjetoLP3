@@ -22,37 +22,49 @@ public class SigaaAndroidServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-
-		String inputString = request.getParameter("sigaaLogin");
-		String error = "";
-		String msg = "";
-		Map <String,String> map = new HashMap<String,String>();
-
-		try{
-			JSONObject inputValues = new JSONObject(inputString);
-			String login = inputValues.getString("Login");
-			String senha = inputValues.getString("Senha");
-
-			if(!login.isEmpty() && !senha.isEmpty()){
-				GeneralOperationAndroid.validaLogin(login,senha,map,request);
-			}		
-
-		}catch(Exception ex){
-			ex.printStackTrace();
-			error = "\nException";
-		}
-		//map.put....
-
-		map.put("Error",map.get("Error")+error);
-		map.put("Mensagem", msg);
-		PrintWriter out = response.getWriter();
-		out.println(new JSONObject(map));
 	}
 
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		doGet(request, response);
+		
+		String inputString = request.getParameter("sigaaAndroid");
+		String error = "";
+		Map<String, String> map = new HashMap<String, String>();
+
+		try {
+			JSONObject inputValues = new JSONObject(inputString);			
+			int operation = inputValues.getInt("Operacao");
+			
+			switch(operation){			
+				case Operations.LOGIN:
+					String login = inputValues.getString("Login");
+					String senha = inputValues.getString("Senha");
+					GeneralOperationAndroid.validaLogin(login, senha, map, request);
+					break;
+				case Operations.LISTAR_BIBLIOTECAS:
+					GeneralOperationAndroid.listaBibliotecas(map);
+					break;
+				case Operations.CONSULTAR_ACERVO_ARTIGO:
+				case Operations.CONSULTAR_ACERVO_LIVRO:
+					int idBiblioteca = inputValues.getInt("IdBiblioteca");
+					String tituloBusca = inputValues.getString("TituloBusca");
+					String autorBusca = inputValues.getString("AutorBusca");
+					String assuntoBusca = inputValues.getString("AssuntoBusca");
+					GeneralOperationAndroid.pesquisarAcervo(map, idBiblioteca, tituloBusca, autorBusca, assuntoBusca);
+					break;
+			}
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			error = "\nException";
+		}
+		// map.put....
+
+		map.put("Error", map.get("Error") + error);
+		map.put("Mensagem", map.get("Mensagem")==null?"":map.get("Mensagem"));
+		PrintWriter out = response.getWriter();
+		out.println(new JSONObject(map));
 	}
 
 }
