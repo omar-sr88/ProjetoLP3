@@ -1,11 +1,9 @@
 package br.nti.SigaaBiblio.activities;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,11 +11,9 @@ import Connection.ConnectJSON;
 import Connection.HttpUtils;
 import Connection.Operations;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -184,7 +180,10 @@ public class LoginActivity extends Activity implements OnClickListener {
 				try {
 					jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
 					resposta = new JSONObject(jsonString);
-					//Log.d("IRON DEBUG", resposta.getJSONObject("Bibliotecas").toString());
+					String bibliotecas = resposta.getString("Bibliotecas");
+					String nome = new JSONObject(bibliotecas).getString("9763");
+					
+					Log.d("IRON DEBUG", nome);
 				} catch (Exception ex){
 					ex.printStackTrace();
 				}
@@ -210,12 +209,45 @@ public class LoginActivity extends Activity implements OnClickListener {
 					try {
 						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
 						resposta = new JSONObject(jsonString);
-						Log.d("IRON_DEBUG", resposta.getJSONObject("Livros").toString());//ou Artigos
+						resposta = new JSONObject(resposta.getString("Livros"));
+						resposta = resposta.getJSONObject("112204");
+						String titulo = resposta.getString("Titulo");
+						
+						Log.d("IRON_DEBUG", titulo);//ou Artigos
 					} catch (Exception ex){
 						ex.printStackTrace();
 					}
 					return null;
 				}
+				
+			}.execute();
+			
+			new AsyncTask<Void,Void,Void>(){
+
+				@Override
+				protected Void doInBackground(Void... params) {
+					Map<String, String> map = new HashMap<String, String>();
+					String jsonString;
+					map.put("Operacao", String.valueOf(Operations.MINHA_SITUACAO));
+					map.put("Login","eduardogama");
+					map.put("Senha", "202cb962ac59075b964b07152d234b70");
+					
+					JSONObject inputsJson = new JSONObject(map);
+					JSONObject resposta;
+					
+					try {
+						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());						
+						resposta = new JSONObject(jsonString);	
+						resposta = new JSONObject(resposta.getString("Emprestimos"));
+						resposta = new JSONObject(resposta.getString("28132"));
+						
+						Log.d("IRON_DEBUG", resposta.toString());//ou Artigos
+					} catch (Exception ex){
+						ex.printStackTrace();
+					}
+					return null;
+				}
+					
 				
 			}.execute();
 		

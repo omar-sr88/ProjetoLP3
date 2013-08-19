@@ -10,6 +10,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.primefaces.json.JSONObject;
+
 import br.ufrn.arq.erros.ArqException;
 import br.ufrn.arq.erros.DAOException;
 import br.ufrn.arq.erros.NegocioException;
@@ -23,18 +25,21 @@ import br.ufrn.sigaa.arq.dao.DiscenteDao;
 import br.ufrn.sigaa.arq.dao.UsuarioDao;
 import br.ufrn.sigaa.arq.dao.biblioteca.ArtigoDePeriodicoDao;
 import br.ufrn.sigaa.arq.dao.biblioteca.BibliotecaDao;
+import br.ufrn.sigaa.arq.dao.biblioteca.EmprestimoDao;
 import br.ufrn.sigaa.arq.dao.biblioteca.ExemplarDao;
 import br.ufrn.sigaa.arq.dao.biblioteca.TituloCatalograficoDao;
 import br.ufrn.sigaa.arq.dao.biblioteca.UsuarioBibliotecaDao;
+import br.ufrn.sigaa.biblioteca.circulacao.dominio.Emprestimo;
 import br.ufrn.sigaa.biblioteca.circulacao.dominio.UsuarioBiblioteca;
 import br.ufrn.sigaa.biblioteca.circulacao.negocio.ObtemVinculoUsuarioBibliotecaFactory;
 import br.ufrn.sigaa.biblioteca.dominio.Biblioteca;
+import br.ufrn.sigaa.biblioteca.dominio.SituacaoUsuarioBiblioteca;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.dominio.CacheEntidadesMarc;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.pesquisa.dominio.CampoOrdenacaoConsultaAcervo;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.pesquisa.dominio.GeraPesquisaTextual;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.pesquisa.negocio.GeraPesquisaTextualFactory;
-import br.ufrn.sigaa.biblioteca.processos_tecnicos.pesquisa.negocio.RegistraEstatisticasBibliotecaProdutor;
 import br.ufrn.sigaa.biblioteca.util.UsuarioBibliotecaUtil;
+import br.ufrn.sigaa.biblioteca.util.VerificaSituacaoUsuarioBibliotecaUtil;
 import br.ufrn.sigaa.dominio.Usuario;
 import br.ufrn.sigaa.ensino.dominio.DiscenteAdapter;
 
@@ -49,10 +54,9 @@ public class GeneralOperationAndroid {
 		String error = "";
 
 		Usuario user = null;
-		usuarioDao = AbstractProcessador.getDAO(UsuarioDao.class, null); // Inicia
-																			// Conexão
-		UsuarioGeral userGeral = usuarioDao.findByLogin(login);
-
+		
+		UsuarioGeral userGeral = verificaLoginSenha( login, senha);
+				
 		if (userGeral == null) {
 			error = "Usuário não existe";
 		} else if (!UserAutenticacao.autenticaUsuario(request,
@@ -60,7 +64,8 @@ public class GeneralOperationAndroid {
 														// Dados Criptografados
 			error = "Senha Inválida";
 		} else {
-
+			
+			usuarioDao = AbstractProcessador.getDAO(UsuarioDao.class, null);
 			user = usuarioDao.findByPrimaryKey(userGeral.getId());
 			usuarioDao.close(); // Encerra conexão
 
@@ -164,6 +169,14 @@ public class GeneralOperationAndroid {
 		map.put("Error", error);
 	}
 
+	private static UsuarioGeral verificaLoginSenha(String login, String senha) throws DAOException {
+		UsuarioDao usuarioDao = AbstractProcessador.getDAO(UsuarioDao.class, null); // Inicia
+		UsuarioGeral userGeral = usuarioDao.findByLogin(login);
+		usuarioDao.close();
+		return userGeral;
+		
+	}
+
 	public static void listaBibliotecas(Map<String, String> map) {
 		try {
 			Map<String, String> bibliotecas = new HashMap<String, String>();
@@ -174,12 +187,12 @@ public class GeneralOperationAndroid {
 			for (Biblioteca b : bibliotecasAtivas)
 				bibliotecas.put(String.valueOf(b.getId()),
 						b.getDescricaoCompleta());
-
-			map.put("Bibliotecas", bibliotecas.toString());
+			
+			JSONObject bibliotecaJSON = new JSONObject(bibliotecas);
+			map.put("Bibliotecas", bibliotecaJSON.toString());
 		} catch (DAOException e) {
 			e.printStackTrace();
-		}
-		;
+		};
 
 	}
 
@@ -330,7 +343,7 @@ public class GeneralOperationAndroid {
 			
 			
 			//Mapa dos livros
-			Map<String,Map<String, String>> livros = new HashMap<String,Map<String,String>> ();
+			Map<String,JSONObject> livros = new HashMap<String,JSONObject>();
 			Map<String,String> cont;
 			CacheEntidadesMarc liv;
 			
@@ -344,16 +357,16 @@ public class GeneralOperationAndroid {
 				cont.put("Edicao", liv.getEdicao());
 				cont.put("Ano", liv.getAno());
 				cont.put("QuantidadeAtivos", String.valueOf(liv.getQuantidadeMateriaisAtivosTitulo()));
-				livros.put(String.valueOf(liv.getId()), cont);
+				livros.put(String.valueOf(liv.getId()), new JSONObject(cont));
 			}
 			
 			//Adicao do mapa de livros para o mapa de retorno
-			map.put("Livros", livros.toString());
+			map.put("Livros", new JSONObject(livros).toString());
 			
 			// Mapa dos artigos
 			
 			//Mapa dos livros
-			Map<String,Map<String, String>> artigosJSON = new HashMap<String,Map<String,String>> ();
+			Map<String,JSONObject> artigosJSON = new HashMap<String,JSONObject>();
 			
 			int quantidadeInteracaoArtigo =  //Carregar o JSON apenas com a quantidade permitida pelo sistema, para não estourar o máximo.
 					(resultadosBuscados.size() > Operations.LIMITE_RESULTADOS_ARTIGOS ? Operations.LIMITE_RESULTADOS_ARTIGOS : resultadosBuscados.size());
@@ -365,11 +378,11 @@ public class GeneralOperationAndroid {
 				cont.put("Edicao", liv.getEdicao());
 				cont.put("Ano", liv.getAno());
 				cont.put("QuantidadeAtivos", String.valueOf(liv.getQuantidadeMateriaisAtivosTitulo()));
-				artigosJSON.put(String.valueOf(liv.getId()), cont);
+				artigosJSON.put(String.valueOf(liv.getId()), new JSONObject(cont));
 			}
 			
 			//Adicao do mapa de livros para o mapa de retorno
-			map.put("Artigos", livros.toString());
+			map.put("Artigos", new JSONObject(livros).toString());
 						
 
 		} finally {
@@ -381,6 +394,93 @@ public class GeneralOperationAndroid {
 		}
 
 	}
+	
+	
+	// Situação do Usuario
+	public static void minhaSituacao(String login, String senha, Map<String,String> map) {
+		try {
+			//Captura Informações do usuário
+			UsuarioGeral userGeral = verificaLoginSenha(login, senha);		
+			UsuarioDao usuarioDao = AbstractProcessador.getDAO(UsuarioDao.class, null);
+			Usuario user = usuarioDao.findByPrimaryKey(userGeral.getId());
+			usuarioDao.close(); // Encerra conexão
+			
+			UsuarioBibliotecaDao usuarioBiblioDao = AbstractProcessador.getDAO(
+					UsuarioBibliotecaDao.class, null); // Inicia Conexão
+	
+			/**
+			 * Carrega informações do Usuario Biblioteca
+			 */
+	
+			List<UsuarioBiblioteca> contasUsuarioBiblioteca = usuarioBiblioDao.findUsuarioBibliotecaAtivoByPessoa(user.getPessoa().getId());
+			UsuarioBiblioteca usuarioBiblioteca = UsuarioBibliotecaUtil.recuperaUsuarioNaoQuitadosAtivos(contasUsuarioBiblioteca);
+			usuarioBiblioDao.close(); // Encerra Conexão
+	
+			EmprestimoDao emprestimoDao = AbstractProcessador.getDAO(EmprestimoDao.class, null);
+			
+
+			List<Emprestimo> emprestimos = emprestimoDao.findEmprestimosAtivosPorVinculoUsuario(usuarioBiblioteca);
+			String situacao = verificarSituacaoUsuario(usuarioBiblioteca);
+			
+			Map<String,String> emprestimoMap;
+			Map<String,String> emprestimosUsuarioMap = new HashMap<String,String>();
+			for(Emprestimo emp : emprestimos){
+				emprestimoMap = new HashMap<String,String>();
+				emprestimoMap.put("DataEmprestimo", emp.getDataEmprestimo().toString());
+				emprestimoMap.put("DataRenovacao", emp.getDataRenovacao() == null ? "-" : emp.getDataRenovacao().toString());
+				emprestimoMap.put("Devolucao", emp.getDataDevolucao() == null ? "-" : emp.getDataDevolucao().toString());
+				emprestimoMap.put("Biblioteca", emp.getMaterial().getBiblioteca().getDescricao());
+				emprestimoMap.put("Renovavel", emp.isPodeRenovar() && !emp.isAtrasado() ? "true" : "false");
+				
+				JSONObject emprestimoJSON = new JSONObject(emprestimoMap);
+				emprestimosUsuarioMap.put(String.valueOf(emp.getId()), emprestimoJSON.toString());
+			}			
+			JSONObject emprestimosJSON = new JSONObject(emprestimosUsuarioMap);
+			map.put("Emprestimos", emprestimosJSON.toString());
+			map.put("Mensagem", situacao);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static String verificarSituacaoUsuario(UsuarioBiblioteca usuarioBiblioteca) throws DAOException, ArqException,
+			NegocioException {
+
+		ArrayList<SituacaoUsuarioBiblioteca> situacoes = new ArrayList<SituacaoUsuarioBiblioteca>();
+
+		boolean situacaoSemPendencias;
+		if (usuarioBiblioteca != null) {
+
+			String motivoBloqueio = VerificaSituacaoUsuarioBibliotecaUtil.getMotivoBloqueadoUsuario(usuarioBiblioteca);
+
+			if (StringUtils.notEmpty(motivoBloqueio))
+				situacoes.add(SituacaoUsuarioBiblioteca.ESTA_BLOQUEADO);
+
+			situacoes.addAll(VerificaSituacaoUsuarioBibliotecaUtil.verificaUsuarioPossuiPunicoesBiblioteca(usuarioBiblioteca.getId()));
+			situacoes
+					.addAll(VerificaSituacaoUsuarioBibliotecaUtil
+							.verificaUsuarioPossuiEmprestimosEmAbertoOUAtrasadosBiblioteca(usuarioBiblioteca.getId()));
+
+			if (situacoes.isEmpty()) {
+				situacoes.add(SituacaoUsuarioBiblioteca.SEM_PENDENCIA);
+				situacaoSemPendencias = true;
+			} else {
+				situacaoSemPendencias = false;
+			}
+		} else { // Se não tem nenhum vínculo atual ativo, então teoricamente
+					// não possui empréstimos ativos
+			situacoes.add(SituacaoUsuarioBiblioteca.SEM_PENDENCIA);
+			situacaoSemPendencias = true;
+		}
+		
+		String situacao = "";
+		for(SituacaoUsuarioBiblioteca s : situacoes)
+			situacao+=s.getDescricaoCompleta()+" ";
+		
+		return situacao;
+	}
 
 	// Verificar se é necessários adicionar Request
 	
@@ -388,6 +488,7 @@ public class GeneralOperationAndroid {
 	public static void informacoesExemplar(){
 		try {
 			ExemplarDao daoExemplares =  AbstractProcessador.getDAO(ExemplarDao.class, null);
+			
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -405,8 +506,8 @@ public class GeneralOperationAndroid {
 			String senhaBiblioteca) {
 	} // Definir demais parametros para empréstimos: id_livro
 
-	public static void minhaSituacao(String login, String senha) {
-	}
+	
+	
 
 	public static void meusEmprestimos() {
 	}

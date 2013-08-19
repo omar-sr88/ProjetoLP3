@@ -35,11 +35,12 @@ public class SigaaAndroidServlet extends HttpServlet {
 		try {
 			JSONObject inputValues = new JSONObject(inputString);			
 			int operation = inputValues.getInt("Operacao");
-			
+			String login;
+			String senha;
 			switch(operation){			
 				case Operations.LOGIN:
-					String login = inputValues.getString("Login");
-					String senha = inputValues.getString("Senha");
+					login = inputValues.getString("Login");
+					senha = inputValues.getString("Senha");
 					GeneralOperationAndroid.validaLogin(login, senha, map, request);
 					break;
 				case Operations.LISTAR_BIBLIOTECAS:
@@ -53,6 +54,12 @@ public class SigaaAndroidServlet extends HttpServlet {
 					String assuntoBusca = inputValues.getString("AssuntoBusca");
 					GeneralOperationAndroid.pesquisarAcervo(map, idBiblioteca, tituloBusca, autorBusca, assuntoBusca);
 					break;
+				
+				case Operations.MINHA_SITUACAO:
+					login = inputValues.getString("Login");
+					senha = inputValues.getString("Senha");
+					GeneralOperationAndroid.minhaSituacao(login, senha,map);
+					break;
 			}
 			
 		} catch (Exception ex) {
@@ -64,7 +71,8 @@ public class SigaaAndroidServlet extends HttpServlet {
 		map.put("Error", map.get("Error") + error);
 		map.put("Mensagem", map.get("Mensagem")==null?"":map.get("Mensagem"));
 		PrintWriter out = response.getWriter();
-		out.println(new JSONObject(map));
+		JSONObject mapJSON = new JSONObject(map);
+		out.println(mapJSON);
 	}
 
 }
