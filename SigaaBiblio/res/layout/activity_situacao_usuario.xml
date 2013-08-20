@@ -46,7 +46,7 @@
 	   </ViewFlipper>
 	
 		<TextView
-		    android:id="@+id/textView2"
+		    android:id="@+id/textViewSituacaoUsuario2"
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
 		    android:gravity="center"

@@ -79,10 +79,12 @@ public class LoginActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 
 		ConnectJSON con = new ConnectJSON(LoginActivity.this);
-		JSONObject jsonResult = null;		
+		JSONObject jsonResult = null;	
+		Usuario user = Usuario.prepareUsuario();
 		String login = etLogin.getText().toString().trim();
 		String senha = ConnectJSON.getMd5Hash(etSenha.getText().toString().trim());		
-		 		
+		user.setLogin(login);
+		user.setSenha(senha);
 		try {
 			if (!Prefs.getLembrar(this)) {
 				con.execute(login, senha);
@@ -103,9 +105,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 		/**
 		 * Atributos
 		 */
-		Intent intent = new Intent(this, MenuActivity.class);
-		Usuario.prepareUsuario();
-		Usuario user = Usuario.INSTANCE;
+		Intent intent = new Intent(this, MenuActivity.class);		
+		
 		String erro = "";
 		String mensagem = "";
 		

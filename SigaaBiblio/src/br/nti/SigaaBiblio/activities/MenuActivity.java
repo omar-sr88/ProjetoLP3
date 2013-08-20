@@ -1,6 +1,6 @@
 package br.nti.SigaaBiblio.activities;
 
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -13,20 +13,19 @@ import Connection.Operations;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import br.nti.SigaaBiblio.model.Emprestimo;
 import br.nti.SigaaBiblio.model.Usuario;
 
 import com.nti.SigaaBiblio.R;
@@ -94,7 +93,77 @@ public class MenuActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(MenuActivity.this, SituacaoUsuarioActivity.class );
+				final Intent intent = new Intent(MenuActivity.this, SituacaoUsuarioActivity.class);
+				final ProgressDialog pd = new ProgressDialog(MenuActivity.this);
+				pd.setMessage("Processando...");
+				pd.setTitle("Aguarde");
+				pd.setIndeterminate(false);
+
+				AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+
+					@Override
+					protected void onPreExecute() {
+						super.onPreExecute();
+						pd.show();
+					}
+
+					@Override
+					protected Void doInBackground(Void... params) {
+						Map<String, String> map = new HashMap<String, String>();
+						String jsonString;
+						map.put("Operacao",
+								String.valueOf(Operations.MINHA_SITUACAO));
+						map.put("Login", Usuario.INSTANCE.getLogin());
+						map.put("Senha", Usuario.INSTANCE.getSenha());
+
+						JSONObject inputsJson = new JSONObject(map);
+						JSONObject resposta;
+						
+						try {
+							jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+							resposta = new JSONObject(jsonString);
+							String mensagem = resposta.getString("Mensagem");
+							resposta = new JSONObject(resposta.getString("Emprestimos"));
+							intent.putExtra("Mensagem", mensagem);
+							String key = "" ;
+							JSONObject content;
+							ArrayList<Emprestimo> emprestimos = new ArrayList<Emprestimo>();
+							Emprestimo emp;
+							for(Iterator obj = resposta.keys(); obj.hasNext();){
+								key = (String)obj.next();
+								content = new JSONObject(resposta.getString(key));
+								Log.d("IRON_DEBUG", content.toString());	
+								emp = new Emprestimo("",content.getString("DataEmprestimo"), 
+										content.getString("DataRenovacao"), content.getString("Devolucao"), "", content.getString("Biblioteca"),
+										content.getBoolean("Renovavel"));
+								emprestimos.add(emp);
+								}
+							intent.putExtra("Emprestimos", emprestimos);							
+							
+							
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+						return null;
+					}
+
+					@Override
+					protected void onPostExecute(Void result) {
+						super.onPostExecute(result);
+						if (pd != null && pd.isShowing())
+							pd.dismiss();
+					}
+
+				};
+
+				task.execute();
+				try {
+					task.get();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				startActivity(intent);
 
 			}

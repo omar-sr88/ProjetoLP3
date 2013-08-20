@@ -22,10 +22,10 @@ public class Usuario {
 	private String curso;
 	private String urlFoto;
 	private String unidade;
-	//private boolean podeRealizarEmprestimo;
-	//private int emprestimosAbertos;
 	private VinculoUsuarioSistema userVinculo;
-		
+	private String login;
+	private String senha;
+	
 	public VinculoUsuarioSistema getUserVinculo() {
 		return userVinculo;
 	}
@@ -74,18 +74,18 @@ public class Usuario {
 	public void setUnidade(String unidade) {
 		this.unidade = unidade;
 	}	
-//	public boolean isPodeRealizarEmprestimo() {
-//		return podeRealizarEmprestimo;
-//	}
-//	public void setPodeRealizarEmprestimo(boolean podeRealizarEmprestimo) {
-//		this.podeRealizarEmprestimo = podeRealizarEmprestimo;
-//	}	
-//	public int getEmprestimosAbertos() {
-//		return emprestimosAbertos;
-//	}
-//	public void setEmprestimosAbertos(int emprestimosAbertos) {
-//		this.emprestimosAbertos = emprestimosAbertos;
-//	}
+	public String getLogin() {
+		return login;
+	}
+	public void setLogin(String login) {
+		this.login = login;
+	}
+	public String getSenha() {
+		return senha;
+	}
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
 	@Override
 	public String toString(){
 		return nome + "\n" + matricula + "\n"
@@ -111,8 +111,8 @@ public class Usuario {
 		return async.get(20, TimeUnit.SECONDS);
 	}
 	
-	public static void prepareUsuario() {
-		INSTANCE = new Usuario();
+	public static Usuario prepareUsuario() {
+		return INSTANCE = new Usuario();
 	}
 
 	

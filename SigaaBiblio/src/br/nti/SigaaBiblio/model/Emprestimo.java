@@ -1,6 +1,6 @@
 package br.nti.SigaaBiblio.model;
 
-public class Emprestimo {
+public class Emprestimo implements java.io.Serializable{
 	
 
 
@@ -24,6 +24,14 @@ public class Emprestimo {
 	/* campo para verificao do vinculo */
 	private boolean renovavel;
 	
+	public boolean isRenovavel() {
+		return renovavel;
+	}
+
+	public void setRenovavel(boolean renovavel) {
+		this.renovavel = renovavel;
+	}
+
 	/* construtor usado para renovacao de emprestimos */
 	public Emprestimo(String codigoLivro, String autor, String titulo,
 			String ano, String dataEmprestimo, String dataDevolucao) {
@@ -57,7 +65,7 @@ public class Emprestimo {
 	
 	/* construtor utilizado para visualização de vinculo */
 	public Emprestimo(String codigoBarra,String dataEmprestimo, 
-			String dataRenovacao, String prazoDevolucao, String biblioteca,
+			String dataRenovacao, String dataDevolucao, String prazoDevolucao, String biblioteca,
 			boolean renovavel) {
 			super();
 		this.codigoBarras = codigoBarra;
@@ -66,6 +74,7 @@ public class Emprestimo {
 		this.renovavel = renovavel;
 		this.dataEmprestimo = dataEmprestimo;
 		this.dataRenovacao = dataRenovacao;
+		this.dataDevolucao = dataDevolucao;
 	}
 	
 	/* toString utilizado para Renovacao de Emprestimo */

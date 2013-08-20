@@ -1,37 +1,41 @@
 package br.nti.SigaaBiblio.activities;
 
-import br.nti.SigaaBiblio.model.Historico;
+import java.util.ArrayList;
 
-import com.nti.SigaaBiblio.R;
-
-import android.os.Bundle;
 import android.app.Activity;
-import android.graphics.Typeface;
+import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
+import br.nti.SigaaBiblio.model.Emprestimo;
+import br.nti.SigaaBiblio.model.Historico;
+import br.nti.SigaaBiblio.model.Usuario;
+
+import com.nti.SigaaBiblio.R;
 
 
 
 public class SituacaoUsuarioActivity extends Activity {
 	ViewFlipper page;
-    	
+	TextView emprestimosAbertos;
+    TextView podeEmprestimo;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_situacao_usuario);
+		
+		emprestimosAbertos = (TextView)findViewById(R.id.textViewSituacaoUsuario1);
+		podeEmprestimo = (TextView)findViewById(R.id.textViewSituacaoUsuario2);
 		
 		page = (ViewFlipper)findViewById(R.id.viewFlipper1);	      
 		animFlipInForeward = AnimationUtils.loadAnimation(this, R.anim.flipin);
@@ -48,14 +52,19 @@ public class SituacaoUsuarioActivity extends Activity {
 		});
         
         
+        Bundle bund = getIntent().getExtras();
+        ArrayList<Emprestimo> lista = (ArrayList<Emprestimo>) bund.get("Emprestimos");
+        podeEmprestimo.setText(bund.getString("Mensagem"));
+        emprestimosAbertos.setText("Total de Empréstimos em Aberto: "+Usuario.INSTANCE.getUserVinculo().getTotalEmprestimosAbertos());
         
+        LinearLayout l1;
+        for(Emprestimo emp : lista){
+        	l1 = Historico.TabelaHistorico(this, emp.getBiblioteca(), emp.getDataEmprestimo(), emp.getDataRenovacao(),
+        			emp.getDataDevolucao(), emp.isRenovavel(), "");
+        	page.addView(l1);
+//        	l1 = Historico.TabelaHistorico(activity, biblioteca, dataEmprestimo, dataRenovacao, dataDevolucao, renovavel, informacoes)
+        }
         // Conteudo das tabelas que serão exibidas
-        LinearLayout ll1 = Historico.TabelaHistorico(this,"Central","15/03/2013","30/03/2013","15/04/2013",true,"Informações do Livro: NOME; AUTOR");
-        LinearLayout ll2 = Historico.TabelaHistorico(this,"Setorial","30/03/2013","15/04/2013","15/04/2013",false,"Informações do Livro: NOME; AUTOR");
-        
-       
-        page.addView(ll1);
-        page.addView(ll2);
         
         //
         
