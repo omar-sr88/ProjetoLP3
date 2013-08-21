@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ import br.ufrn.sigaa.arq.dao.biblioteca.UsuarioBibliotecaDao;
 import br.ufrn.sigaa.biblioteca.circulacao.dominio.Emprestimo;
 import br.ufrn.sigaa.biblioteca.circulacao.dominio.UsuarioBiblioteca;
 import br.ufrn.sigaa.biblioteca.circulacao.negocio.ObtemVinculoUsuarioBibliotecaFactory;
+import br.ufrn.sigaa.biblioteca.controle_estatistico.dao.HistorioEmprestimosDao;
 import br.ufrn.sigaa.biblioteca.dominio.Biblioteca;
 import br.ufrn.sigaa.biblioteca.dominio.SituacaoUsuarioBiblioteca;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.dominio.CacheEntidadesMarc;
@@ -401,23 +403,9 @@ public class GeneralOperationAndroid {
 	// Situação do Usuario
 	public static void minhaSituacao(String login, String senha, Map<String,String> map) {
 		try {
-			//Captura Informações do usuário
-			UsuarioGeral userGeral = verificaLoginSenha(login, senha);		
-			UsuarioDao usuarioDao = AbstractProcessador.getDAO(UsuarioDao.class, null);
-			Usuario user = usuarioDao.findByPrimaryKey(userGeral.getId());
-			usuarioDao.close(); // Encerra conexão
 			
-			UsuarioBibliotecaDao usuarioBiblioDao = AbstractProcessador.getDAO(
-					UsuarioBibliotecaDao.class, null); // Inicia Conexão
-	
-			/**
-			 * Carrega informações do Usuario Biblioteca
-			 */
-	
-			List<UsuarioBiblioteca> contasUsuarioBiblioteca = usuarioBiblioDao.findUsuarioBibliotecaAtivoByPessoa(user.getPessoa().getId());
+			List<UsuarioBiblioteca> contasUsuarioBiblioteca = carregaUsuarioBiblioteca(login, senha);			
 			UsuarioBiblioteca usuarioBiblioteca = UsuarioBibliotecaUtil.recuperaUsuarioNaoQuitadosAtivos(contasUsuarioBiblioteca);
-			usuarioBiblioDao.close(); // Encerra Conexão
-	
 			EmprestimoDao emprestimoDao = AbstractProcessador.getDAO(EmprestimoDao.class, null);
 			
 			//Captura Emprestimos Ativos do usuário
@@ -515,7 +503,55 @@ public class GeneralOperationAndroid {
 	
 	
 
-	public static void meusEmprestimos() {
+	public static void historicoEmprestimos(String login,
+			String senha, Date inicio, Date fim, Map<String, String> map) {
+		try {
+			List<UsuarioBiblioteca> usuariosBiblioteca = carregaUsuarioBiblioteca(login, senha);
+			HistorioEmprestimosDao dao = AbstractProcessador.getDAO(HistorioEmprestimosDao.class, null);
+			List<Emprestimo> emprestimos = dao.findEmprestimosAtivosByUsuarios(usuariosBiblioteca, inicio, fim);
+			
+			JSONObject emprestimosJSON = new JSONObject();
+			JSONObject emprestimoJSON; 
+			for(Emprestimo emp : emprestimos){
+				emprestimoJSON = new JSONObject();
+				emprestimoJSON.put("TipoEmprestimo", emp.getPoliticaEmprestimo().getTipoEmprestimo().getDescricao());
+				emprestimoJSON.put("DataEmprestimo", emp.getDataEmprestimo());
+				emprestimoJSON.put("DataRenovacao", emp.getDataRenovacao());
+				emprestimoJSON.put("PrazoDevolucao", emp.getPrazo());
+				emprestimoJSON.put("DataDevolucao", emp.getDataDevolucao());
+				emprestimoJSON.put("Informacao", emp.getMaterial().getInformacao());
+				
+				emprestimosJSON.put(String.valueOf(emp.getId()), emprestimoJSON);
+				
+			}	
+			
+			map.put("Emprestimos", emprestimosJSON.toString());
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	private static List<UsuarioBiblioteca> carregaUsuarioBiblioteca(String login,
+			String senha) throws DAOException, NegocioException {
+		// Captura Informações do usuário
+		UsuarioGeral userGeral = verificaLoginSenha(login, senha);
+		UsuarioDao usuarioDao = AbstractProcessador.getDAO(UsuarioDao.class,
+				null);
+		Usuario user = usuarioDao.findByPrimaryKey(userGeral.getId());
+		usuarioDao.close(); // Encerra conexão
+
+		UsuarioBibliotecaDao usuarioBiblioDao = AbstractProcessador.getDAO(	UsuarioBibliotecaDao.class, null); // Inicia Conexão
+
+		/**
+		 * Carrega informações do Usuario Biblioteca
+		 */
+
+		List<UsuarioBiblioteca> contasUsuarioBiblioteca = usuarioBiblioDao.findUsuarioBibliotecaAtivoByPessoa(user.getPessoa().getId());
+		
+		usuarioBiblioDao.close(); // Encerra Conexão
+
+		return contasUsuarioBiblioteca;
 	}
 
 }

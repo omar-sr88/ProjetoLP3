@@ -1,6 +1,7 @@
 package br.nti.SigaaBiblio.activities;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -216,6 +217,36 @@ public class LoginActivity extends Activity implements OnClickListener {
 						String titulo = resposta.getString("Titulo");
 						
 						Log.d("IRON_DEBUG", titulo);//ou Artigos
+					} catch (Exception ex){
+						ex.printStackTrace();
+					}
+					return null;
+				}				
+			}.execute();
+			
+			new AsyncTask<Void,Void,Void>(){
+				
+				@Override
+				protected Void doInBackground(Void... arg0) {
+					Map<String, String> map = new HashMap<String, String>();
+					String jsonString;
+					map.put("Operacao", String.valueOf(Operations.MEUS_EMPRESTIMOS));
+					map.put("Login", "eduardogama");
+					map.put("Senha", "202cb962ac59075b964b07152d234b70");
+					map.put("Inicio", "");
+					map.put("Fim", "");
+					JSONObject inputsJson = new JSONObject(map);
+					JSONObject resposta;
+					
+					try {
+						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+						resposta = new JSONObject(jsonString);					
+						resposta = new JSONObject(resposta.getString("Emprestimos"));
+						Iterator it = resposta.keys();
+					while (it.hasNext()) {
+						JSONObject obj = resposta.getJSONObject((String) it.next());
+						Log.d("IRON_DEBUG", obj.toString());// ou Artigos
+					}
 					} catch (Exception ex){
 						ex.printStackTrace();
 					}

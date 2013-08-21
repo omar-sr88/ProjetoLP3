@@ -60,6 +60,14 @@ public class SigaaAndroidServlet extends HttpServlet {
 					senha = inputValues.getString("Senha");
 					GeneralOperationAndroid.minhaSituacao(login, senha,map);
 					break;
+					
+				case Operations.MEUS_EMPRESTIMOS:
+					login = inputValues.getString("Login");
+					senha = inputValues.getString("Senha");
+					java.util.Date Inicio = inputValues.getString("Inicio").isEmpty() ? null : (java.util.Date)inputValues.get("Inicio"); 
+					java.util.Date Fim = inputValues.getString("Fim").isEmpty() ? null : (java.util.Date)inputValues.get("Fim");
+					GeneralOperationAndroid.historicoEmprestimos(login, senha, Inicio,Fim, map);
+					break;
 			}
 			
 		} catch (Exception ex) {
