@@ -60,7 +60,7 @@ public class SituacaoUsuarioActivity extends Activity {
         LinearLayout l1;
         for(Emprestimo emp : lista){
         	l1 = Historico.TabelaHistorico(this, emp.getBiblioteca(), emp.getDataEmprestimo(), emp.getDataRenovacao(),
-        			emp.getDataDevolucao(), emp.isRenovavel(), "");
+        			emp.getDataDevolucao(), emp.isRenovavel(), emp.getInformacoesLivro());
         	page.addView(l1);
 //        	l1 = Historico.TabelaHistorico(activity, biblioteca, dataEmprestimo, dataRenovacao, dataDevolucao, renovavel, informacoes)
         }

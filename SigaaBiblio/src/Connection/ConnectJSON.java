@@ -26,8 +26,8 @@ import android.widget.Toast;
  */
 public class ConnectJSON  extends AsyncTask<String, Void, JSONObject>{
 
-	public static String SISTEMA = "http://testes.nti.ufpb.br/sigaa";
-//	public static String SISTEMA = "http://150.165.250.55:8080/sigaa";
+//	public static String SISTEMA = "http://testes.nti.ufpb.br/sigaa";
+	public static String SISTEMA = "http://150.165.250.55:8080/sigaa";
 	public static String HOST = SISTEMA
 			+ "/public/biblioteca/SigaaAndroidServlet";
 	private ProgressDialog pd;
@@ -81,10 +81,13 @@ public class ConnectJSON  extends AsyncTask<String, Void, JSONObject>{
 	protected void onPostExecute(JSONObject result) {
 		// TODO Auto-generated method stub
 		super.onPostExecute(result);
+		desabilitaProgressDialog();
+	}
+	
+	public void desabilitaProgressDialog(){
 		if(pd!= null && pd.isShowing())
 			pd.dismiss();
 	}
-
 
 	public JSONObject getJsonResult() {
 		return jsonResult;

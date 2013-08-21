@@ -12,6 +12,7 @@ public class Emprestimo implements java.io.Serializable{
 	private String dataEmprestimo;
 	private String dataDevolucao;
 	
+	
 	/* campos de dados para historico de emprestimo */
 	private String tipoEmprestimo;
 	private String dataRenovacao;
@@ -64,11 +65,14 @@ public class Emprestimo implements java.io.Serializable{
 	}
 	
 	/* construtor utilizado para visualização de vinculo */
-	public Emprestimo(String codigoBarra,String dataEmprestimo, 
+	public Emprestimo(String codigoBarras, String autor, String titulo, String ano,String dataEmprestimo, 
 			String dataRenovacao, String dataDevolucao, String prazoDevolucao, String biblioteca,
 			boolean renovavel) {
 			super();
-		this.codigoBarras = codigoBarra;
+		this.autor = autor;
+		this.titulo = titulo;
+		this.ano = ano;
+		this.codigoBarras = codigoBarras;
 		this.prazoDevolucao = prazoDevolucao;
 		this.biblioteca = biblioteca;
 		this.renovavel = renovavel;
@@ -83,6 +87,11 @@ public class Emprestimo implements java.io.Serializable{
 		return "Código do livro: " + codigoLivro + "\nAutor: " + autor
 				+ "\nTítulo: " + titulo + "\nAno: " + ano + "\nData de empréstimo: "
 				+ dataEmprestimo + "\ndata de devolucao: " + dataDevolucao;
+	}
+	
+	public String getInformacoesLivro(){
+		return "Codigo de Barras: "+codigoBarras+"\nAutor: " + autor
+				+ "\nTítulo: " + titulo + "\nAno: " + ano;
 	}
 
 	public String getCodigoLivro() {

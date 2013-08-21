@@ -52,7 +52,7 @@
 		    android:gravity="center"
 		    android:text="Pode Realizar Empréstimos: SIM"
 		    android:textStyle="bold"
-		    android:textSize="18dp" />
+		    android:textSize="15dp" />
 		
 
 </LinearLayout>

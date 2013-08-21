@@ -27,6 +27,7 @@ import br.ufrn.sigaa.arq.dao.biblioteca.ArtigoDePeriodicoDao;
 import br.ufrn.sigaa.arq.dao.biblioteca.BibliotecaDao;
 import br.ufrn.sigaa.arq.dao.biblioteca.EmprestimoDao;
 import br.ufrn.sigaa.arq.dao.biblioteca.ExemplarDao;
+import br.ufrn.sigaa.arq.dao.biblioteca.MaterialInformacionalDao;
 import br.ufrn.sigaa.arq.dao.biblioteca.TituloCatalograficoDao;
 import br.ufrn.sigaa.arq.dao.biblioteca.UsuarioBibliotecaDao;
 import br.ufrn.sigaa.biblioteca.circulacao.dominio.Emprestimo;
@@ -35,6 +36,7 @@ import br.ufrn.sigaa.biblioteca.circulacao.negocio.ObtemVinculoUsuarioBiblioteca
 import br.ufrn.sigaa.biblioteca.dominio.Biblioteca;
 import br.ufrn.sigaa.biblioteca.dominio.SituacaoUsuarioBiblioteca;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.dominio.CacheEntidadesMarc;
+import br.ufrn.sigaa.biblioteca.processos_tecnicos.dominio.MaterialInformacional;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.pesquisa.dominio.CampoOrdenacaoConsultaAcervo;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.pesquisa.dominio.GeraPesquisaTextual;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.pesquisa.negocio.GeraPesquisaTextualFactory;
@@ -418,14 +420,26 @@ public class GeneralOperationAndroid {
 	
 			EmprestimoDao emprestimoDao = AbstractProcessador.getDAO(EmprestimoDao.class, null);
 			
-
+			//Captura Emprestimos Ativos do usuário
 			List<Emprestimo> emprestimos = emprestimoDao.findEmprestimosAtivosPorVinculoUsuario(usuarioBiblioteca);
 			String situacao = verificarSituacaoUsuario(usuarioBiblioteca);
 			
+			//Captura informações dos emprestimos e carrega o map.
 			Map<String,String> emprestimoMap;
 			Map<String,String> emprestimosUsuarioMap = new HashMap<String,String>();
-			for(Emprestimo emp : emprestimos){
+			MaterialInformacionalDao exemplarDao = AbstractProcessador.getDAO(MaterialInformacionalDao.class,null);
+			TituloCatalograficoDao tituloDao = AbstractProcessador.getDAO(TituloCatalograficoDao.class,null);
+			MaterialInformacional material;
+			Object[] materialInfo;
+			for(Emprestimo emp : emprestimos){				
+				material = exemplarDao.findMaterialAtivoByCodigoBarras(emp.getMaterial().getCodigoBarras());
+				materialInfo =(Object[]) tituloDao.findInformacoesResumidasDoTitulo(tituloDao.findIdTituloDoMaterial(material.getId()));
+
 				emprestimoMap = new HashMap<String,String>();
+				emprestimoMap.put("CodigoDeBarras", material.getCodigoBarras());
+				emprestimoMap.put("Autor", (String)materialInfo[2]);
+				emprestimoMap.put("Titulo",(String)materialInfo[1]);
+				emprestimoMap.put("Ano", (String)materialInfo[3]);
 				emprestimoMap.put("DataEmprestimo", emp.getDataEmprestimo().toString());
 				emprestimoMap.put("DataRenovacao", emp.getDataRenovacao() == null ? "-" : emp.getDataRenovacao().toString());
 				emprestimoMap.put("Devolucao", emp.getDataDevolucao() == null ? "-" : emp.getDataDevolucao().toString());
@@ -481,9 +495,7 @@ public class GeneralOperationAndroid {
 		
 		return situacao;
 	}
-
-	// Verificar se é necessários adicionar Request
-	
+		
 	
 	public static void informacoesExemplar(){
 		try {
@@ -495,12 +507,6 @@ public class GeneralOperationAndroid {
 		}
 	}
 
-	public static void consultaAcervoLivros(String titulo, String autor,
-			String assunto) {
-	}
-
-	public static void consultaAcervoArtigos(String titulo, String autor) {
-	}
 
 	public static void renovacaoEmprestimo(String login, String senha,
 			String senhaBiblioteca) {

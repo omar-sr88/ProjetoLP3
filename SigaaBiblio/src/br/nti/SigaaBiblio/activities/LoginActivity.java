@@ -96,6 +96,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 			
 		} catch (Exception ex) {
 			Toast.makeText(getApplicationContext(), "Ocorreu um error com a conexão!", Toast.LENGTH_LONG).show();
+			con.desabilitaProgressDialog();
 			ex.printStackTrace();
 			return;
 		}
@@ -219,41 +220,10 @@ public class LoginActivity extends Activity implements OnClickListener {
 						ex.printStackTrace();
 					}
 					return null;
-				}
-				
+				}				
 			}.execute();
 			
-			new AsyncTask<Void,Void,Void>(){
-
-				@Override
-				protected Void doInBackground(Void... params) {
-					Map<String, String> map = new HashMap<String, String>();
-					String jsonString;
-					map.put("Operacao", String.valueOf(Operations.MINHA_SITUACAO));
-					map.put("Login","eduardogama");
-					map.put("Senha", "202cb962ac59075b964b07152d234b70");
-					
-					JSONObject inputsJson = new JSONObject(map);
-					JSONObject resposta;
-					
-					try {
-						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());						
-						resposta = new JSONObject(jsonString);	
-						resposta = new JSONObject(resposta.getString("Emprestimos"));
-						resposta = new JSONObject(resposta.getString("28132"));
-						
-						Log.d("IRON_DEBUG", resposta.toString());//ou Artigos
-					} catch (Exception ex){
-						ex.printStackTrace();
-					}
-					return null;
-				}
-					
-				
-			}.execute();
-		
-		
-		//
+			
 		startActivity(intent);
 		finish();
 

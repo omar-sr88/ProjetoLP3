@@ -5,6 +5,7 @@ import br.nti.SigaaBiblio.activities.SituacaoUsuarioActivity;
 import com.nti.SigaaBiblio.R;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.ViewGroup.LayoutParams;
@@ -158,9 +159,11 @@ public class Historico {
         TextView tv10 = new TextView(activity);
         LinearLayout.LayoutParams ltv11 = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         ltv8.weight = (float) 0.50;
+        ltv11.setMargins(0, 15, 0, 0);
         tv10.setLayoutParams(ltv11);
         tv10.setText(informacoes);
-        tv10.setTextSize(18);
+        tv10.setTextSize(15);
+        tv10.setTextColor(Color.rgb(144,144,144));
         tv10.setTypeface(null, Typeface.BOLD);
         
         ll1.addView(tv10);

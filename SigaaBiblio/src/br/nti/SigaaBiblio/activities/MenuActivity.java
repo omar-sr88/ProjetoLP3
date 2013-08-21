@@ -133,7 +133,8 @@ public class MenuActivity extends Activity {
 								key = (String)obj.next();
 								content = new JSONObject(resposta.getString(key));
 								Log.d("IRON_DEBUG", content.toString());	
-								emp = new Emprestimo("",content.getString("DataEmprestimo"), 
+								emp = new Emprestimo(content.getString("CodigoDeBarras"),content.getString("Autor"),
+										content.getString("Titulo"),content.getString("Ano"),content.getString("DataEmprestimo"), 
 										content.getString("DataRenovacao"), content.getString("Devolucao"), "", content.getString("Biblioteca"),
 										content.getBoolean("Renovavel"));
 								emprestimos.add(emp);
