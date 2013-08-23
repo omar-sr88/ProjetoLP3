@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.primefaces.json.JSONException;
 import org.primefaces.json.JSONObject;
 
 import br.ufrn.arq.erros.ArqException;
@@ -31,24 +32,45 @@ import br.ufrn.sigaa.arq.dao.biblioteca.ExemplarDao;
 import br.ufrn.sigaa.arq.dao.biblioteca.MaterialInformacionalDao;
 import br.ufrn.sigaa.arq.dao.biblioteca.TituloCatalograficoDao;
 import br.ufrn.sigaa.arq.dao.biblioteca.UsuarioBibliotecaDao;
+import br.ufrn.sigaa.arq.negocio.SigaaListaComando;
 import br.ufrn.sigaa.biblioteca.circulacao.dominio.Emprestimo;
 import br.ufrn.sigaa.biblioteca.circulacao.dominio.UsuarioBiblioteca;
+import br.ufrn.sigaa.biblioteca.circulacao.negocio.MovimentoRenovaEmprestimo;
 import br.ufrn.sigaa.biblioteca.circulacao.negocio.ObtemVinculoUsuarioBibliotecaFactory;
+import br.ufrn.sigaa.biblioteca.circulacao.negocio.ProcessadorRenovaEmprestimo;
 import br.ufrn.sigaa.biblioteca.controle_estatistico.dao.HistorioEmprestimosDao;
 import br.ufrn.sigaa.biblioteca.dominio.Biblioteca;
 import br.ufrn.sigaa.biblioteca.dominio.SituacaoUsuarioBiblioteca;
+import br.ufrn.sigaa.biblioteca.integracao.dtos.OperacaoBibliotecaDto;
+import br.ufrn.sigaa.biblioteca.integracao.dtos.RetornoOperacoesCirculacaoDTO;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.dominio.CacheEntidadesMarc;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.dominio.MaterialInformacional;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.pesquisa.dominio.CampoOrdenacaoConsultaAcervo;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.pesquisa.dominio.GeraPesquisaTextual;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.pesquisa.negocio.GeraPesquisaTextualFactory;
+import br.ufrn.sigaa.biblioteca.util.BibliotecaUtil;
+import br.ufrn.sigaa.biblioteca.util.CirculacaoUtil;
 import br.ufrn.sigaa.biblioteca.util.UsuarioBibliotecaUtil;
 import br.ufrn.sigaa.biblioteca.util.VerificaSituacaoUsuarioBibliotecaUtil;
 import br.ufrn.sigaa.dominio.Usuario;
 import br.ufrn.sigaa.ensino.dominio.DiscenteAdapter;
+import br.ufrn.sigaa.mensagens.MensagensBiblioteca;
 
 public class GeneralOperationAndroid {
-
+	/**
+	 * Author Iron Araújo 08/2013
+	 */
+	
+	
+	/**
+	 * Operacao LOGIN
+	 * @param login
+	 * @param senha
+	 * @param map
+	 * @param request
+	 * @throws ArqException
+	 * @throws NegocioException
+	 */
 	public static void validaLogin(String login, String senha,
 			Map<String, String> map, HttpServletRequest request)
 			throws ArqException, NegocioException {
@@ -173,13 +195,19 @@ public class GeneralOperationAndroid {
 		map.put("Error", error);
 	}
 
+	
 	private static UsuarioGeral verificaLoginSenha(String login, String senha) throws DAOException {
-		UsuarioDao usuarioDao = AbstractProcessador.getDAO(UsuarioDao.class, null); // Inicia
+		UsuarioDao usuarioDao = AbstractProcessador.getDAO(UsuarioDao.class, null);
 		UsuarioGeral userGeral = usuarioDao.findByLogin(login);
 		usuarioDao.close();
 		return userGeral;
 		
 	}
+	
+	/**
+	 * Operacao: Listar Bibliotecas
+	 * @param map
+	 */
 
 	public static void listaBibliotecas(Map<String, String> map) {
 		try {
@@ -195,13 +223,23 @@ public class GeneralOperationAndroid {
 			JSONObject bibliotecaJSON = new JSONObject(bibliotecas);
 			map.put("Bibliotecas", bibliotecaJSON.toString());
 		} catch (DAOException e) {
+			map.put("Error", "Ocorreu um erro ao Listar as Bibliotecas");
 			e.printStackTrace();
 		};
 
 	}
 
 	// Buscar Artigos e Livros
-
+	/**
+	 * Operacao:
+	 * 			Consultar_acervo_artigo/Consultar_Acervo_Livro
+	 * @param map
+	 * @param idBiblioteca
+	 * @param tituloBusca
+	 * @param autorBusca
+	 * @param assuntoBusca
+	 * @throws DAOException
+	 */
 	public static void pesquisarAcervo(Map<String, String> map, Integer idBiblioteca, String tituloBusca, String autorBusca, String assuntoBusca)
 			throws DAOException {
 		
@@ -482,8 +520,7 @@ public class GeneralOperationAndroid {
 			situacao+=s.getDescricaoCompleta()+" ";
 		
 		return situacao;
-	}
-		
+	}		
 	
 	public static void informacoesExemplar(){
 		try {
@@ -495,14 +532,16 @@ public class GeneralOperationAndroid {
 		}
 	}
 
-
-	public static void renovacaoEmprestimo(String login, String senha,
-			String senhaBiblioteca) {
-	} // Definir demais parametros para empréstimos: id_livro
-
 	
-	
-
+	/**
+	 * Operacao: MEUS_EMPRESTIMOS
+	 * 
+	 * @param login
+	 * @param senha
+	 * @param inicio
+	 * @param fim
+	 * @param map
+	 */
 	public static void historicoEmprestimos(String login,
 			String senha, Date inicio, Date fim, Map<String, String> map) {
 		try {
@@ -529,7 +568,148 @@ public class GeneralOperationAndroid {
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			map.put("Error", "Ao Listar o Historico de Empréstimos");
 		}
+	}
+	
+	/**
+	 * Operacao: LIVROS_EMPRESTADOS
+	 * @param login
+	 * @param senha
+	 * @param map
+	 */
+	
+	public static void emprestimosAbertosUsuario (String login, String senha, Map<String, String> map) {
+		try {
+			ArrayList<Emprestimo> emprestimosList = emprestimosAbertosUsuario(login, senha);
+			JSONObject emprestimosAbertos = new JSONObject();
+			JSONObject emprestimo;
+			
+			for(Emprestimo emp : emprestimosList){
+				emprestimo = new JSONObject();
+				emprestimo.put("Informacao", emp.getMaterial().getInformacao());
+				emprestimo.put("DataEmprestimo", emp.getDataEmprestimo());
+				emprestimo.put("Prazo", emp.getPrazo());
+				emprestimo.put("IdMaterial", emp.getMaterial().getId());
+				
+				emprestimosAbertos.put(String.valueOf(emp.getId()), emprestimo);
+			}
+			
+			map.put("EmprestimosAbertos", emprestimosAbertos.toString());
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static ArrayList<Emprestimo> emprestimosAbertosUsuario(String login, String senha) {
+		ArrayList<Emprestimo> emprestimosEmAbertoRenovaveis = new ArrayList<Emprestimo>();
+		EmprestimoDao emprestimoDao = null;
+		try {
+			
+			emprestimoDao = AbstractProcessador.getDAO(EmprestimoDao.class,	null);
+
+			UsuarioBiblioteca usuarioBiblioteca = UsuarioBibliotecaUtil.recuperaUsuarioNaoQuitadosAtivos(carregaUsuarioBiblioteca(login, senha));
+			List<Emprestimo> emprestimosAbertos = emprestimoDao.findEmprestimosByUsuarioSituacaoPeriodo(usuarioBiblioteca,false, null, null);
+			
+			for (Emprestimo e : emprestimosAbertos)
+				if (e.podeRenovar()) {
+					emprestimosEmAbertoRenovaveis.add(e);
+					e.getMaterial().setInformacao(BibliotecaUtil.obtemDadosMaterialInformacional(e.getMaterial().getId()));
+				}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			if(emprestimoDao != null)
+				emprestimoDao.close();
+		}
+		return emprestimosEmAbertoRenovaveis;
+	}
+	
+
+	public static void renovarEmprestimos(String login, String senha, JSONObject inputValues, Map<String,String> map) throws ArqException{
+		
+		ArrayList<Emprestimo> emprestimosSelecionados = new ArrayList <Emprestimo> ();
+		ArrayList<Emprestimo> emprestimosEmAbertoRenovaveis = emprestimosAbertosUsuario(login, senha);
+		List<OperacaoBibliotecaDto> emprestimosRenovadosOp;
+		String mensagem = "";
+		String infoRenovacao = "";
+		
+		JSONObject result = new JSONObject();
+		
+		String idLivrosRenovacao[] = {""};
+		try {
+			idLivrosRenovacao = ((String)inputValues.get("IdLivrosRenovacao")).split(";");
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		for (Emprestimo e : emprestimosEmAbertoRenovaveis){ // Guarda os livros escolhidos para renovacao que vieram por JSON
+			for(String i : idLivrosRenovacao)
+				if(e.getMaterial().getId() == (Integer.valueOf(i))){
+				  emprestimosSelecionados.add(e);
+				  break;
+				}
+		}
+			
+		if (emprestimosSelecionados.size() == 0){    
+			mensagem += (MensagensBiblioteca.NENHUM_EMPRESTIMO_SELECIONADO);
+			
+		}else if(emprestimosSelecionados != null && emprestimosSelecionados.size() > 0){
+		
+			try{
+				UsuarioBibliotecaDao dao = null;
+				// Monta as informações que o processador precisa, apesar de algumas não serem necessárias
+				
+				// Carrega Usuario Biblioteca
+				dao = AbstractProcessador.getDAO(UsuarioBibliotecaDao.class, null);
+				UsuarioBiblioteca usuarioBiblioteca = UsuarioBibliotecaUtil.recuperaUsuarioNaoQuitadosAtivos(carregaUsuarioBiblioteca(login, senha));
+
+				List <Integer> idsMateriaisARenovar  = new ArrayList <Integer> ();
+				
+				//Transforma Array em ArrayList para executar o Moveimento Renova Emprestimo
+				for(String i : idLivrosRenovacao)
+					idsMateriaisARenovar.add(Integer.valueOf(i));
+				
+				// Chama o processador que realiza a renovação
+				MovimentoRenovaEmprestimo mov = new MovimentoRenovaEmprestimo(idsMateriaisARenovar, usuarioBiblioteca, usuarioBiblioteca.getSenha());
+				
+				mov.setCodMovimento(SigaaListaComando.RENOVA_EMPRESTIMO);
+		
+				// Retorna uma lista de operações feitas								
+				ProcessadorRenovaEmprestimo ac = new ProcessadorRenovaEmprestimo();
+				RetornoOperacoesCirculacaoDTO retorno = (RetornoOperacoesCirculacaoDTO) ac.execute(mov);
+				
+				for (String msg : retorno.mensagemAosUsuarios) {
+					mensagem += msg;
+				}
+				
+				emprestimosRenovadosOp = retorno.getOperacoesRealizadas();
+				
+				for (OperacaoBibliotecaDto renovacoes : emprestimosRenovadosOp) {
+					infoRenovacao = (renovacoes.infoMaterial+" Prazo para Devolução: "+renovacoes.getPrazoFormatado())+"\n";
+				}	
+				
+				result.put("InfoRenovacao", infoRenovacao);
+				result.put("CodigoAutenticacao", CirculacaoUtil.getCodigoAutenticacaoRenovacao(emprestimosRenovadosOp));
+				
+			} catch (Exception ne){
+				ne.printStackTrace();
+				map.put("Error",ne.getMessage());
+				
+			} 
+		
+		}else{
+			mensagem = "Nenhum emprestimo foi selecionado";			
+		}		
+		
+		map.put("Mensagem",mensagem);
+		map.put("RenovacaoEmprestimo", result.toString());
+		
 	}
 
 	private static List<UsuarioBiblioteca> carregaUsuarioBiblioteca(String login,

@@ -197,6 +197,14 @@ public class LoginActivity extends Activity implements OnClickListener {
 			
 			new AsyncTask<Void,Void,Void>(){
 				//IdBiblioteca":"9763","TituloBusca":"Metodologia","AutorBusca":"","AssuntoBusca":""}
+				/**
+				 * Retorno: Livros
+				 * Autor  (String)
+				 * Titulo (String)
+				 * Edicao (String)
+				 * Ano    (Int)
+				 * QuantidadeAtivos (Int)
+				 */
 				@Override
 				protected Void doInBackground(Void... arg0) {
 					Map<String, String> map = new HashMap<String, String>();
@@ -225,7 +233,17 @@ public class LoginActivity extends Activity implements OnClickListener {
 			}.execute();
 			
 			new AsyncTask<Void,Void,Void>(){
-				
+				/**
+				 * Retorno: Emprestimos
+				 * TipoEmprestimo (String)
+				 * DataEmprestimo (Date)
+				 * DataRenovacao  (Date)
+				 * PrazoDevolucao (Date)
+				 * DataDevolucao  (Date)
+				 * Informacao     (String)   -- Informacao do Material
+				 * 
+				 */
+				//{"Login":"eduardogama","Senha":"202cb962ac59075b964b07152d234b70","Operacao":"6","Fim":"","Inicio":""}
 				@Override
 				protected Void doInBackground(Void... arg0) {
 					Map<String, String> map = new HashMap<String, String>();
@@ -245,7 +263,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 						Iterator it = resposta.keys();
 					while (it.hasNext()) {
 						JSONObject obj = resposta.getJSONObject((String) it.next());
-						Log.d("IRON_DEBUG", obj.toString());// ou Artigos
+						Log.d("IRON_DEBUG", obj.toString());
 					}
 					} catch (Exception ex){
 						ex.printStackTrace();
@@ -253,6 +271,74 @@ public class LoginActivity extends Activity implements OnClickListener {
 					return null;
 				}				
 			}.execute();
+			
+			new AsyncTask<Void,Void,Void>(){
+				/**
+				 * Retorno: EmprestimosAbertos
+				 * Informacao         (String)
+				 * DataEmprestimo     (Date)
+				 * Prazo              (Date)
+				 * IdMaterial         (int) -> Será usado para renovacao
+				 * 
+				 */
+				@Override
+				protected Void doInBackground(Void... arg0) {
+					try {
+					Map<String, String> map = new HashMap<String, String>();
+					String jsonString;
+					map.put("Operacao", String.valueOf(Operations.LIVROS_EMPRESTADOS));
+					map.put("Login", "ironaraujo");
+					map.put("Senha", "202cb962ac59075b964b07152d234b70");
+					
+					JSONObject inputsJson = new JSONObject(map);
+					JSONObject resposta;
+					
+					
+					jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+					resposta = new JSONObject(jsonString);					
+					resposta = new JSONObject(resposta.getString("EmprestimosAbertos"));
+					Iterator it = resposta.keys();
+					String renovacao = "";
+					
+					while (it.hasNext()) {
+						JSONObject obj = resposta.getJSONObject((String) it.next());
+						renovacao += obj.getInt("IdMaterial")+";";              ///String de Renovacao: ID's separados por ';'
+						Log.d("IRON_DEBUG", obj.toString());// ou Artigos
+					}				
+					
+					
+					///// FIM DA LISTAGEM DOS EMPRESTIMOS
+					//// RENOVACAO DE EMPRESTIMOS
+					
+					/**
+					 * Retorno: RenovacaoEmprestimo
+					 * InfoRenovacao: String
+					 * CodigoAutenticacao : String
+					 * 
+					 * Verificar Mensagem e ERROR
+					 */
+					map = new HashMap<String, String>();					
+					
+					map.put("Operacao", String.valueOf(Operations.RENOVACAO));
+					map.put("Login", "ironaraujo");
+					map.put("Senha", "202cb962ac59075b964b07152d234b70");		
+					map.put("IdLivrosRenovacao", renovacao); // ESTA RENOVANDO TODOS OS LIVROS
+					inputsJson = new JSONObject(map);					
+					
+					jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+					resposta = new JSONObject(jsonString);	
+					
+					resposta = new JSONObject(resposta.getString(("RenovacaoEmprestimo")));
+					//{"Mensagem":"","RenovacaoEmprestimo":"{\"InfoRenovacao\":\"00001\/06 - Verger, Pierre. Fluxo e refluxo do tráfico de escravos entre o Golfo do Benin e a Bahia de Todos os Santos dos séculos XVII a XIX.\/ - Biblioteca Central Prazo para Devolução: 12\/09\/2013 23:59:59\\n\",\"CodigoAutenticacao\":\"834B.7D5D5BB \"}","Error":"null"}
+					Log.d("IRON_DEBUG_CODIGOAUTENTICACAO", resposta.getString("CodigoAutenticacao"));
+					} catch (Exception ex){
+						ex.printStackTrace();
+					}
+					return null;
+				}				
+			}.execute();
+			
+			
 			
 			
 		startActivity(intent);

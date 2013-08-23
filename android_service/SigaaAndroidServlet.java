@@ -10,11 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.richfaces.json.JSONObject;
+import org.primefaces.json.JSONObject;
 
 @SuppressWarnings("serial")
 public class SigaaAndroidServlet extends HttpServlet {
-
+	// Iron Araujo 23/08/2013
 	/**
 	 * Recebe Requisição
 	 */
@@ -37,15 +37,56 @@ public class SigaaAndroidServlet extends HttpServlet {
 			int operation = inputValues.getInt("Operacao");
 			String login;
 			String senha;
-			switch(operation){			
+			switch(operation){	
+				/**
+				 * Realizar Login
+				 * 
+				 * Input: Operacao : LOGIN
+				 * 		  Login : String
+				 * 		  Senha : String (Senha em md5)
+				 * 
+				 * Output: Nome    				  : String
+				 * 		   isAluno 				  : String
+				 * 		   IdUsuarioBiblioteca    : int
+				 * 		   Foto    				  : String (URL da foto)
+				 * 	       EmprestimosAbertos 	  : int (Quantidade de empréstimos abertos)
+				 * 		   PodeRealizarEmprestimo : boolean
+				 * 		   Matricula 			  : String (Discente)
+				 * 		   Curso 				  : String (Discente)
+				 * 		   Unidade 				  : String   (Servidor)
+				 */
 				case Operations.LOGIN:
 					login = inputValues.getString("Login");
 					senha = inputValues.getString("Senha");
 					GeneralOperationAndroid.validaLogin(login, senha, map, request);
 					break;
+				
+				/**
+				 * Lista das Bibliotecas
+				 * 
+				 * Input: 	Operacao: LISTAR_BIBLIOTECAS
+				 * 
+				 * Output:  Bibliotecas : String
+				 */
 				case Operations.LISTAR_BIBLIOTECAS:
 					GeneralOperationAndroid.listaBibliotecas(map);
 					break;
+					
+				/**
+				 * Consulta de Material no Acervo
+				 * 
+				 * Input: Operacao: CONSULTAR_ACERVO_ARTIGO / CONSULTAR_ACERVO_LIVRO
+				 * 		  IdBiblioteca : int
+				 * 		  TituloBusca  : String
+				 * 		  AutorBusca   : String
+				 * 		  AssuntoBusca : String
+				 * 
+				 * Output: Autor           : String
+				 * 		   Titulo 		   : String
+				 * 		   Edicao 		   : String
+				 * 		   Ano    		   : int
+				 * 		   QuantidadeAtivos: int
+				 */    
 				case Operations.CONSULTAR_ACERVO_ARTIGO:
 				case Operations.CONSULTAR_ACERVO_LIVRO:
 					int idBiblioteca = inputValues.getInt("IdBiblioteca");
@@ -54,12 +95,49 @@ public class SigaaAndroidServlet extends HttpServlet {
 					String assuntoBusca = inputValues.getString("AssuntoBusca");
 					GeneralOperationAndroid.pesquisarAcervo(map, idBiblioteca, tituloBusca, autorBusca, assuntoBusca);
 					break;
+					
+				/**
+				 * Situacao do Usuario
+				 * 
+				 * Input: Operacao: MINHA_SITUACAO (Emprestimos Realizados Pelos Usuario)
+				 * 		  Login : String
+				 * 		  Senha : String
+				 * 
+				 * Output: Lista de Materiais:
+				 * 			CodigoDeBarras : String
+				 * 			Autor          : String
+				 * 			Titulo         : String
+				 * 			Ano            : int
+				 * 		    DataEmprestimo : Date
+				 * 			DataRenovacao  : Date
+				 * 			Devolucao      : Date
+				 * 			Biblioteca     : String
+				 * 			Renovavel      : boolean
+				 * 				
+				 */
 				
 				case Operations.MINHA_SITUACAO:
 					login = inputValues.getString("Login");
 					senha = inputValues.getString("Senha");
 					GeneralOperationAndroid.minhaSituacao(login, senha,map);
 					break;
+					
+				/** Emprestimos do Usuario por intervalo de Tempo
+				 * 
+				 * 	Input : Operacao : MEUS_EMPRESTIMOS
+				 * 			Login    : String
+				 * 			Senha    : String
+				 * 			Inicio   : Date
+				 * 			Fim      : Date
+				 * 
+				 * Output : TipoEmprestimo : String
+				 * 			DataEmprestimo : Date
+				 * 			DataRenovacao  : Date
+				 * 			PrazoDevolucao : Date
+				 * 			DataDevolucao  : Date
+				 * 			Informacao     : String
+				 * 
+				 */
 					
 				case Operations.MEUS_EMPRESTIMOS:
 					login = inputValues.getString("Login");
@@ -68,6 +146,40 @@ public class SigaaAndroidServlet extends HttpServlet {
 					java.util.Date Fim = inputValues.getString("Fim").isEmpty() ? null : (java.util.Date)inputValues.get("Fim");
 					GeneralOperationAndroid.historicoEmprestimos(login, senha, Inicio,Fim, map);
 					break;
+					
+				/** Livros Emprestados 
+				 * 
+				 *  Input : Operacao : LIVROS_EMPRESTADOS
+				 *  		Login 		: String
+				 *  		Senha 		: String
+				 *  
+				 *  Output: Informacao     : String
+				 *  		DataEmprestimo : Date
+				 *  		Prazo          : Date
+				 *  		IdMaterial     : int
+				 *  	
+				 */
+				
+				case Operations.LIVROS_EMPRESTADOS:
+					login = inputValues.getString("Login");
+					senha = inputValues.getString("Senha");
+					GeneralOperationAndroid.emprestimosAbertosUsuario(login, senha, map);
+					break;
+				/**
+				 * Renovacao de Emprestimos de Material
+				 * 
+				 * Input : Operacao : RENOVACAO
+				 * 		   Login    : String
+				 * 		   Senha    : Senha
+				 * 
+				 * Output : InfoRenovacao      : String
+				 * 			CodigoAutenticacao : String
+				 */
+					
+				case Operations.RENOVACAO:
+					login = inputValues.getString("Login");
+					senha = inputValues.getString("Senha");
+					GeneralOperationAndroid.renovarEmprestimos(login, senha, inputValues, map);
 			}
 			
 		} catch (Exception ex) {
