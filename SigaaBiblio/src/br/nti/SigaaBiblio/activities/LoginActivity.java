@@ -45,6 +45,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 		
 		setContentView(R.layout.activity_login);
 
+			
+	 	//Na criacao da ACtivity eu tento buscar a preferencia "Lembrar usuario" 
 		logPref = "";
 		senhaPref = "";
 
@@ -53,14 +55,16 @@ public class LoginActivity extends Activity implements OnClickListener {
 		etSenha = (EditText) findViewById(R.id.editTextSenhaUsuario);
 		login.setOnClickListener(this);
 
+		//Se a pref lembrar eh true eu tento setar os vlores de logpref e senhapref
 		if (Prefs.getLembrar(this)) {
-
+		
 			if (getPreferences(MODE_PRIVATE).contains("login"))
 				logPref = getPreferences(MODE_PRIVATE).getString("login", "");
 
 			if (getPreferences(MODE_PRIVATE).contains("senha"))
 				senhaPref = getPreferences(MODE_PRIVATE).getString("senha", "");
 
+			//se nao forem nulos, ele ja realiza o login chamando o botao de login
 			if (!logPref.isEmpty() && logPref != null && !senhaPref.isEmpty()
 					&& senhaPref != null)
 				login.performClick();
@@ -154,6 +158,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		}
 		
 		if (Prefs.getLembrar(this)) {
+			//se fez o login corretamente, ele salva o usuario
 			
 			if (!login.isEmpty() && login != null && !senha.isEmpty()
 					&& senha != null) {
