@@ -25,6 +25,13 @@ public class Prefs extends PreferenceActivity {
     addPreferencesFromResource(R.layout.settings);
   }
 
+
+  //Aqui so fiz a definicao das preferencias que seriam criadas:
+  // Elas sao:
+  //
+  // Lembrar Usuario , Esquema de cor diferente , Historico de livros , historico de pequisa
+  // 
+  
   /** Get the current value of the Lembrar option */
   public static boolean getLembrar(Context context) {
     return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
