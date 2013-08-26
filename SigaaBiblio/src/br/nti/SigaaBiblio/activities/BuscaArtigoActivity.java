@@ -1,8 +1,10 @@
 package br.nti.SigaaBiblio.activities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,8 +13,13 @@ import org.json.JSONObject;
 
 import com.nti.SigaaBiblio.R;
 
+import Connection.ConnectJSON;
+import Connection.HttpUtils;
+import Connection.Operations;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
@@ -76,6 +83,82 @@ public class BuscaArtigoActivity extends Activity {
 	
 	}
 
+	
+	public void pesquisar(View v) {
+		
+		titulo = (EditText)findViewById(R.id.editTextTituloArtigo);
+		autor = (EditText)findViewById(R.id.editTextAutorArtigo);
+		palavraChave = (EditText)findViewById(R.id.editTextPalavraChaveArtigo);
+		
+		final ProgressDialog pd = new ProgressDialog(BuscaArtigoActivity.this);
+		pd.setMessage("Processando...");
+		pd.setTitle("Aguarde");
+		pd.setIndeterminate(false);
+		
+		
+		new AsyncTask<Void,Void,Void>(){
+			//IdBiblioteca":"9763","TituloBusca":"Metodologia","AutorBusca":"","AssuntoBusca":""}
+			/**
+			 * Retorno: Livros
+			 * Autor  (String)
+			 * Titulo (String)
+			 * Edicao (String)
+			 * Ano    (Int)
+			 * QuantidadeAtivos (Int)
+			 */
+			
+			
+			@Override
+			protected void onPreExecute() {
+				// TODO Auto-generated method stub
+				super.onPreExecute();
+				pd.show();
+			}
+			
+			
+			@Override
+			protected Void doInBackground(Void... arg0) {
+				
+				
+				Map<String, String> map = new HashMap<String, String>();
+				String jsonString;
+				map.put("Operacao", String.valueOf(Operations.CONSULTAR_ACERVO_ARTIGO));
+				map.put("IdBiblioteca",bibliotecaSelecionada);
+				map.put("TituloBusca", titulo.getText().toString());
+				map.put("AutorBusca", autor.getText().toString());
+				map.put("AssuntoBusca",palavraChave.getText().toString());
+				JSONObject inputsJson = new JSONObject(map);
+				JSONObject resposta;
+				
+				try {
+					jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+					resposta = new JSONObject(jsonString);
+					String artigos =resposta.getString("Artigos");
+					Intent intent = new Intent(BuscaArtigoActivity.this, ResultadoBuscaArtigoctivity.class );
+					intent.putExtra("Artigos", artigos);
+					startActivity(intent);
+					
+					//Log.d("MARCILIO_DEBUG",livros);//ou Artigos
+				} catch (Exception ex){
+					String erro = "Não foi possivel completar a requisição, por favor tente novamente";
+					Toast.makeText(getApplicationContext(), erro, Toast.LENGTH_LONG)
+					.show();
+					ex.printStackTrace();
+				}
+				return null;
+			}
+			
+			@Override
+			protected void onPostExecute(Void v) {
+				// TODO Auto-generated method stub
+				super.onPostExecute(v);
+				if(pd!= null && pd.isShowing())
+					pd.dismiss();
+			}
+			
+			
+		}.execute();
+	}
 	
 	
 	/*

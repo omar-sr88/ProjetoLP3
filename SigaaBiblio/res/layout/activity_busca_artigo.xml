@@ -141,7 +141,8 @@
 	    android:layout_height="wrap_content"
 	    android:layout_gravity="center"
 	    android:layout_marginTop="30dp"
-	    android:text="Pesquisar" />
+	    android:text="Pesquisar"
+	    android:onClick="pesquisar" />
 	
 	 </LinearLayout>
 	</ScrollView>

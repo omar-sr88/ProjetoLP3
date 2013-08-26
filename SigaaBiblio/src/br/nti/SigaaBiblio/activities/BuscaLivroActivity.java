@@ -97,7 +97,7 @@ public class BuscaLivroActivity extends Activity {
 	}
 		
 		
-	/* Realiza Uma pesuqisa
+	/* Realiza Uma pesquisa
 	 */
 		
 		public void pesquisar(View v) {

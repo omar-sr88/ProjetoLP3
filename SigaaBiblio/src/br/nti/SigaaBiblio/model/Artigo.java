@@ -178,6 +178,10 @@ public class Artigo {
 		this.diaMes = diaMes;
 	}
 	
+	public String toString(){
+		return "Autor: "+this.autor+"\nTítulo: "+this.titulo+"\nPalavras-Chave: "+this.palavrasChave;
+	}
+	
 	
 
 	
