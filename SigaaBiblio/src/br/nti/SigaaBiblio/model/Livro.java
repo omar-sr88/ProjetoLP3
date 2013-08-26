@@ -10,9 +10,9 @@ public class Livro {
 	private String titulo;
 	private String edicao;
 	private String ano;
-	private int quantidade;
+	private String quantidade;
 	/* Campos dados do Titulo */
-	private Long registroNoSistema;
+	private String registroNoSistema;
 	private String numeroChamada;
 	private String subTitulo;
 	private String assunto;
@@ -28,8 +28,12 @@ public class Livro {
 	 * solicitações ao servidor
 	 */
 	
+	
+	
+	
+	
 	public Livro(String autor, String titulo, String edicao, String ano,
-			int quantidade, Long registroNoSistema) {
+			String quantidade, String registroNoSistema) {
 		super();
 		this.autor = autor;
 		this.titulo = titulo;
@@ -37,7 +41,7 @@ public class Livro {
 		this.ano = ano;
 		this.quantidade = quantidade;
 		this.registroNoSistema=registroNoSistema;
-		this.exemplares=new ArrayList<ExemplarLivro>();
+		//this.exemplares=new ArrayList<ExemplarLivro>();
 	}
 
 
@@ -91,22 +95,22 @@ public class Livro {
 	}
 
 
-	public int getQuantidade() {
+	public String getQuantidade() {
 		return quantidade;
 	}
 
 
-	public void setQuantidade(int quantidade) {
+	public void setQuantidade(String quantidade) {
 		this.quantidade = quantidade;
 	}
 
 
-	public Long getRegistroNoSistema() {
+	public String getRegistroNoSistema() {
 		return registroNoSistema;
 	}
 
 
-	public void setRegistroNoSistema(Long registroNoSistema) {
+	public void setRegistroNoSistema(String registroNoSistema) {
 		this.registroNoSistema = registroNoSistema;
 	}
 
@@ -158,6 +162,11 @@ public class Livro {
 
 	public void setEditora(String editora) {
 		this.editora = editora;
+	}
+	
+	public String toString(){
+		return "Autor: "+this.autor+"\nTítulo: "+this.titulo+"\nEdição: "+this.edicao+
+				"\nAno: "+this.ano+"\nQuantidade: "+this.quantidade;
 	}
 	
 }

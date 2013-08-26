@@ -191,7 +191,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 					String bibliotecas = resposta.getString("Bibliotecas");
 					String nome = new JSONObject(bibliotecas).getString("9763");
 					
-					Log.d("IRON DEBUG", nome);
+					//Log.d("IRON DEBUG", nome);
 				} catch (Exception ex){
 					ex.printStackTrace();
 				}
@@ -215,7 +215,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 					Map<String, String> map = new HashMap<String, String>();
 					String jsonString;
 					map.put("Operacao", String.valueOf(Operations.CONSULTAR_ACERVO_LIVRO));
-					map.put("IdBiblioteca","9763");
+					map.put("IdBiblioteca","0");
 					map.put("TituloBusca", "Metodologia");
 					map.put("AutorBusca", "");
 					map.put("AssuntoBusca","");
@@ -227,9 +227,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 						resposta = new JSONObject(jsonString);
 						resposta = new JSONObject(resposta.getString("Livros"));
 						resposta = resposta.getJSONObject("112204");
-						String titulo = resposta.getString("Titulo");
+						//String titulo = resposta.getString("Titulo");
 						
-						Log.d("IRON_DEBUG", titulo);//ou Artigos
+						Log.d("IRON_DEBUG", resposta.toString());//ou Artigos
 					} catch (Exception ex){
 						ex.printStackTrace();
 					}
@@ -268,7 +268,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 						Iterator it = resposta.keys();
 					while (it.hasNext()) {
 						JSONObject obj = resposta.getJSONObject((String) it.next());
-						Log.d("IRON_DEBUG", obj.toString());
+						//Log.d("IRON_DEBUG", obj.toString());
 					}
 					} catch (Exception ex){
 						ex.printStackTrace();
@@ -308,7 +308,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 					while (it.hasNext()) {
 						JSONObject obj = resposta.getJSONObject((String) it.next());
 						renovacao += obj.getInt("IdMaterial")+";";              ///String de Renovacao: ID's separados por ';'
-						Log.d("IRON_DEBUG", obj.toString());// ou Artigos
+						//Log.d("IRON_DEBUG", obj.toString());// ou Artigos
 					}				
 					
 					
@@ -335,7 +335,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 					
 					resposta = new JSONObject(resposta.getString(("RenovacaoEmprestimo")));
 					//{"Mensagem":"","RenovacaoEmprestimo":"{\"InfoRenovacao\":\"00001\/06 - Verger, Pierre. Fluxo e refluxo do tráfico de escravos entre o Golfo do Benin e a Bahia de Todos os Santos dos séculos XVII a XIX.\/ - Biblioteca Central Prazo para Devolução: 12\/09\/2013 23:59:59\\n\",\"CodigoAutenticacao\":\"834B.7D5D5BB \"}","Error":"null"}
-					Log.d("IRON_DEBUG_CODIGOAUTENTICACAO", resposta.getString("CodigoAutenticacao"));
+					//Log.d("IRON_DEBUG_CODIGOAUTENTICACAO", resposta.getString("CodigoAutenticacao"));
 					} catch (Exception ex){
 						ex.printStackTrace();
 					}

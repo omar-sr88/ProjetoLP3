@@ -55,8 +55,8 @@ public class MenuActivity extends Activity {
 		textViewPodeFazerEmprestimo = (TextView)findViewById(R.id.textViewPodeFazerEmprestimo);
 		textViewTotalEmprestimosAbertos = (TextView)findViewById(R.id.textViewTotalEmprestimos);
 		imageView1 = (ImageView)findViewById(R.id.imageView1);
-		buscaAcervo = (Button)findViewById(R.id.consultarHistorico);
-		buscaArtigo= (Button)findViewById(R.id.button2);
+		buscaAcervo = (Button)findViewById(R.id.consultarAcervo);
+		buscaArtigo= (Button)findViewById(R.id.consultarArtigo);
 		situacao = (Button)findViewById(R.id.button4);
 		renovacao = (Button) findViewById(R.id.button3);
 		historico = (Button) findViewById(R.id.button5);
@@ -64,29 +64,7 @@ public class MenuActivity extends Activity {
 
 		carregaDados();
 		
-		
-//		buscaAcervo.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				
-//				Intent intent = new Intent(MenuActivity.this, BuscaLivroActivity.class );
-//				intent.putExtra("Bibliotecas", bibliotecas);
-//				startActivity(intent);
-//				
-//
-//			}
-//		});
 
-		buscaArtigo.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(MenuActivity.this, BuscaArtigoActivity.class );
-				startActivity(intent);
-
-			}
-		});
 
 
 		situacao.setOnClickListener(new OnClickListener() {
@@ -255,22 +233,21 @@ public class MenuActivity extends Activity {
 			pd.setMessage("Processando...");
 			pd.setTitle("Aguarde");
 			pd.setIndeterminate(false);
-			
 			bibliotecas=null;
-
 			
 			/*
 			 * OBTEM O NOMES DAS BIBLIOTECAS ATIVAS
 			 */
+			
 			new AsyncTask<Void,Void,Void>(){
 
-				
 				@Override
 				protected void onPreExecute() {
 					// TODO Auto-generated method stub
 					super.onPreExecute();
 					pd.show();
 				}
+				
 				
 				@Override
 				protected Void doInBackground(Void... arg0) {
@@ -279,22 +256,16 @@ public class MenuActivity extends Activity {
 					map.put("Operacao", String.valueOf(Operations.LISTAR_BIBLIOTECAS));
 					JSONObject inputsJson = new JSONObject(map);
 					JSONObject resposta;
+					
 					try {
 						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
 						resposta = new JSONObject(jsonString);
-						String bibliotecas=resposta.getString("Bibliotecas");
+						String bibliotecas = resposta.getString("Bibliotecas");
 						Intent intent = new Intent(MenuActivity.this, BuscaLivroActivity.class );
 						intent.putExtra("Bibliotecas", bibliotecas);
 						startActivity(intent);
-						
-						//Log.d("MARCILIO_DEBUG", "isso é uma key "+resposta.getString("Bibliotecas"));
-						//JSONObject bibliotecas=resposta.getJSONObject("Bibliotecas");
-//						Iterator<String> keys = bibliotecas.keys(); //descobre as chaves que são os ids das bibliotecas
-//						while(keys.hasNext()){
-//							String key=keys.next();
-//							Log.d("MARCILIO_DEBUG", "isso é uma key "+key);
-//						}
-						
+//						
+						Log.d("MARCILIO_DEBUG", bibliotecas);
 					} catch (Exception ex){
 						String erro = "Não foi possivel completar a requisição, por favor tente novamente";
 						Toast.makeText(getApplicationContext(), erro, Toast.LENGTH_LONG)
@@ -304,7 +275,6 @@ public class MenuActivity extends Activity {
 					return null;
 				}
 				
-//				
 				@Override
 				protected void onPostExecute(Void v) {
 					// TODO Auto-generated method stub
@@ -313,12 +283,72 @@ public class MenuActivity extends Activity {
 						pd.dismiss();
 				}
 				
-			}.execute();
+				}.execute();			
 			
-			
-
 		}
+	
 		
+		public void consultarArtigo(View v){
+			
+			
+			final ProgressDialog pd = new ProgressDialog(MenuActivity.this);
+			pd.setMessage("Processando...");
+			pd.setTitle("Aguarde");
+			pd.setIndeterminate(false);
+			bibliotecas=null;
+			
+			/*
+			 * OBTEM O NOMES DAS BIBLIOTECAS ATIVAS
+			 */
+			
+			new AsyncTask<Void,Void,Void>(){
+
+				@Override
+				protected void onPreExecute() {
+					// TODO Auto-generated method stub
+					super.onPreExecute();
+					pd.show();
+				}
+				
+				
+				@Override
+				protected Void doInBackground(Void... arg0) {
+					Map<String, String> map = new HashMap<String, String>();
+					String jsonString;
+					map.put("Operacao", String.valueOf(Operations.LISTAR_BIBLIOTECAS));
+					JSONObject inputsJson = new JSONObject(map);
+					JSONObject resposta;
+					
+					try {
+						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+						resposta = new JSONObject(jsonString);
+						String bibliotecas = resposta.getString("Bibliotecas");
+						Intent intent = new Intent(MenuActivity.this, BuscaArtigoActivity.class );
+						intent.putExtra("Bibliotecas", bibliotecas);
+						startActivity(intent);
+						
+						Log.d("MARCILIO_DEBUG", bibliotecas);
+					} catch (Exception ex){
+						String erro = "Não foi possivel completar a requisição, por favor tente novamente";
+						Toast.makeText(getApplicationContext(), erro, Toast.LENGTH_LONG)
+						.show();
+						ex.printStackTrace();
+					}
+					return null;
+				}
+				
+				@Override
+				protected void onPostExecute(Void v) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(v);
+					if(pd!= null && pd.isShowing())
+						pd.dismiss();
+				}
+				
+				}.execute();			
+			
+		}
+
 
 }
 

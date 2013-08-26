@@ -80,17 +80,18 @@
                 android:layout_weight="1.53" >
 
                 <Button
-                    android:id="@+id/consultarHistorico"
+                    android:id="@+id/consultarAcervo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Consultar Acervo"
                     android:onClick="consultarAcervo" />
 
                 <Button
-                    android:id="@+id/button2"
+                    android:id="@+id/consultarArtigo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Consultar Artigo" />
+                    android:text="Consultar Artigo"
+                    android:onClick="consultarArtigo" />
 
                 <Button
                     android:id="@+id/button3"
