@@ -10,5 +10,6 @@ public class Operations {
 	public static final int MEUS_EMPRESTIMOS = 6;
 	public static final int LISTAR_BIBLIOTECAS = 7;
 	public static final int LIVROS_EMPRESTADOS = 8;
+	public static final int INFORMACOES_EXEMPLAR = 9;
 
 }

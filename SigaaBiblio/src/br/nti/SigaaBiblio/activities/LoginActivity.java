@@ -344,6 +344,42 @@ public class LoginActivity extends Activity implements OnClickListener {
 			}.execute();
 			
 			
+			new AsyncTask<Void,Void,Void>(){
+				/**
+				 * Retorno:   Registro         : int
+				 * 			  NumeroChamada    : String
+				 * 			  Titulo           : String  
+				 * 			  SubTitulo        : String
+				 * 			  Assunto          : String
+				 * 			  Autor            : String
+				 * 			  AutorSecundario  : String
+				 * 			  Publicacao       : String    (Local de Publicacao)
+				 * 		      Editora 		   : String
+				 * 			  AnoPublicacao    : int
+				 * 			  NotasGerais 	   : String				
+				 * 
+				 */
+				
+				@Override
+				protected Void doInBackground(Void... arg0) {
+					Map<String, String> map = new HashMap<String, String>();
+					String jsonString;
+					map.put("Operacao", String.valueOf(Operations.INFORMACOES_EXEMPLAR));
+					map.put("IdDetalhes", "112204");					
+					JSONObject inputsJson = new JSONObject(map);
+					
+					
+					try {
+						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+						JSONObject resposta = new JSONObject(jsonString);					
+						Log.d("IRON_DEBUG", resposta.toString());
+					} catch (Exception ex){
+						ex.printStackTrace();
+					}
+					return null;
+				}				
+			}.execute();
+			
 			
 			
 		startActivity(intent);

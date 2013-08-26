@@ -81,7 +81,8 @@ public class SigaaAndroidServlet extends HttpServlet {
 				 * 		  AutorBusca   : String
 				 * 		  AssuntoBusca : String
 				 * 
-				 * Output: Autor           : String
+				 * Output: Id_Detalhes     : int
+				 * 		   Autor           : String
 				 * 		   Titulo 		   : String
 				 * 		   Edicao 		   : String
 				 * 		   Ano    		   : int
@@ -180,6 +181,31 @@ public class SigaaAndroidServlet extends HttpServlet {
 					login = inputValues.getString("Login");
 					senha = inputValues.getString("Senha");
 					GeneralOperationAndroid.renovarEmprestimos(login, senha, inputValues, map);
+					break;
+					
+				/**
+				 * Obtém informações detalhadas sobre o Exemplar
+				 * 
+				 * Input   :  Operacao : INFORMACOES_EXEMPLAR
+				 * 			  IdExemplar : int
+				 * 
+				 * Output  :  Registro         : int
+				 * 			  NumeroChamada    : String
+				 * 			  Titulo           : String  
+				 * 			  SubTitulo        : String
+				 * 			  Assunto          : String
+				 * 			  Autor            : String
+				 * 			  AutorSecundario  : String
+				 * 			  Publicacao       : String    (Local de Publicacao)
+				 * 		      Editora 		   : String
+				 * 			  AnoPublicacao    : int
+				 * 			  NotasGerais 	   : String				
+				 */
+					
+				case Operations.INFORMACOES_EXEMPLAR:
+					int id = inputValues.getInt("IdDetalhes");
+					GeneralOperationAndroid.informacoesExemplar(id, map);
+					break;
 			}
 			
 		} catch (Exception ex) {
