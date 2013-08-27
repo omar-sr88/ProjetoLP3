@@ -10,8 +10,9 @@ public class Operations {
 	public static final int MEUS_EMPRESTIMOS = 6;
 	public static final int LISTAR_BIBLIOTECAS = 7;
 	public static final int LIVROS_EMPRESTADOS = 8;
-	public static final int INFORMACOES_EXEMPLAR = 9;
-	
+	public static final int INFORMACOES_EXEMPLAR_ACERVO = 9;
+	public static final int INFORMACOES_EXEMPLAR_ARTIGO = 10;
+
 	public static final Integer LIMITE_RESULTADOS_LIVROS = 30;
 	public static final Integer LIMITE_RESULTADOS_ARTIGOS = 30;
 	

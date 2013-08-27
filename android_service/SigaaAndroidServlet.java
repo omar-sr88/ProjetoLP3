@@ -186,8 +186,8 @@ public class SigaaAndroidServlet extends HttpServlet {
 				/**
 				 * Obtém informações detalhadas sobre o Exemplar
 				 * 
-				 * Input   :  Operacao : INFORMACOES_EXEMPLAR
-				 * 			  IdExemplar : int
+				 * Input   :  Operacao : INFORMACOES_EXEMPLAR_ACERVO
+				 * 			  IdDetalhes : int
 				 * 
 				 * Output  :  Registro         : int
 				 * 			  NumeroChamada    : String
@@ -202,9 +202,34 @@ public class SigaaAndroidServlet extends HttpServlet {
 				 * 			  NotasGerais 	   : String				
 				 */
 					
-				case Operations.INFORMACOES_EXEMPLAR:
+				case Operations.INFORMACOES_EXEMPLAR_ACERVO:
 					int id = inputValues.getInt("IdDetalhes");
 					GeneralOperationAndroid.informacoesExemplar(id, map);
+					break;
+				/**
+				 * Input   : Operacao     : INFORMACOES_EXEMPLAR_ARTIGO
+				 * 			 IdDetalhes   : int
+				 * 
+				 * Output  : Biblioteca       : String
+				 * 			 CodigoBarras     : String
+				 * 			 Localizacao      : String
+				 * 			 Situacao         : String
+				 * 			 AnoCronologico   : String
+				 * 			 Ano			  : String
+				 * 			 DiaMes  		  : String
+				 * 			 Volume			  : String
+				 * 			 Numero			  : String
+				 * 			 AutorSecundario  : String
+				 * 			 IntervaloPaginas : String
+				 * 			 LocalPublicacao  : String
+				 * 			 Editora   		  : String
+				 * 			 AnoExemplar 	  : String
+				 * 		     Resumo			  : String
+				 * 				
+				 */
+				case Operations.INFORMACOES_EXEMPLAR_ARTIGO:
+					int idDetalhes = inputValues.getInt("IdDetalhes");
+					GeneralOperationAndroid.informacoesArtigo(idDetalhes,map);
 					break;
 			}
 			

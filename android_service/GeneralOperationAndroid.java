@@ -43,7 +43,9 @@ import br.ufrn.sigaa.biblioteca.dominio.Biblioteca;
 import br.ufrn.sigaa.biblioteca.dominio.SituacaoUsuarioBiblioteca;
 import br.ufrn.sigaa.biblioteca.integracao.dtos.OperacaoBibliotecaDto;
 import br.ufrn.sigaa.biblioteca.integracao.dtos.RetornoOperacoesCirculacaoDTO;
+import br.ufrn.sigaa.biblioteca.processos_tecnicos.dominio.ArtigoDePeriodico;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.dominio.CacheEntidadesMarc;
+import br.ufrn.sigaa.biblioteca.processos_tecnicos.dominio.Fasciculo;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.dominio.MaterialInformacional;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.pesquisa.dominio.CampoOrdenacaoConsultaAcervo;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.pesquisa.dominio.GeraPesquisaTextual;
@@ -400,21 +402,21 @@ public class GeneralOperationAndroid {
 				cont.put("Edicao", liv.getEdicao());
 				cont.put("Ano", liv.getAno());
 				cont.put("QuantidadeAtivos", String.valueOf(liv.getQuantidadeMateriaisAtivosTitulo()));
+				cont.put("Assunto", liv.getAssunto());
 				livros.put(String.valueOf(liv.getId()), new JSONObject(cont));
 			}
 			
 			//Adicao do mapa de livros para o mapa de retorno
 			map.put("Livros", new JSONObject(livros).toString());
 			
-			// Mapa dos artigos
 			
-			//Mapa dos livros
+			
+			//Mapa dos Artigos
 			Map<String,JSONObject> artigosJSON = new HashMap<String,JSONObject>();
-			
 			int quantidadeInteracaoArtigo =  //Carregar o JSON apenas com a quantidade permitida pelo sistema, para não estourar o máximo.
-					(resultadosBuscados.size() > Operations.LIMITE_RESULTADOS_ARTIGOS ? Operations.LIMITE_RESULTADOS_ARTIGOS : resultadosBuscados.size());
+					(artigos.size() > Operations.LIMITE_RESULTADOS_ARTIGOS ? Operations.LIMITE_RESULTADOS_ARTIGOS : artigos.size());
 			for(int i = 0; i < quantidadeInteracaoArtigo;i++){
-				liv = resultadosBuscados.get(i);
+				liv = artigos.get(i);
 				cont = new HashMap<String,String>();
 				cont.put("IdDetalhes", String.valueOf(liv.getId()));
 				cont.put("Autor", liv.getAutor());
@@ -422,11 +424,12 @@ public class GeneralOperationAndroid {
 				cont.put("Edicao", liv.getEdicao());
 				cont.put("Ano", liv.getAno());
 				cont.put("QuantidadeAtivos", String.valueOf(liv.getQuantidadeMateriaisAtivosTitulo()));
+				cont.put("Assunto", liv.getAssunto());
 				artigosJSON.put(String.valueOf(liv.getId()), new JSONObject(cont));
 			}
 			
 			//Adicao do mapa de livros para o mapa de retorno
-			map.put("Artigos", new JSONObject(livros).toString());
+			map.put("Artigos", new JSONObject(artigosJSON).toString());
 						
 
 		} finally {
@@ -526,8 +529,8 @@ public class GeneralOperationAndroid {
 	
 	public static void informacoesExemplar(int idMaterial, Map<String, String> map){
 		try {
-			FormatoMaterialDao formatoDao = AbstractProcessador.getDAO(FormatoMaterialDao.class, null);
-			CacheEntidadesMarc tituloCache = formatoDao.findByExactField(CacheEntidadesMarc.class, "id", idMaterial, true);
+			FormatoMaterialDao formatoDao = AbstractProcessador.getDAO(FormatoMaterialDao.class, null); 
+			CacheEntidadesMarc tituloCache = formatoDao.findByExactField(CacheEntidadesMarc.class, "id", idMaterial, true); // Captura a partir do ID Detalhes
 			map.put("Registro", String.valueOf(tituloCache.getNumeroDoSistema()));
 			map.put("NumeroChamada", tituloCache.getNumeroChamada());
 			map.put("Titulo", tituloCache.getTitulo()+" "+tituloCache.getMeioPublicacao()+" "+
@@ -539,12 +542,44 @@ public class GeneralOperationAndroid {
 			map.put("Publicacao", tituloCache.getLocalPublicacao());
 			map.put("Editora", tituloCache.getEditora());
 			map.put("AnoPublicacao", tituloCache.getAnoPublicacao().toString());
-			map.put("NotasGerais", tituloCache.getNotasGerais());			
+			map.put("NotasGerais", tituloCache.getNotasGerais());
+			
 			
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+public static void informacoesArtigo(int id, Map<String, String> map) {
+	try {
+		
+		FormatoMaterialDao formatoDao = AbstractProcessador.getDAO(FormatoMaterialDao.class, null);
+		CacheEntidadesMarc tituloCache = formatoDao.findByExactField(CacheEntidadesMarc.class, "id", id, true);
+		ArtigoDePeriodicoDao dao = AbstractProcessador.getDAO(ArtigoDePeriodicoDao.class,null);
+		ArtigoDePeriodico artigo =  dao.findByPrimaryKey(tituloCache.getIdArtigoDePeriodico(), ArtigoDePeriodico.class);		
+		Fasciculo fasciculo = artigo.getFasciculo();
+		
+		map.put("Biblioteca", fasciculo.getBiblioteca().getDescricao());
+		map.put("CodigoBarras", fasciculo.getCodigoBarras());
+		map.put("Localizacao", fasciculo.getNumeroChamada().trim());
+		map.put("Situacao", fasciculo.getSituacao().getDescricao());
+		map.put("AnoCronologico", fasciculo.getAnoCronologico().trim());
+		map.put("Ano", fasciculo.getAno());
+		map.put("DiaMes", fasciculo.getDiaMes());
+		map.put("Volume", fasciculo.getVolume().trim());
+		map.put("Numero", fasciculo.getNumero().trim());
+		map.put("AutorSecundario", tituloCache.getAutoresSecundarios());
+		map.put("IntervaloPaginas", tituloCache.getIntervaloPaginas());
+		map.put("LocalPublicacao", tituloCache.getLocalPublicacao());
+		map.put("Editora",tituloCache.getEditora());
+		map.put("AnoExemplar", tituloCache.getAno());
+		map.put("Resumo", tituloCache.getResumo());		
+		
+	} catch (DAOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	}
 
 	
@@ -748,5 +783,8 @@ public class GeneralOperationAndroid {
 
 		return contasUsuarioBiblioteca;
 	}
+
+
+	
 
 }

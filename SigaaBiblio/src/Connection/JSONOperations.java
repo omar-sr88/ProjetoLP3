@@ -158,7 +158,7 @@ public class JSONOperations implements Operations {
 		// TODO Auto-generated method stub
 		Map<String, String> map = new HashMap<String, String>();
 		String jsonString;
-		map.put("Operacao", String.valueOf(Operations.INFORMACOES_EXEMPLAR));
+		map.put("Operacao", String.valueOf(Operations.INFORMACOES_EXEMPLAR_ACERVO));
 		map.put("IdDetalhes", pararametrosLivro[0]);					
 		JSONObject inputsJson = new JSONObject(map);
 		Livro livro=null;

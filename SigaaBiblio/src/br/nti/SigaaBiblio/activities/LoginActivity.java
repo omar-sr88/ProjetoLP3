@@ -364,8 +364,47 @@ public class LoginActivity extends Activity implements OnClickListener {
 				protected Void doInBackground(Void... arg0) {
 					Map<String, String> map = new HashMap<String, String>();
 					String jsonString;
-					map.put("Operacao", String.valueOf(Operations.INFORMACOES_EXEMPLAR));
+					map.put("Operacao", String.valueOf(Operations.INFORMACOES_EXEMPLAR_ACERVO));
 					map.put("IdDetalhes", "112204");					
+					JSONObject inputsJson = new JSONObject(map);
+					
+					
+					try {
+						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+						JSONObject resposta = new JSONObject(jsonString);					
+						Log.d("IRON_DEBUG", resposta.toString());
+					} catch (Exception ex){
+						ex.printStackTrace();
+					}
+					return null;
+				}				
+			}.execute();
+			
+			
+			new AsyncTask<Void,Void,Void>(){
+				/**
+				 * Output  : Biblioteca       : String
+				 * 			 CodigoBarras     : String
+				 * 			 Localizacao      : String
+				 * 			 Situacao         : String
+				 * 			 AnoCronologico   : String
+				 * 			 Ano			  : String
+				 * 			 DiaMes  		  : String
+				 * 			 Volume			  : String
+				 * 			 Numero			  : String
+				 * 			 AutorSecundario  : String
+				 * 			 IntervaloPaginas : String
+				 * 			 LocalPublicacao  : String
+				 * 			 Editora   		  : String
+				 * 			 AnoExemplar 	  : String
+				 * 		     Resumo			  : String		
+				 */
+				@Override
+				protected Void doInBackground(Void... arg0) {
+					Map<String, String> map = new HashMap<String, String>();
+					String jsonString;
+					map.put("Operacao", String.valueOf(Operations.INFORMACOES_EXEMPLAR_ARTIGO));
+					map.put("IdDetalhes", "6304");					
 					JSONObject inputsJson = new JSONObject(map);
 					
 					

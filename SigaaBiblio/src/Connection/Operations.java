@@ -17,7 +17,8 @@ public interface Operations {
 	public  final int MEUS_EMPRESTIMOS = 6;
 	public  final int LISTAR_BIBLIOTECAS = 7;
 	public  final int LIVROS_EMPRESTADOS = 8;
-	public  final int INFORMACOES_EXEMPLAR = 9;
+	public static final int INFORMACOES_EXEMPLAR_ACERVO = 9;
+	public static final int INFORMACOES_EXEMPLAR_ARTIGO = 10;
 	
 	public ArrayList<Biblioteca> listarBibliotecas();
 	public ArrayList<Livro> consultarAcervoLivro(String ... parametrosConsulta);
