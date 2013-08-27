@@ -13,11 +13,15 @@ import java.util.regex.Pattern;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import br.nti.SigaaBiblio.model.Biblioteca;
+import br.nti.SigaaBiblio.model.Livro;
+
 import com.nti.SigaaBiblio.R;
 
 import Connection.ConnectJSON;
 import Connection.HttpUtils;
 import Connection.Operations;
+import Connection.OperationsFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -43,6 +47,7 @@ public class BuscaLivroActivity extends Activity {
 	Spinner bibliotecasDisponiveis;
 	List<String> bibliotecasLista;
 	List<String> bibliotecasIds;
+	ArrayList<Biblioteca> bibliotecas;
 	String bibliotecaSelecionada;
 	EditText titulo;
 	EditText autor;
@@ -57,25 +62,12 @@ public class BuscaLivroActivity extends Activity {
 		setContentView(R.layout.activity_busca_livro);
 		
 		//recupera o nome das bibliotecas
-		Bundle extras = getIntent().getExtras();
-		String bibliotecas = extras.getString("Bibliotecas");
-		bibliotecasLista=new ArrayList<String>();
-		bibliotecasIds= new ArrayList<String>();
-		JSONObject bibliotecasJson;
-		try {
-			bibliotecasJson = new JSONObject(bibliotecas);
-			parseBibliotecas(bibliotecasJson);	
-			
-			
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			String erro = "Não foi possivel completar a requisição, por favor tente novamente";
-			Toast.makeText(getApplicationContext(), erro, Toast.LENGTH_LONG)
-			.show();
-			e.printStackTrace();
-		}
-	
 		
+		bibliotecasLista=new ArrayList<String>();
+		bibliotecas = getIntent().getParcelableArrayListExtra("Bibliotecas");	
+		for(Biblioteca b : bibliotecas){
+			bibliotecasLista.add(b.getNome());
+		}
 		//Log.d("MARCILIO_DEBUG", d.toString());
 		
 		//Exibe as bibliotecas no spinner
@@ -136,31 +128,12 @@ public class BuscaLivroActivity extends Activity {
 				protected Void doInBackground(Void... arg0) {
 					
 					
-					Map<String, String> map = new HashMap<String, String>();
-					String jsonString;
-					map.put("Operacao", String.valueOf(Operations.CONSULTAR_ACERVO_LIVRO));
-					map.put("IdBiblioteca",bibliotecaSelecionada);
-					map.put("TituloBusca", titulo.getText().toString());
-					map.put("AutorBusca", autor.getText().toString());
-					map.put("AssuntoBusca",assunto.getText().toString());
-					JSONObject inputsJson = new JSONObject(map);
-					JSONObject resposta;
+					Operations json = new OperationsFactory().getOperation(OperationsFactory.REMOTA);
+					ArrayList<Livro> livros = json.consultarAcervoLivro(bibliotecaSelecionada,titulo.getText().toString(),autor.getText().toString(),assunto.getText().toString());
+					Intent intent = new Intent(BuscaLivroActivity.this, ResultadoBuscaActivity.class );
+					intent.putExtra("Livros", livros);
+					startActivity(intent);
 					
-					try {
-						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
-						resposta = new JSONObject(jsonString);
-						String livros =resposta.getString("Livros");
-						Intent intent = new Intent(BuscaLivroActivity.this, ResultadoBuscaActivity.class );
-						intent.putExtra("Livros", livros);
-						startActivity(intent);
-						
-						//Log.d("MARCILIO_DEBUG",livros);//ou Artigos
-					} catch (Exception ex){
-						String erro = "Não foi possivel completar a requisição, por favor tente novamente";
-						Toast.makeText(getApplicationContext(), erro, Toast.LENGTH_LONG)
-						.show();
-						ex.printStackTrace();
-					}
 					return null;
 				}
 				
@@ -188,7 +161,7 @@ public class BuscaLivroActivity extends Activity {
 		    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 		        String selected = parent.getItemAtPosition(pos).toString();
 		        
-		        bibliotecaSelecionada=bibliotecasIds.get(bibliotecasLista.indexOf(selected));
+		        bibliotecaSelecionada=bibliotecas.get(bibliotecasLista.indexOf(selected)).getId();
 		        
 		        Log.d("MARCILIO_DEBUG", bibliotecaSelecionada);
 		    }
@@ -199,23 +172,7 @@ public class BuscaLivroActivity extends Activity {
 		}
 
 	
-	/*
-	 * Faz o Parse do objeto JSON para as listas
-	 */
 	
-	public void parseBibliotecas(JSONObject bibliotecas) throws JSONException{
-		
-		bibliotecasLista.add("Buscar em Todas as Unidades"); //desativa o filtro da biblioteca lá no servidor
-		bibliotecasIds.add("0");
-		Iterator<String> keys = bibliotecas.keys(); //descobre as chaves que são os ids das bibliotecas
-		while(keys.hasNext()){
-			String key=keys.next();
-			bibliotecasLista.add(bibliotecas.getString(key));
-			bibliotecasIds.add(key);
-			//Log.d("MARCILIO_DEBUG", "isso é uma key "+key);
-		}
-		
-	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

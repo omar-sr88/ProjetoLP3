@@ -1,15 +1,28 @@
 package Connection;
 
-public class Operations {
+import java.util.ArrayList;
+import java.util.List;
+
+import br.nti.SigaaBiblio.model.Artigo;
+import br.nti.SigaaBiblio.model.Biblioteca;
+import br.nti.SigaaBiblio.model.Livro;
+
+public interface Operations {
 	
-	public static final int LOGIN = 1;
-	public static final int CONSULTAR_ACERVO_LIVRO = 2;
-	public static final int CONSULTAR_ACERVO_ARTIGO = 3;
-	public static final int RENOVACAO = 4;
-	public static final int MINHA_SITUACAO = 5;
-	public static final int MEUS_EMPRESTIMOS = 6;
-	public static final int LISTAR_BIBLIOTECAS = 7;
-	public static final int LIVROS_EMPRESTADOS = 8;
-	public static final int INFORMACOES_EXEMPLAR = 9;
+	public  final int LOGIN = 1;
+	public  final int CONSULTAR_ACERVO_LIVRO = 2;
+	public  final int CONSULTAR_ACERVO_ARTIGO = 3;
+	public  final int RENOVACAO = 4;
+	public  final int MINHA_SITUACAO = 5;
+	public  final int MEUS_EMPRESTIMOS = 6;
+	public  final int LISTAR_BIBLIOTECAS = 7;
+	public  final int LIVROS_EMPRESTADOS = 8;
+	public  final int INFORMACOES_EXEMPLAR = 9;
+	
+	public ArrayList<Biblioteca> listarBibliotecas();
+	public ArrayList<Livro> consultarAcervoLivro(String ... parametrosConsulta);
+	public ArrayList<Artigo> consultarAcervoArtigo(String ... parametrosConsulta);
+	public Livro informacoesLivro(String ... pararametrosLivro);
+	
 
 }

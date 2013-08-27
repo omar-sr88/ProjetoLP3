@@ -32,30 +32,17 @@ public class ResultadoBuscaArtigoctivity extends Activity {
 		setContentView(R.layout.activity_resultado_busca_artigoctivity);
 		
 		List<String> lista = new ArrayList<String>(); 
-		//recupera o nome dos livros
-		Bundle extras = getIntent().getExtras();
-		String artigos = extras.getString("Artigos");
-		JSONObject artigosJSON;
-		try {
-			artigosJSON = new JSONObject(artigos);
-			List<Artigo> listaDeArtigos = parseArtigos(artigosJSON);
-			
-			if(listaDeArtigos==null)
-				lista.add("Não foram encontrados resultados para sua pesquisa.");
+		List<Artigo> listaArtigos = new ArrayList<Artigo>();
+		
+		listaArtigos = getIntent().getParcelableArrayListExtra("Artigos");	
+		
+		if(listaArtigos==null)
+			lista.add("Não foram encontrados resultados para sua pesquisa.");
 			else
-				for(Artigo a : listaDeArtigos){
-					lista.add(a.toString());
+				for(Artigo a : listaArtigos){
+				lista.add(a.toString());
 				}
 			
-			
-			
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			String erro = "Não foi possivel completar a requisição, por favor tente novamente";
-			Toast.makeText(getApplicationContext(), erro, Toast.LENGTH_LONG)
-			.show();
-			e.printStackTrace();
-		}
 		
 		ListView listaResultados = (ListView) findViewById(R.id.listViewResultadosArtigo);
 
@@ -78,44 +65,6 @@ public class ResultadoBuscaArtigoctivity extends Activity {
 	}
 
 	
-public List<Artigo> parseArtigos(JSONObject artigos){
-		
-		List<Artigo> listaArtigos = new ArrayList<Artigo>();
-		
-		String autor="", titulo="", palavrasChave="";
-		
-		Iterator<String> keys = artigos.keys();
-		
-		if(keys.hasNext())
-		while(keys.hasNext()){
-			String key=keys.next();
-			try {
-				JSONObject artigoJSON = artigos.getJSONObject(key);
-				autor = JSONObject.NULL.equals(artigoJSON.get("Autor"))?"-":artigoJSON.getString("Autor");
-				titulo = JSONObject.NULL.equals(artigoJSON.get("Titulo"))?"-":artigoJSON.getString("Titulo");
-				palavrasChave = JSONObject.NULL.equals(artigoJSON.get("Assunto"))?"-":artigoJSON.getString("Assunto");
-				String[] pChaves = palavrasChave.split("\\#\\$\\&");
-				String palavraChaveFinal="";
-				for(String c : pChaves){
-					palavraChaveFinal+=c+"; ";
-				}
-				Artigo artigo = new Artigo(autor,titulo,palavraChaveFinal);
-				listaArtigos.add(artigo);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
-//		Log.d("MARCILIO_DEBUG", "isso é uma key "+autor);
-		}
-		else{
-			return null; //não foi encontrado nenhum livro :(
-		}
-		
-		return listaArtigos;
-		
-	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

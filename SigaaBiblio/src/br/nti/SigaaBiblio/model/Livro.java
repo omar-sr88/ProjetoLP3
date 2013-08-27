@@ -3,7 +3,10 @@ package br.nti.SigaaBiblio.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Livro {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Livro implements Parcelable {
 
 	/* Campos dados basico */
 	private String autor;
@@ -20,7 +23,7 @@ public class Livro {
 	private String editora;
 	
 	/*Campo Exemplar*/
-	List<ExemplarLivro> exemplares;
+	//List<ExemplarLivro> exemplares;
 	
 	
 	/* 
@@ -45,14 +48,14 @@ public class Livro {
 	}
 
 
-	public List<ExemplarLivro> getExemplares() {
-		return exemplares;
-	}
-
-
-	public void setExemplares(List<ExemplarLivro> exemplares) {
-		this.exemplares = exemplares;
-	}
+//	public List<ExemplarLivro> getExemplares() {
+//		return exemplares;
+//	}
+//
+//
+//	public void setExemplares(List<ExemplarLivro> exemplares) {
+//		this.exemplares = exemplares;
+//	}
 
 
 	public String getAutor() {
@@ -168,5 +171,58 @@ public class Livro {
 		return "Autor: "+this.autor+"\nTítulo: "+this.titulo+"\nEdição: "+this.edicao+
 				"\nAno: "+this.ano+"\nQuantidade: "+this.quantidade;
 	}
+
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+		dest.writeString(this.autor);
+		dest.writeString(this.titulo);
+		dest.writeString(this.edicao);
+		dest.writeString(this.ano);
+		dest.writeString(this.quantidade);
+		dest.writeString(this.registroNoSistema);
+		dest.writeString(this.numeroChamada);
+		dest.writeString(this.subTitulo);
+		dest.writeString(this.assunto);
+		dest.writeString(this.localDePublicação);
+		dest.writeString(this.editora);
+		
+	}
+	
+	public Livro(Parcel in) {
+		readFromParcel(in); }
+	
+	private void readFromParcel(Parcel in) {
+		this.autor=in.readString(); 
+		this.titulo=in.readString();
+		this.edicao=in.readString();
+		this.ano=in.readString();
+		this.quantidade=in.readString();
+		this.registroNoSistema=in.readString();
+		this.numeroChamada=in.readString();
+		this.subTitulo=in.readString();
+		this.assunto=in.readString();
+		this.localDePublicação=in.readString();
+		this.editora=in.readString();
+		
+	}
+	
+	public static final Parcelable.Creator<Livro> CREATOR = new Parcelable.Creator<Livro>() {
+		public Livro createFromParcel(Parcel in){
+			return new Livro(in);
+		}
+		public Livro[] newArray(int size) { 
+			return new Livro[size]; 
+			}
+		
+	};
 	
 }

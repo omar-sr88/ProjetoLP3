@@ -3,6 +3,7 @@ package br.nti.SigaaBiblio.activities;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONObject;
@@ -10,6 +11,7 @@ import org.json.JSONObject;
 import Connection.ConnectJSON;
 import Connection.HttpUtils;
 import Connection.Operations;
+import Connection.OperationsFactory;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -25,6 +27,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import br.nti.SigaaBiblio.model.Biblioteca;
 import br.nti.SigaaBiblio.model.Emprestimo;
 import br.nti.SigaaBiblio.model.Usuario;
 
@@ -226,6 +229,7 @@ public class MenuActivity extends Activity {
 	  }
 	
 	
+		//Consulta um acervo no sistema
 		public void consultarAcervo(View v){
 			
 			
@@ -251,27 +255,14 @@ public class MenuActivity extends Activity {
 				
 				@Override
 				protected Void doInBackground(Void... arg0) {
-					Map<String, String> map = new HashMap<String, String>();
-					String jsonString;
-					map.put("Operacao", String.valueOf(Operations.LISTAR_BIBLIOTECAS));
-					JSONObject inputsJson = new JSONObject(map);
-					JSONObject resposta;
-					
-					try {
-						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
-						resposta = new JSONObject(jsonString);
-						String bibliotecas = resposta.getString("Bibliotecas");
+						Operations json = new OperationsFactory().getOperation(OperationsFactory.REMOTA);
+						ArrayList<Biblioteca> bibliotecas = json.listarBibliotecas();
 						Intent intent = new Intent(MenuActivity.this, BuscaLivroActivity.class );
 						intent.putExtra("Bibliotecas", bibliotecas);
 						startActivity(intent);
 //						
-						Log.d("MARCILIO_DEBUG", bibliotecas);
-					} catch (Exception ex){
-						String erro = "Não foi possivel completar a requisição, por favor tente novamente";
-						Toast.makeText(getApplicationContext(), erro, Toast.LENGTH_LONG)
-						.show();
-						ex.printStackTrace();
-					}
+						//Log.d("MARCILIO_DEBUG", ""+bibliotecas);
+					
 					return null;
 				}
 				
@@ -313,27 +304,12 @@ public class MenuActivity extends Activity {
 				
 				@Override
 				protected Void doInBackground(Void... arg0) {
-					Map<String, String> map = new HashMap<String, String>();
-					String jsonString;
-					map.put("Operacao", String.valueOf(Operations.LISTAR_BIBLIOTECAS));
-					JSONObject inputsJson = new JSONObject(map);
-					JSONObject resposta;
-					
-					try {
-						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
-						resposta = new JSONObject(jsonString);
-						String bibliotecas = resposta.getString("Bibliotecas");
-						Intent intent = new Intent(MenuActivity.this, BuscaArtigoActivity.class );
-						intent.putExtra("Bibliotecas", bibliotecas);
-						startActivity(intent);
-						
-						Log.d("MARCILIO_DEBUG", bibliotecas);
-					} catch (Exception ex){
-						String erro = "Não foi possivel completar a requisição, por favor tente novamente";
-						Toast.makeText(getApplicationContext(), erro, Toast.LENGTH_LONG)
-						.show();
-						ex.printStackTrace();
-					}
+					Operations json = new OperationsFactory().getOperation(OperationsFactory.REMOTA);
+					ArrayList<Biblioteca> bibliotecas = json.listarBibliotecas();
+					Intent intent = new Intent(MenuActivity.this, BuscaArtigoActivity.class );
+					intent.putExtra("Bibliotecas", bibliotecas);
+					startActivity(intent);								
+
 					return null;
 				}
 				

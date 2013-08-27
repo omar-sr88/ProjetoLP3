@@ -1,6 +1,9 @@
 package br.nti.SigaaBiblio.model;
 
-public class Artigo {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Artigo implements Parcelable {
 	
 	/* campos basicos */
 	private String autor;
@@ -181,6 +184,59 @@ public class Artigo {
 	public String toString(){
 		return "Autor: "+this.autor+"\nTítulo: "+this.titulo+"\nPalavras-Chave: "+this.palavrasChave;
 	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int arg1) {
+		// TODO Auto-generated method stub
+		/* campos basicos */
+		
+		dest.writeString(this.autor);
+		dest.writeString(this.titulo);
+		dest.writeString(this.palavrasChave);
+		dest.writeString(this.ano);
+		dest.writeString(this.autoresSecundarios);
+		dest.writeString(this.paginas);
+		dest.writeString(this.localPublicacao);
+		dest.writeString(this.editora);
+		dest.writeString(this.ano);
+		dest.writeString(this.resumo);
+		
+	}
+	
+	public Artigo(Parcel in) {
+		readFromParcel(in); }
+	
+	private void readFromParcel(Parcel in) {
+		this.autor=in.readString(); 
+		this.titulo=in.readString();
+		this.palavrasChave=in.readString();
+		this.ano=in.readString();
+		this.autoresSecundarios=in.readString();
+		this.paginas=in.readString();
+		this.localPublicacao=in.readString();
+		this.editora=in.readString();
+		this.ano=in.readString();
+		this.resumo=in.readString();
+		
+	}
+	
+	public static final Parcelable.Creator<Artigo> CREATOR = new Parcelable.Creator<Artigo>() {
+		public Artigo createFromParcel(Parcel in){
+			return new Artigo(in);
+		}
+		public Artigo[] newArray(int size) { 
+			return new Artigo[size]; 
+			}
+		
+	};
+	
+	
 	
 	
 
