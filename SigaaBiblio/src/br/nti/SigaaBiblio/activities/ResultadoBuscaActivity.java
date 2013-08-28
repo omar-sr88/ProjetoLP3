@@ -101,6 +101,7 @@ public class ResultadoBuscaActivity extends Activity {
 						@Override
 						protected void onPreExecute() {
 							// TODO Auto-generated method stub
+							
 							super.onPreExecute();
 							pd.show();
 						}
@@ -113,7 +114,7 @@ public class ResultadoBuscaActivity extends Activity {
 							Operations json = new OperationsFactory().getOperation(OperationsFactory.REMOTA);
 							Livro livro = json.informacoesLivro(livroSelecionado);
 							Intent intent = new Intent(ResultadoBuscaActivity.this, DadosTituloActivity.class );
-							intent.putExtra("Livro", livro);
+							intent.putExtra("InformacoesLivro", livro);
 							startActivity(intent);
 							return null;
 						}

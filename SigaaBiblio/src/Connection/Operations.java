@@ -24,6 +24,7 @@ public interface Operations {
 	public ArrayList<Livro> consultarAcervoLivro(String ... parametrosConsulta);
 	public ArrayList<Artigo> consultarAcervoArtigo(String ... parametrosConsulta);
 	public Livro informacoesLivro(String ... pararametrosLivro);
+	public Artigo informacoesExemplarArtigo(String ... pararametrosArtigo);
 	
 
 }

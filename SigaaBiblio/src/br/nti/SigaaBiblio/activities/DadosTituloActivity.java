@@ -1,5 +1,7 @@
 package br.nti.SigaaBiblio.activities;
 
+import br.nti.SigaaBiblio.model.Artigo;
+
 import com.nti.SigaaBiblio.R;
 import com.nti.SigaaBiblio.R.layout;
 import com.nti.SigaaBiblio.R.menu;
@@ -18,17 +20,30 @@ import android.widget.ListView;
 public class DadosTituloActivity extends Activity {
 
 	Button buttonVerifDisp;
+	Artigo artigo;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_dados_titulo);
-
+		
+		String[] values= new String[]{""};
+		artigo = (Artigo) getIntent().getExtras().getParcelable("ExemplarArtigo");
+		
+		if(artigo!=null){
+			values = new String[] { "Autores Secundários: "+artigo.getAutoresSecundarios(), 
+					"Intervalo de Páginas: "+artigo.getPaginas(),
+					"Local de Publicação: "+ artigo.getLocalPublicacao(),
+					"Editora: "+artigo.getEditora(),
+			        "Ano: "+artigo.getAno(),
+			        "Resumo: "+artigo.getResumo()};
+		}
+				
+		
+		
 		ListView l = (ListView) findViewById(R.id.listViewDadosTitulo);
-	    String[] values = new String[] { "Titulo: Programação Android", "Autor: Alguem do Google ", "Paginas: Um monte",
-	        "Windows", "Ubuntu", "Android", "iPhone", "Windows" };
-	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+	    	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 	        android.R.layout.simple_list_item_1, values){
 
 	    	  /*
@@ -50,8 +65,18 @@ public class DadosTituloActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(DadosTituloActivity.this, ExemplaresActivity.class );
-				startActivity(intent);
+				
+				if(artigo!=null){
+					Artigo artigo = (Artigo) getIntent().getExtras().getParcelable("ExemplarArtigo");
+					Intent intent = new Intent(DadosTituloActivity.this, ExemplarArtigoActivity.class );
+					intent.putExtra("ExemplarArtigo", artigo);
+					startActivity(intent);
+				}
+				else{
+					Intent intent = new Intent(DadosTituloActivity.this, ExemplaresActivity.class );
+					startActivity(intent);
+				}
+					
 
 			}
 		});

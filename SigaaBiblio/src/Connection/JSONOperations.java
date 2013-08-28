@@ -86,8 +86,9 @@ public class JSONOperations implements Operations {
 					edicao = JSONObject.NULL.equals(livroJSON.get("Edicao"))?"":livroJSON.getString("Edicao");
 					ano = JSONObject.NULL.equals(livroJSON.get("Ano"))?"":livroJSON.getString("Ano");
 					quantidade = JSONObject.NULL.equals(livroJSON.get("QuantidadeAtivos"))?"":livroJSON.getString("QuantidadeAtivos");
-					registroSistema = key;
-					
+					 //= key;
+					registroSistema= JSONObject.NULL.equals(livroJSON.get("IdDetalhes"))?"-":livroJSON.getString("IdDetalhes");
+
 					Livro livro = new Livro(autor,titulo,edicao,ano,quantidade,registroSistema);
 					listaLivros.add(livro);
 					//Log.d("MARCILIO_DEBUG", "isso é uma key "+key);
@@ -118,7 +119,7 @@ public class JSONOperations implements Operations {
 		String artigosRaw="";
 		ArrayList<Artigo> listaArtigos = new ArrayList<Artigo>();
 		
-		String autor="", titulo="", palavrasChave="";
+		String autor="", titulo="", palavrasChave="",id="";
 		
 
 		try {
@@ -135,12 +136,13 @@ public class JSONOperations implements Operations {
 						autor = JSONObject.NULL.equals(artigoJSON.get("Autor"))?"-":artigoJSON.getString("Autor");
 						titulo = JSONObject.NULL.equals(artigoJSON.get("Titulo"))?"-":artigoJSON.getString("Titulo");
 						palavrasChave = JSONObject.NULL.equals(artigoJSON.get("Assunto"))?"-":artigoJSON.getString("Assunto");
+						id= JSONObject.NULL.equals(artigoJSON.get("IdDetalhes"))?"-":artigoJSON.getString("IdDetalhes");
 						String[] pChaves = palavrasChave.split("\\#\\$\\&");
 						String palavraChaveFinal="";
 						for(String c : pChaves){
 							palavraChaveFinal+=c+"; ";
 						}
-						Artigo artigo = new Artigo(autor,titulo,palavraChaveFinal);
+						Artigo artigo = new Artigo(autor,titulo,palavraChaveFinal,id);
 						listaArtigos.add(artigo);
 				}
 				else
@@ -166,11 +168,8 @@ public class JSONOperations implements Operations {
 		
 		try {
 			jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
-			JSONObject resposta = new JSONObject(jsonString);
-			Iterator<String> keys = resposta.keys();
-			if(keys.hasNext()){
-				
-			}
+			JSONObject resposta = new JSONObject(jsonString); 
+			
 				
 			
 			Log.d("MARCILIO_DEBUG", resposta.toString());
@@ -178,6 +177,54 @@ public class JSONOperations implements Operations {
 			ex.printStackTrace();
 		}
 		return null;
+	}
+
+
+
+	@Override
+	public Artigo informacoesExemplarArtigo(String... pararametrosArtigo) {
+		// TODO Auto-generated method stub
+		Map<String, String> map = new HashMap<String, String>();
+		String jsonString;
+		map.put("Operacao", String.valueOf(Operations.INFORMACOES_EXEMPLAR_ARTIGO));
+		map.put("IdDetalhes", pararametrosArtigo[0]);					
+		JSONObject inputsJson = new JSONObject(map);
+		Artigo artigo = null;
+		String biblioteca="", codigoDeBarras="", localizacao="",situacao="",
+				anoCronologico="",ano="",diaMes="",volume="",numero="",autorSecundario="",
+				intervaloPaginas="",localPublicacao="", editora="",anoExemplar="",resumo="";
+				
+		
+		try {
+			jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+			JSONObject resposta = new JSONObject(jsonString);					
+			
+			biblioteca= JSONObject.NULL.equals(resposta.get("Biblioteca"))?"-":resposta.getString("Biblioteca");
+			codigoDeBarras= JSONObject.NULL.equals(resposta.get("CodigoBarras"))?"-":resposta.getString("CodigoBarras");
+			localizacao= JSONObject.NULL.equals(resposta.get("Localizacao"))?"-":resposta.getString("Localizacao");
+			situacao= JSONObject.NULL.equals(resposta.get("Situacao"))?"-":resposta.getString("Situacao");
+			anoCronologico= JSONObject.NULL.equals(resposta.get("AnoCronologico"))?"-":resposta.getString("AnoCronologico");
+			ano= JSONObject.NULL.equals(resposta.get("Ano"))?"-":resposta.getString("Ano");
+			diaMes= JSONObject.NULL.equals(resposta.get("DiaMes"))?"-":resposta.getString("DiaMes");
+			volume= JSONObject.NULL.equals(resposta.get("Volume"))?"-":resposta.getString("Volume");
+			numero= JSONObject.NULL.equals(resposta.get("Numero"))?"-":resposta.getString("Numero");
+			autorSecundario= JSONObject.NULL.equals(resposta.get("AutorSecundario"))?"-":resposta.getString("AutorSecundario");
+			intervaloPaginas= JSONObject.NULL.equals(resposta.get("IntervaloPaginas"))?"-":resposta.getString("IntervaloPaginas");
+			localPublicacao= JSONObject.NULL.equals(resposta.get("LocalPublicacao"))?"-":resposta.getString("LocalPublicacao");
+			editora= JSONObject.NULL.equals(resposta.get("Editora"))?"-":resposta.getString("Editora");
+			anoExemplar= JSONObject.NULL.equals(resposta.get("AnoExemplar"))?"-":resposta.getString("AnoExemplar");
+			resumo= JSONObject.NULL.equals(resposta.get("Resumo"))?"-":resposta.getString("Resumo");
+
+			artigo = new Artigo(autorSecundario,intervaloPaginas,localPublicacao,editora,ano,
+					  resumo,biblioteca,codigoDeBarras,localizacao,situacao,volume,numero,
+					  anoCronologico,diaMes);
+			Log.d("MARCILIO_DEBUG", resposta.toString());
+			
+		} catch (Exception ex){
+			ex.printStackTrace();
+		}
+		
+		return artigo;
 	}
 	
 	

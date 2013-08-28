@@ -14,8 +14,12 @@ import com.nti.SigaaBiblio.R;
 import com.nti.SigaaBiblio.R.layout;
 import com.nti.SigaaBiblio.R.menu;
 
+import Connection.Operations;
+import Connection.OperationsFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
@@ -26,13 +30,16 @@ import android.widget.Toast;
 
 public class ResultadoBuscaArtigoctivity extends Activity {
 
+	List<Artigo> listaArtigos;
+	List<String> lista;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_resultado_busca_artigoctivity);
 		
-		List<String> lista = new ArrayList<String>(); 
-		List<Artigo> listaArtigos = new ArrayList<Artigo>();
+		lista = new ArrayList<String>(); 
+		listaArtigos = new ArrayList<Artigo>();
 		
 		listaArtigos = getIntent().getParcelableArrayListExtra("Artigos");	
 		
@@ -51,16 +58,89 @@ public class ResultadoBuscaArtigoctivity extends Activity {
 
 	    listaResultados.setAdapter(adapter);
 
-		listaResultados.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+	    final ProgressDialog pd = new ProgressDialog(ResultadoBuscaArtigoctivity.this);
+		pd.setMessage("Processando...");
+		pd.setTitle("Aguarde");
+		pd.setIndeterminate(false);
+		
+		
+	    listaResultados.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			// TODO Auto-generated method stub
 			@Override
 			public void onItemClick(AdapterView<?> parent, final View view, int position,
 					long id) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(ResultadoBuscaArtigoctivity.this, DadosTituloActivity.class );
-				startActivity(intent);
-			}
+				String selected = parent.getItemAtPosition(position).toString();
+				final String artigoSelecionado=listaArtigos.get(lista.indexOf(selected)).getId();
+				
+				new AsyncTask<Void,Void,Void>(){
+					
+					/**
+					 * Output  : Biblioteca       : String
+					 * 			 CodigoBarras     : String
+					 * 			 Localizacao      : String
+					 * 			 Situacao         : String
+					 * 			 AnoCronologico   : String
+					 * 			 Ano			  : String
+					 * 			 DiaMes  		  : String
+					 * 			 Volume			  : String
+					 * 			 Numero			  : String
+					 * 			 AutorSecundario  : String
+					 * 			 IntervaloPaginas : String
+					 * 			 LocalPublicacao  : String
+					 * 			 Editora   		  : String
+					 * 			 AnoExemplar 	  : String
+					 * 		     Resumo			  : String		
+					 */
+					
+					@Override
+					protected void onPreExecute() {
+						// TODO Auto-generated method stub
+						super.onPreExecute();
+						pd.show();
+					}
+					
+					
+					@Override
+					protected Void doInBackground(Void... arg0) {
+						
+						
+						Operations json = new OperationsFactory().getOperation(OperationsFactory.REMOTA);
+						Artigo artigo = json.informacoesExemplarArtigo(artigoSelecionado);
+						Intent intent = new Intent(ResultadoBuscaArtigoctivity.this,DadosTituloActivity.class);
+						intent.putExtra("ExemplarArtigo", artigo);
+						startActivity(intent);
+						return null;
+					}
+					
+					@Override
+					protected void onPostExecute(Void v) {
+						// TODO Auto-generated method stub
+						super.onPostExecute(v);
+						if(pd!= null && pd.isShowing())
+							pd.dismiss();
+					}
+					
+					
+				}.execute();
 
-		});
+				
+		}
+
+	});
+
+	    
+	    
+//	    listaResultados.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//			@Override
+//			public void onItemClick(AdapterView<?> parent, final View view, int position,
+//					long id) {
+//				// TODO Auto-generated method stub
+//				Intent intent = new Intent(ResultadoBuscaArtigoctivity.this, DadosTituloActivity.class );
+//				startActivity(intent);
+//			}
+//
+//		});
 	
 	}
 

@@ -9,10 +9,12 @@ public class Artigo implements Parcelable {
 	private String autor;
 	private String titulo;
 	private String palavrasChave;
+	private String id;
 	
 	/* campos dados do titulo */
 	private String autoresSecundarios;
 	private String paginas;
+	
 	private String localPublicacao;
 	private String editora;
 	private String ano;
@@ -30,12 +32,50 @@ public class Artigo implements Parcelable {
 	private String anoCronologico;
 	private String diaMes;
 	
-	public Artigo(String autor, String titulo, String palavrasChave) {
+	public Artigo(String autor, String titulo, String palavrasChave,String id) {
 		super();
 		this.autor = autor;
 		this.titulo = titulo;
 		this.palavrasChave = palavrasChave;
+		this.id=id;
 	}
+	
+	public Artigo(String autoresSecundarios, String paginas,
+			String localPublicacao, String editora, String ano, String resumo,
+			String biblioteca, String codigoDeBarras, String localizacao,
+			String situacao, String volume, String numero, 
+			String anoCronologico, String diaMes) {
+		super();
+		this.autoresSecundarios = autoresSecundarios;
+		this.paginas = paginas;
+		this.localPublicacao = localPublicacao;
+		this.editora = editora;
+		this.ano = ano;
+		this.resumo = resumo;
+		this.biblioteca = biblioteca;
+		this.codigoDeBarras = codigoDeBarras;
+		this.localizacao = localizacao;
+		this.situacao = situacao;
+		this.volume = volume;
+		this.numero = numero;
+		this.anoCronologico = anoCronologico;
+		this.diaMes = diaMes;
+	}
+
+	
+	
+
+	public String getId() {
+		return id;
+	}
+
+
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+
 
 	public String getAutor() {
 		return autor;
@@ -199,6 +239,7 @@ public class Artigo implements Parcelable {
 		dest.writeString(this.autor);
 		dest.writeString(this.titulo);
 		dest.writeString(this.palavrasChave);
+		dest.writeString(this.id);
 		dest.writeString(this.ano);
 		dest.writeString(this.autoresSecundarios);
 		dest.writeString(this.paginas);
@@ -206,6 +247,15 @@ public class Artigo implements Parcelable {
 		dest.writeString(this.editora);
 		dest.writeString(this.ano);
 		dest.writeString(this.resumo);
+		dest.writeString(this.biblioteca);
+		dest.writeString(this.codigoDeBarras);
+		dest.writeString(this.localizacao);
+		dest.writeString(this.situacao);
+		dest.writeString(this.volume);
+		dest.writeString(this.numero);
+		dest.writeString(this.edicao);
+		dest.writeString(this.anoCronologico);
+		dest.writeString(this.diaMes);
 		
 	}
 	
@@ -216,6 +266,7 @@ public class Artigo implements Parcelable {
 		this.autor=in.readString(); 
 		this.titulo=in.readString();
 		this.palavrasChave=in.readString();
+		this.id=in.readString();
 		this.ano=in.readString();
 		this.autoresSecundarios=in.readString();
 		this.paginas=in.readString();
@@ -223,7 +274,20 @@ public class Artigo implements Parcelable {
 		this.editora=in.readString();
 		this.ano=in.readString();
 		this.resumo=in.readString();
+		this.biblioteca=in.readString();
+		this.codigoDeBarras=in.readString();
+		this.localizacao=in.readString();
+		this.situacao=in.readString();
+				
 		
+		this.volume=in.readString();
+		this.numero=in.readString();
+		this.edicao=in.readString();
+		this.anoCronologico=in.readString();
+		this.diaMes=in.readString();
+	
+		
+	
 	}
 	
 	public static final Parcelable.Creator<Artigo> CREATOR = new Parcelable.Creator<Artigo>() {

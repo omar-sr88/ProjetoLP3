@@ -43,5 +43,7 @@
     <string name="guardarPesquisas">Histórico Local</string>
     <string name="pesquisas_texto">Guarda o histórico de pesquisas realizadas no celular</string>
     <string name="title_activity_resultado_busca_artigoctivity">ResultadoBuscaArtigoctivity</string>
+    <string name="title_activity_exemplar_artigo">ExemplarArtigoActivity</string>
+    <string name="exemplar_artigo">Exemplar</string>
 
 </resources>
