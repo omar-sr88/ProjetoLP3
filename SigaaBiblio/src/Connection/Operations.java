@@ -3,8 +3,10 @@ package Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import br.nti.SigaaBiblio.model.Artigo;
 import br.nti.SigaaBiblio.model.Biblioteca;
+import br.nti.SigaaBiblio.model.Emprestimo;
 import br.nti.SigaaBiblio.model.Livro;
 
 public interface Operations {
@@ -25,6 +27,7 @@ public interface Operations {
 	public ArrayList<Artigo> consultarAcervoArtigo(String ... parametrosConsulta);
 	public Livro informacoesLivro(String ... pararametrosLivro);
 	public Artigo informacoesExemplarArtigo(String ... pararametrosArtigo);
+	public ArrayList<Emprestimo> consultarSituacao(String ... parametrosUsuario);
 	
 
 }

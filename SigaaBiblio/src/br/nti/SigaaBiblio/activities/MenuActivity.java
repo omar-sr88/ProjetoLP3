@@ -90,42 +90,12 @@ public class MenuActivity extends Activity {
 
 					@Override
 					protected Void doInBackground(Void... params) {
-						Map<String, String> map = new HashMap<String, String>();
-						String jsonString;
-						map.put("Operacao",
-								String.valueOf(Operations.MINHA_SITUACAO));
-						map.put("Login", Usuario.INSTANCE.getLogin());
-						map.put("Senha", Usuario.INSTANCE.getSenha());
-
-						JSONObject inputsJson = new JSONObject(map);
-						JSONObject resposta;
-						
-						try {
-							jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
-							resposta = new JSONObject(jsonString);
-							String mensagem = resposta.getString("Mensagem");
-							resposta = new JSONObject(resposta.getString("Emprestimos"));
-							intent.putExtra("Mensagem", mensagem);
-							String key = "" ;
-							JSONObject content;
-							ArrayList<Emprestimo> emprestimos = new ArrayList<Emprestimo>();
-							Emprestimo emp;
-							for(Iterator obj = resposta.keys(); obj.hasNext();){
-								key = (String)obj.next();
-								content = new JSONObject(resposta.getString(key));
-								Log.d("IRON_DEBUG", content.toString());	
-								emp = new Emprestimo(content.getString("CodigoDeBarras"),content.getString("Autor"),
-										content.getString("Titulo"),content.getString("Ano"),content.getString("DataEmprestimo"), 
-										content.getString("DataRenovacao"), content.getString("Devolucao"), "", content.getString("Biblioteca"),
-										content.getBoolean("Renovavel"));
-								emprestimos.add(emp);
-								}
-							intent.putExtra("Emprestimos", emprestimos);							
-							
-							
-						} catch (Exception ex) {
-							ex.printStackTrace();
-						}
+												
+						Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA);
+						String mensagem = new String("");
+						ArrayList<Emprestimo> emprestimos = operacao.consultarSituacao(Usuario.INSTANCE.getLogin(),Usuario.INSTANCE.getSenha(),mensagem);
+						intent.putExtra("Mensagem", mensagem);
+						intent.putExtra("Emprestimos", emprestimos);
 						return null;
 					}
 

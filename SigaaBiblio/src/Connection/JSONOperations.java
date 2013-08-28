@@ -13,7 +13,9 @@ import br.nti.SigaaBiblio.activities.BuscaLivroActivity;
 import br.nti.SigaaBiblio.activities.ResultadoBuscaActivity;
 import br.nti.SigaaBiblio.model.Artigo;
 import br.nti.SigaaBiblio.model.Biblioteca;
+import br.nti.SigaaBiblio.model.Emprestimo;
 import br.nti.SigaaBiblio.model.Livro;
+import br.nti.SigaaBiblio.model.Usuario;
 
 import android.content.Intent;
 import android.util.Log;
@@ -225,6 +227,53 @@ public class JSONOperations implements Operations {
 		}
 		
 		return artigo;
+	}
+
+
+
+	@Override
+	public ArrayList<Emprestimo> consultarSituacao(String... parametrosUsuario) {
+		// TODO Auto-generated method stub
+		Map<String, String> map = new HashMap<String, String>();
+		String jsonString;
+		map.put("Operacao",
+				String.valueOf(Operations.MINHA_SITUACAO));
+		map.put("Login", parametrosUsuario[0]);
+		map.put("Senha", parametrosUsuario[1]);
+		ArrayList<Emprestimo> emprestimos = new ArrayList<Emprestimo>();
+		JSONObject inputsJson = new JSONObject(map);
+		JSONObject resposta;
+		
+		try {
+			jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+			resposta = new JSONObject(jsonString);
+			parametrosUsuario[2] = resposta.getString("Mensagem"); //informa a mensagem
+			resposta = new JSONObject(resposta.getString("Emprestimos"));
+			//intent.putExtra("Mensagem", mensagem);
+			String key = "" ;
+			JSONObject content;
+			
+			Emprestimo emp;
+			for(Iterator obj = resposta.keys(); obj.hasNext();){
+				key = (String)obj.next();
+				content = new JSONObject(resposta.getString(key));
+				Log.d("IRON_DEBUG", content.toString());	
+				emp = new Emprestimo(content.getString("CodigoDeBarras"),content.getString("Autor"),
+						content.getString("Titulo"),content.getString("Ano"),content.getString("DataEmprestimo"), 
+						content.getString("DataRenovacao"), content.getString("Devolucao"), "", content.getString("Biblioteca"),
+						content.getBoolean("Renovavel"));
+				emprestimos.add(emp);
+				}
+										
+		
+		
+	} catch (Exception ex) {
+		ex.printStackTrace();
+	}
+
+
+		
+		return emprestimos;
 	}
 	
 	
