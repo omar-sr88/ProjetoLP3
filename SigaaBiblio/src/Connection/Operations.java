@@ -28,6 +28,9 @@ public interface Operations {
 	public Livro informacoesLivro(String ... pararametrosLivro);
 	public Artigo informacoesExemplarArtigo(String ... pararametrosArtigo);
 	public ArrayList<Emprestimo> consultarSituacao(String ... parametrosUsuario);
+	public ArrayList<Emprestimo> consultarEmprestimosRenovaveis(String ... parametrosUsuario);
+	public ArrayList<Emprestimo> historicoEmprestimos(String ... parametrosUsuario);
+	
 	
 
 }

@@ -140,6 +140,7 @@ public class MenuActivity extends Activity {
 
 			}
 		});
+
 		historico.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -249,6 +250,10 @@ public class MenuActivity extends Activity {
 		}
 	
 		
+		/*
+		 * CONSULTAR ARTIGO
+		 */
+		
 		public void consultarArtigo(View v){
 			
 			
@@ -294,7 +299,9 @@ public class MenuActivity extends Activity {
 				}.execute();			
 			
 		}
-
+		
+		
+		
 
 }
 

@@ -1,15 +1,23 @@
 package br.nti.SigaaBiblio.activities;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+
+import br.nti.SigaaBiblio.model.Emprestimo;
+import br.nti.SigaaBiblio.model.Usuario;
 
 import com.nti.SigaaBiblio.R;
 import com.nti.SigaaBiblio.R.layout;
 import com.nti.SigaaBiblio.R.menu;
 
+import Connection.Operations;
+import Connection.OperationsFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 
 import android.view.Menu;
@@ -95,15 +103,15 @@ public class SelecionarHistoricoActivity extends Activity {
 			}
 		});
 		
-		pesquisar.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(SelecionarHistoricoActivity.this, HistoricoEmprestimosActivity.class );
-				startActivity(intent);
-
-			}
-		});
+//		pesquisar.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				Intent intent = new Intent(SelecionarHistoricoActivity.this, HistoricoEmprestimosActivity.class );
+//				startActivity(intent);
+//
+//			}
+//		});
 
 	}
 
@@ -115,6 +123,56 @@ public class SelecionarHistoricoActivity extends Activity {
 		return true;
 	}
 
+	
+	/*
+	 * CONSULTAR HISTORICO
+	 */
+	
+	public void consultarHistorico(View v){
+		
+		final ProgressDialog pd = new ProgressDialog(SelecionarHistoricoActivity.this);
+		pd.setMessage("Processando...");
+		pd.setTitle("Aguarde");
+		pd.setIndeterminate(false);
+		
+		
+		new AsyncTask<Void,Void,Void>(){
+
+			@Override
+			protected void onPreExecute() {
+				// TODO Auto-generated method stub
+				super.onPreExecute();
+				pd.show();
+			}
+			
+			
+			@Override
+			protected Void doInBackground(Void... arg0) {
+				Operations operation = new OperationsFactory().getOperation(OperationsFactory.REMOTA);
+				String usuario=Usuario.INSTANCE.getLogin();
+				String senha = Usuario.INSTANCE.getSenha();
+				String dataInicial= inputDataInicial.getText().toString();
+				String dataFinal= inputDataFinal.getText().toString();
+				ArrayList<Emprestimo> emprestimos = operation.historicoEmprestimos(usuario,senha,dataInicial,dataFinal) ;
+				Intent intent = new Intent(SelecionarHistoricoActivity.this, HistoricoEmprestimosActivity.class );
+				intent.putExtra("Historico", emprestimos);
+				startActivity(intent);								
+
+				return null;
+			}
+			
+			@Override
+			protected void onPostExecute(Void v) {
+				// TODO Auto-generated method stub
+				super.onPostExecute(v);
+				if(pd!= null && pd.isShowing())
+					pd.dismiss();
+			}
+			
+			}.execute();			
+
+		
+	}
 
 
 

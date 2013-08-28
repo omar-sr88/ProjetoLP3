@@ -275,6 +275,66 @@ public class JSONOperations implements Operations {
 		
 		return emprestimos;
 	}
+
+
+
+	@Override
+	public ArrayList<Emprestimo> consultarEmprestimosRenovaveis(
+			String... parametrosUsuario) {
+		// TODO Auto-generated method stub
+				
+		return null;
+	}
+
+
+
+	@Override
+	public ArrayList<Emprestimo> historicoEmprestimos(
+			String... parametrosUsuario) {
+		// TODO Auto-generated method stub
+		Map<String, String> map = new HashMap<String, String>();
+		String jsonString;
+		map.put("Operacao", String.valueOf(Operations.MEUS_EMPRESTIMOS));
+		map.put("Login", parametrosUsuario[0]);
+		map.put("Senha", parametrosUsuario[1]);
+		map.put("Inicio", parametrosUsuario[2]);
+		map.put("Fim", parametrosUsuario[3]);
+		JSONObject inputsJson = new JSONObject(map);
+		JSONObject resposta;
+		ArrayList<Emprestimo> emprestimos= new ArrayList<Emprestimo>();
+		try {
+			jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+			resposta = new JSONObject(jsonString);					
+			resposta = new JSONObject(resposta.getString("Emprestimos"));
+			
+			String tipoEmprestimo="",dataEmprestimo="",dataRenovacao="",informacao="",
+					prazoDevolucao="",dataDevolucao="";
+			
+			Iterator it = resposta.keys();
+			while (it.hasNext()) {
+			JSONObject emprestimoJson = resposta.getJSONObject((String) it.next());
+			tipoEmprestimo= JSONObject.NULL.equals(resposta.get("TipoEmprestimo"))?"-":resposta.getString("TipoEmprestimo");
+			dataEmprestimo= JSONObject.NULL.equals(resposta.get("DataEmprestimo"))?"-":resposta.getString("DataEmprestimo");
+			dataRenovacao= JSONObject.NULL.equals(resposta.get("DataRenovacao"))?"-":resposta.getString("DataRenovacao");
+			informacao= JSONObject.NULL.equals(resposta.get("PrazoDevolucao"))?"-":resposta.getString("PrazoDevolucao");
+			prazoDevolucao= JSONObject.NULL.equals(resposta.get("DataDevolucao"))?"-":resposta.getString("DataDevolucao");
+			dataDevolucao= JSONObject.NULL.equals(resposta.get("Informacao"))?"-":resposta.getString("Informacao");
+			Emprestimo emprestimo = new Emprestimo(tipoEmprestimo,dataEmprestimo,dataRenovacao,
+													informacao,prazoDevolucao,dataDevolucao);
+	
+					
+			emprestimos.add(emprestimo);
+			//Log.d("MARCILIO_DEBUG", obj.toString());
+		}
+		} catch (Exception ex){
+			ex.printStackTrace();
+		}
+
+		
+		return emprestimos;
+	}
+	
+	
 	
 	
 }//end class

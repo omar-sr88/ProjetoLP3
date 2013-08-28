@@ -21,7 +21,16 @@ public class Emprestimo implements java.io.Serializable{
 	private String localizacao;
 	private boolean emAberto;
 	private String codigoBarras;
+	private String informacoes;
 	
+	public String getInformacoes() {
+		return informacoes;
+	}
+
+	public void setInformacoes(String informacoes) {
+		this.informacoes = informacoes;
+	}
+
 	/* campo para verificao do vinculo */
 	private boolean renovavel;
 	
@@ -35,7 +44,7 @@ public class Emprestimo implements java.io.Serializable{
 
 	/* construtor usado para renovacao de emprestimos */
 	public Emprestimo(String codigoLivro, String autor, String titulo,
-			String ano, String dataEmprestimo, String dataDevolucao) {
+			String ano, String dataEmprestimo, String dataDevolucao,boolean lol) {
 		super();
 		this.codigoLivro = codigoLivro;
 		this.autor = autor;
@@ -46,22 +55,17 @@ public class Emprestimo implements java.io.Serializable{
 	}
 	
 	/* Construtor Utilizado para historico de emprestimos */
-	public Emprestimo(String autor, String titulo, String dataEmprestimo,
-			String dataDevolucao, String tipoEmprestimo, String dataRenovacao,
-			String prazoDevolucao, String biblioteca, String localizacao,
-			boolean emAberto, String codigoBarras) {
+	public Emprestimo(String tipoEmprestimo,String dataEmprestimo,
+			String dataRenovacao, String informacoes, 
+			String prazoDevolucao,String dataDevolucao ) {
 		super();
-		this.autor = autor;
-		this.titulo = titulo;
+
 		this.dataEmprestimo = dataEmprestimo;
 		this.dataDevolucao = dataDevolucao;
 		this.tipoEmprestimo = tipoEmprestimo;
 		this.dataRenovacao = dataRenovacao;
 		this.prazoDevolucao = prazoDevolucao;
-		this.biblioteca = biblioteca;
-		this.localizacao = localizacao;
-		this.emAberto = emAberto;
-		this.codigoBarras = codigoBarras;
+		this.informacoes=informacoes;
 	}
 	
 	/* construtor utilizado para visualização de vinculo */

@@ -122,7 +122,8 @@
 	         android:layout_width="wrap_content"
 	         android:layout_height="wrap_content"
 	         android:layout_margin="10dp"
-	         android:text="@string/label_gerar_historico" />
+	         android:text="@string/label_gerar_historico"
+	         android:onClick="consultarHistorico" />
 
 	 </LinearLayout>
 
