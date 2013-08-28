@@ -199,7 +199,14 @@ public class SigaaAndroidServlet extends HttpServlet {
 				 * 			  Publicacao       : String    (Local de Publicacao)
 				 * 		      Editora 		   : String
 				 * 			  AnoPublicacao    : int
-				 * 			  NotasGerais 	   : String				
+				 * 			  NotasGerais 	   : String		
+				 * 			  Exemplares:      : JSONObject (Lista dos Exemplares)
+				 * 			    CodigoBarras   : String
+				 * 				TipoMateria    : String
+				 * 				Colecao        : String
+				 * 				Status         : String
+				 * 				Disponivel     : String
+				 *				Localizacao    : String				
 				 */
 					
 				case Operations.INFORMACOES_EXEMPLAR_ACERVO:

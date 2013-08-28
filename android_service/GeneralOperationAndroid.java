@@ -28,6 +28,7 @@ import br.ufrn.sigaa.arq.dao.UsuarioDao;
 import br.ufrn.sigaa.arq.dao.biblioteca.ArtigoDePeriodicoDao;
 import br.ufrn.sigaa.arq.dao.biblioteca.BibliotecaDao;
 import br.ufrn.sigaa.arq.dao.biblioteca.EmprestimoDao;
+import br.ufrn.sigaa.arq.dao.biblioteca.ExemplarDao;
 import br.ufrn.sigaa.arq.dao.biblioteca.FormatoMaterialDao;
 import br.ufrn.sigaa.arq.dao.biblioteca.MaterialInformacionalDao;
 import br.ufrn.sigaa.arq.dao.biblioteca.TituloCatalograficoDao;
@@ -45,6 +46,7 @@ import br.ufrn.sigaa.biblioteca.integracao.dtos.OperacaoBibliotecaDto;
 import br.ufrn.sigaa.biblioteca.integracao.dtos.RetornoOperacoesCirculacaoDTO;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.dominio.ArtigoDePeriodico;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.dominio.CacheEntidadesMarc;
+import br.ufrn.sigaa.biblioteca.processos_tecnicos.dominio.Exemplar;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.dominio.Fasciculo;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.dominio.MaterialInformacional;
 import br.ufrn.sigaa.biblioteca.processos_tecnicos.pesquisa.dominio.CampoOrdenacaoConsultaAcervo;
@@ -390,7 +392,7 @@ public class GeneralOperationAndroid {
 			Map<String,JSONObject> livros = new HashMap<String,JSONObject>();
 			Map<String,String> cont;
 			CacheEntidadesMarc liv;
-			
+			////33612,33610, 33608
 			int quantidadeInteracaoLivro =  //Carregar o JSON apenas com a quantidade permitida pelo sistema, para não estourar o máximo.
 					(resultadosBuscados.size() > Operations.LIMITE_RESULTADOS_LIVROS ? Operations.LIMITE_RESULTADOS_LIVROS : resultadosBuscados.size());
 			for(int i = 0; i < quantidadeInteracaoLivro;i++){
@@ -526,61 +528,95 @@ public class GeneralOperationAndroid {
 		
 		return situacao;
 	}		
-	
+	/**
+	 * 
+	 * @param idMaterial
+	 * @param map
+	 */
 	public static void informacoesExemplar(int idMaterial, Map<String, String> map){
 		try {
 			FormatoMaterialDao formatoDao = AbstractProcessador.getDAO(FormatoMaterialDao.class, null); 
+			ExemplarDao daoExemplares = AbstractProcessador.getDAO(ExemplarDao.class,null);
 			CacheEntidadesMarc tituloCache = formatoDao.findByExactField(CacheEntidadesMarc.class, "id", idMaterial, true); // Captura a partir do ID Detalhes
-			map.put("Registro", String.valueOf(tituloCache.getNumeroDoSistema()));
-			map.put("NumeroChamada", tituloCache.getNumeroChamada());
-			map.put("Titulo", tituloCache.getTitulo()+" "+tituloCache.getMeioPublicacao()+" "+
-			(tituloCache.getSubTitulo().isEmpty() ? tituloCache.getIndicacaoDeResponsabilidade() : ""));
-			map.put("SubTitulo", tituloCache.getSubTitulo()+" "+tituloCache.getIndicacaoDeResponsabilidade());
-			map.put("Assunto", tituloCache.getAssunto());
-			map.put("Autor", tituloCache.getAutor());
-			map.put("AutorSecundario", tituloCache.getAutoresSecundarios());
-			map.put("Publicacao", tituloCache.getLocalPublicacao());
-			map.put("Editora", tituloCache.getEditora());
-			map.put("AnoPublicacao", tituloCache.getAnoPublicacao().toString());
-			map.put("NotasGerais", tituloCache.getNotasGerais());
 			
+			List<Exemplar> exemplares;
+			JSONObject exemplaresJson = new JSONObject();
+			JSONObject exemplarJson;
+			try{
+				map.put("Registro", String.valueOf(tituloCache.getNumeroDoSistema()));
+				map.put("NumeroChamada", tituloCache.getNumeroChamada());
+				map.put("Titulo", tituloCache.getTitulo()+" "+tituloCache.getMeioPublicacao()+" "+
+				(tituloCache.getSubTitulo() == null || tituloCache.getSubTitulo().isEmpty() ? tituloCache.getIndicacaoDeResponsabilidade() : tituloCache.getSubTitulo()));
+				map.put("SubTitulo", tituloCache.getSubTitulo()+" "+tituloCache.getIndicacaoDeResponsabilidade());
+				map.put("Assunto", tituloCache.getAssunto());
+				map.put("Autor", tituloCache.getAutor());
+				map.put("AutorSecundario", tituloCache.getAutoresSecundarios());
+				map.put("Publicacao", tituloCache.getLocalPublicacao());
+				map.put("Editora", tituloCache.getEditora());
+				map.put("AnoPublicacao", tituloCache.getAnoPublicacao() == null ? "" : tituloCache.getAnoPublicacao().toString());
+				map.put("NotasGerais", tituloCache.getNotasGerais());
+				exemplares = daoExemplares.findExemplaresAtivosDeUmTitulo(tituloCache.getIdTituloCatalografico());
+				
+				for(Exemplar ex : exemplares){
+					exemplarJson = new JSONObject();
+					exemplarJson.put("CodigoBarras", ex.getCodigoBarras());
+					exemplarJson.put("TipoMaterial", ex.getTipoMaterial().getDescricao());
+					exemplarJson.put("Colecao", ex.getColecao().getDescricao());
+					exemplarJson.put("Status", ex.getStatus().getDescricao());
+					exemplarJson.put("Disponivel", ex.isDisponivel());
+					exemplarJson.put("Localizacao",ex.getNumeroChamada()+" "+(ex.getSegundaLocalizacao() == null ? "" : ex.getSegundaLocalizacao()));
+					
+					exemplaresJson.put(String.valueOf(ex.getId()), exemplarJson);
+					
+				}
+				map.put("Exemplares", exemplaresJson.toString());
+			}catch(Exception ex){
+				map.put("Mensagem", "Não foi possível recuperar informações do exemplar");
+			}
 			
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-public static void informacoesArtigo(int id, Map<String, String> map) {
-	try {
-		
-		FormatoMaterialDao formatoDao = AbstractProcessador.getDAO(FormatoMaterialDao.class, null);
-		CacheEntidadesMarc tituloCache = formatoDao.findByExactField(CacheEntidadesMarc.class, "id", id, true);
-		ArtigoDePeriodicoDao dao = AbstractProcessador.getDAO(ArtigoDePeriodicoDao.class,null);
-		ArtigoDePeriodico artigo =  dao.findByPrimaryKey(tituloCache.getIdArtigoDePeriodico(), ArtigoDePeriodico.class);		
-		Fasciculo fasciculo = artigo.getFasciculo();
-		
-		map.put("Biblioteca", fasciculo.getBiblioteca().getDescricao());
-		map.put("CodigoBarras", fasciculo.getCodigoBarras());
-		map.put("Localizacao", fasciculo.getNumeroChamada().trim());
-		map.put("Situacao", fasciculo.getSituacao().getDescricao());
-		map.put("AnoCronologico", fasciculo.getAnoCronologico().trim());
-		map.put("Ano", fasciculo.getAno());
-		map.put("DiaMes", fasciculo.getDiaMes());
-		map.put("Volume", fasciculo.getVolume().trim());
-		map.put("Numero", fasciculo.getNumero().trim());
-		map.put("AutorSecundario", tituloCache.getAutoresSecundarios());
-		map.put("IntervaloPaginas", tituloCache.getIntervaloPaginas());
-		map.put("LocalPublicacao", tituloCache.getLocalPublicacao());
-		map.put("Editora",tituloCache.getEditora());
-		map.put("AnoExemplar", tituloCache.getAno());
-		map.put("Resumo", tituloCache.getResumo());		
-		
-	} catch (DAOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	}
+	/**
+	 * 
+	 * @param id
+	 * @param map
+	 */
+	public static void informacoesArtigo(int id, Map<String, String> map) {
+		try {
+			
+			FormatoMaterialDao formatoDao = AbstractProcessador.getDAO(FormatoMaterialDao.class, null);
+			CacheEntidadesMarc tituloCache = formatoDao.findByExactField(CacheEntidadesMarc.class, "id", id, true);
+			ArtigoDePeriodicoDao dao = AbstractProcessador.getDAO(ArtigoDePeriodicoDao.class,null);
+			ArtigoDePeriodico artigo =  dao.findByPrimaryKey(tituloCache.getIdArtigoDePeriodico(), ArtigoDePeriodico.class);		
+			Fasciculo fasciculo = artigo.getFasciculo();
+			try{
+			map.put("Biblioteca", fasciculo.getBiblioteca().getDescricao());
+			map.put("CodigoBarras", fasciculo.getCodigoBarras());
+			map.put("Localizacao", fasciculo.getNumeroChamada() == null ? "" : fasciculo.getNumeroChamada().trim());
+			map.put("Situacao", fasciculo.getSituacao().getDescricao());
+			map.put("AnoCronologico", fasciculo.getAnoCronologico() == null ? "" : fasciculo.getNumeroChamada().trim());
+			map.put("Ano", fasciculo.getAno());
+			map.put("DiaMes", fasciculo.getDiaMes());
+			map.put("Volume", fasciculo.getVolume() == null ? "" : fasciculo.getVolume().trim());
+			map.put("Numero", fasciculo.getNumero() == null ? "" : fasciculo.getNumero().trim());
+			map.put("AutorSecundario", tituloCache.getAutoresSecundarios());
+			map.put("IntervaloPaginas", tituloCache.getIntervaloPaginas());
+			map.put("LocalPublicacao", tituloCache.getLocalPublicacao());
+			map.put("Editora",tituloCache.getEditora());
+			map.put("AnoExemplar", tituloCache.getAno());
+			map.put("Resumo", tituloCache.getResumo());	
+			}catch(Exception ex){
+				map.put("Mensagem", "Não foi possível retornar informações do Artigo.");
+			}
+			
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
 
 	
 	/**

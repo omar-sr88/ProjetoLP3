@@ -209,6 +209,13 @@ public class LoginActivity extends Activity implements OnClickListener {
 				 * Edicao (String)
 				 * Ano    (Int)
 				 * QuantidadeAtivos (Int)
+				 * Exemplares:  : JSONObject (Lista dos Exemplares)
+				 * 			    CodigoBarras   : String
+				 * 				TipoMateria    : String
+				 * 				Colecao        : String
+				 * 				Status         : String
+				 * 				Disponivel     : String
+				 *				Localizacao    : String		
 				 */
 				@Override
 				protected Void doInBackground(Void... arg0) {
@@ -229,7 +236,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 						resposta = resposta.getJSONObject("112204");
 						//String titulo = resposta.getString("Titulo");
 						
-						//Log.d("IRON_DEBUG", resposta.toString());//ou Artigos
+						Log.d("IRON_DEBUG", resposta.toString());//ou Artigos
 					} catch (Exception ex){
 						ex.printStackTrace();
 					}
@@ -372,7 +379,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 					try {
 						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
 						JSONObject resposta = new JSONObject(jsonString);					
-						//Log.d("IRON_DEBUG", resposta.toString());
+						Log.d("IRON_DEBUG", resposta.toString());
 					} catch (Exception ex){
 						ex.printStackTrace();
 					}
