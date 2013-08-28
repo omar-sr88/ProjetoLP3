@@ -121,15 +121,15 @@ public class MenuActivity extends Activity {
 			}
 		});
 
-		renovacao.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(MenuActivity.this, RenovacaoActivity.class );
-				startActivity(intent);
-
-			}
-		});
+//		renovacao.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				Intent intent = new Intent(MenuActivity.this, RenovacaoActivity.class );
+//				startActivity(intent);
+//
+//			}
+//		});
 
 		sair.setOnClickListener(new OnClickListener() {
 
@@ -300,7 +300,59 @@ public class MenuActivity extends Activity {
 			
 		}
 		
+
+		/*
+		 * CONSULTAR EMPRESTIMOS RENOVAVEIS
+		 */
 		
+		public void emprestimosRenovaveis(View v){
+			
+			
+			final ProgressDialog pd = new ProgressDialog(MenuActivity.this);
+			pd.setMessage("Processando...");
+			pd.setTitle("Aguarde");
+			pd.setIndeterminate(false);
+			
+			
+			/*
+			 * OBTEM O NOMES DAS BIBLIOTECAS ATIVAS
+			 */
+			
+			new AsyncTask<Void,Void,Void>(){
+
+				@Override
+				protected void onPreExecute() {
+					// TODO Auto-generated method stub
+					super.onPreExecute();
+					pd.show();
+				}
+				
+				
+				@Override
+				protected Void doInBackground(Void... arg0) {
+					Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA);
+					String usuario=Usuario.INSTANCE.getLogin();
+					String senha = Usuario.INSTANCE.getSenha();
+					ArrayList<Emprestimo> emprestimos = operacao.consultarEmprestimosRenovaveis(usuario,senha);
+					Intent intent = new Intent(MenuActivity.this, RenovacaoActivity.class);
+					intent.putExtra("EmprestimosRenovaveis", emprestimos);
+					startActivity(intent);								
+
+					return null;
+				}
+				
+				@Override
+				protected void onPostExecute(Void v) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(v);
+					if(pd!= null && pd.isShowing())
+						pd.dismiss();
+				}
+				
+				}.execute();			
+			
+		}
+
 		
 
 }

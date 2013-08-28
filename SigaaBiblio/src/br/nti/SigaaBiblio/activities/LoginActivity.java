@@ -229,7 +229,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 						resposta = resposta.getJSONObject("112204");
 						//String titulo = resposta.getString("Titulo");
 						
-						Log.d("IRON_DEBUG", resposta.toString());//ou Artigos
+						//Log.d("IRON_DEBUG", resposta.toString());//ou Artigos
 					} catch (Exception ex){
 						ex.printStackTrace();
 					}
@@ -268,7 +268,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 						Iterator it = resposta.keys();
 					while (it.hasNext()) {
 						JSONObject obj = resposta.getJSONObject((String) it.next());
-						Log.d("IRON_DEBUG", obj.toString());
+						//Log.d("IRON_DEBUG", obj.toString());
 					}
 					} catch (Exception ex){
 						ex.printStackTrace();
@@ -292,7 +292,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 					Map<String, String> map = new HashMap<String, String>();
 					String jsonString;
 					map.put("Operacao", String.valueOf(Operations.LIVROS_EMPRESTADOS));
-					map.put("Login", "ironaraujo");
+					map.put("Login", "eduardogama");
 					map.put("Senha", "202cb962ac59075b964b07152d234b70");
 					
 					JSONObject inputsJson = new JSONObject(map);
@@ -308,7 +308,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 					while (it.hasNext()) {
 						JSONObject obj = resposta.getJSONObject((String) it.next());
 						renovacao += obj.getInt("IdMaterial")+";";              ///String de Renovacao: ID's separados por ';'
-						//Log.d("IRON_DEBUG", obj.toString());// ou Artigos
+						Log.d("IRON_DEBUG", obj.toString());// ou Artigos
 					}				
 					
 					

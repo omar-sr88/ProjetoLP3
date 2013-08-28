@@ -282,8 +282,44 @@ public class JSONOperations implements Operations {
 	public ArrayList<Emprestimo> consultarEmprestimosRenovaveis(
 			String... parametrosUsuario) {
 		// TODO Auto-generated method stub
-				
-		return null;
+		Map<String, String> map = new HashMap<String, String>();
+		String jsonString;
+		map.put("Operacao", String.valueOf(Operations.LIVROS_EMPRESTADOS));
+		map.put("Login", parametrosUsuario[0]);
+		map.put("Senha", parametrosUsuario[1]);
+		JSONObject inputsJson = new JSONObject(map);
+		JSONObject resposta;
+		ArrayList<Emprestimo> emprestimos= new ArrayList<Emprestimo>();
+		try {
+			jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+			resposta = new JSONObject(jsonString);					
+			resposta = new JSONObject(resposta.getString("EmprestimosAbertos"));
+			
+			String informacao="",dataEmprestimo="",prazo="",idMaterial="";
+
+			
+			Log.d("MARCILIO_DEBUG", resposta.toString());
+			Iterator it = resposta.keys();
+			while (it.hasNext()) {
+			JSONObject emprestimoJson = resposta.getJSONObject((String) it.next());
+			Log.d("MARCILIO_DEBUG", emprestimoJson.toString());
+			dataEmprestimo= JSONObject.NULL.equals(resposta.get("DataEmprestimo"))?"-":resposta.getString("DataEmprestimo");
+			idMaterial= JSONObject.NULL.equals(resposta.get("IdMaterial"))?"-":resposta.getString("IdMaterial");
+			informacao= JSONObject.NULL.equals(resposta.get("Informacao"))?"-":resposta.getString("Informacao");
+			prazo= JSONObject.NULL.equals(resposta.get("Prazo"))?"-":resposta.getString("Prazo");
+			
+			Emprestimo emprestimo = new Emprestimo(dataEmprestimo,idMaterial,informacao,prazo);
+	
+					
+			emprestimos.add(emprestimo);
+			//Log.d("MARCILIO_DEBUG", resposta.toString());
+		}
+		} catch (Exception ex){
+			ex.printStackTrace();
+		}
+
+		
+		return emprestimos;
 	}
 
 

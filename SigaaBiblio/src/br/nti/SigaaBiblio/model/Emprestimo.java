@@ -43,15 +43,13 @@ public class Emprestimo implements java.io.Serializable{
 	}
 
 	/* construtor usado para renovacao de emprestimos */
-	public Emprestimo(String codigoLivro, String autor, String titulo,
-			String ano, String dataEmprestimo, String dataDevolucao,boolean lol) {
+	public Emprestimo(String dataEmprestimo,String codigoLivro, String informacoes,
+			String prazo) {
 		super();
 		this.codigoLivro = codigoLivro;
-		this.autor = autor;
-		this.titulo = titulo;
-		this.ano = ano;
 		this.dataEmprestimo = dataEmprestimo;
-		this.dataDevolucao = dataDevolucao;
+		this.prazoDevolucao=prazo;
+		this.informacoes=informacoes;
 	}
 	
 	/* Construtor Utilizado para historico de emprestimos */
@@ -88,9 +86,11 @@ public class Emprestimo implements java.io.Serializable{
 	/* toString utilizado para Renovacao de Emprestimo */
 	@Override
 	public String toString() {
-		return "Código do livro: " + codigoLivro + "\nAutor: " + autor
-				+ "\nTítulo: " + titulo + "\nAno: " + ano + "\nData de empréstimo: "
-				+ dataEmprestimo + "\ndata de devolucao: " + dataDevolucao;
+		return "Código do livro: " + codigoLivro + 
+				"\n: " + informacoes + 
+				"\nData de empréstimo: "
+				+ dataEmprestimo + 
+				"\ndata de devolucao: " + prazoDevolucao;
 	}
 	
 	public String getInformacoesLivro(){

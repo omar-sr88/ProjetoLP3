@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import br.nti.SigaaBiblio.model.Emprestimo;
+
 import com.nti.SigaaBiblio.R;
 import com.nti.SigaaBiblio.R.layout;
 import com.nti.SigaaBiblio.R.menu;
@@ -30,6 +32,19 @@ public class RenovacaoActivity extends Activity {
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_renovacao);
 		
+		
+		
+		 Bundle bund = getIntent().getExtras();
+	     ArrayList<Emprestimo> emprestimos = (ArrayList<Emprestimo>) bund.get("EmprestimosRenovaveis");
+	     ArrayList<String> lista = new ArrayList<String>();
+	     for(Emprestimo e : emprestimos){
+	    	 lista.add(e.toString());
+	     }
+		
+		
+		
+		
+		
 		ListView listaLivros = (ListView) findViewById(R.id.listViewResultados);
 		
 		/*
@@ -37,19 +52,20 @@ public class RenovacaoActivity extends Activity {
 		 * a parte de conexão com o servidor for implementada 
 		 */
 		
-		String[] livros_emprestados = new String[] { "Código do livro\nAutor\nTítulo\n" +
-				"Ano\n"+"Data de empréstimo, data de devolução",
-				"Código do livro\nAutor\nTítulo\n" +
-						"Ano\n"+"Data de empréstimo, data de devolução","Código do livro\nAutor\nTítulo\n" +
-								"Ano\n"+"Data de empréstimo, data de devolução","Código do livro\nAutor\nTítulo\n" +
-										"Ano\n"+"Data de empréstimo, data de devolução","Código do livro\nAutor\nTítulo\n" +
-												"Ano\n"+"Data de empréstimo, data de devolução",};
-		
+//		String[] livros_emprestados = new String[] { "Código do livro\nAutor\nTítulo\n" +
+//				"Ano\n"+"Data de empréstimo, data de devolução",
+//				"Código do livro\nAutor\nTítulo\n" +
+//						"Ano\n"+"Data de empréstimo, data de devolução","Código do livro\nAutor\nTítulo\n" +
+//								"Ano\n"+"Data de empréstimo, data de devolução","Código do livro\nAutor\nTítulo\n" +
+//										"Ano\n"+"Data de empréstimo, data de devolução","Código do livro\nAutor\nTítulo\n" +
+//												"Ano\n"+"Data de empréstimo, data de devolução",};
+//		
 		       ArrayList<EmprestimoAdapterUtils> lista_para_adapter = new ArrayList<EmprestimoAdapterUtils>();
 		       
-		       for (int i = 0; i < livros_emprestados.length; ++i) {
-		    	   lista_para_adapter.add(new EmprestimoAdapterUtils(livros_emprestados[i]));
+		       for(String emprestimo : lista){
+		    	   lista_para_adapter.add(new EmprestimoAdapterUtils(emprestimo));
 		       }
+		       
 		       ArrayAdapter<EmprestimoAdapterUtils> adapter = new EmprestimoAdapter(this,lista_para_adapter);
 		       //ArrayAdapter<String> listViewAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, lista_para_adapter);	 
 		       listaLivros.setAdapter(adapter);
