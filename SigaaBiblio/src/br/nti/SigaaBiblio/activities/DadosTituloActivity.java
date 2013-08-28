@@ -1,6 +1,10 @@
 package br.nti.SigaaBiblio.activities;
 
+import java.util.ArrayList;
+
 import br.nti.SigaaBiblio.model.Artigo;
+import br.nti.SigaaBiblio.model.ExemplarLivro;
+import br.nti.SigaaBiblio.model.Livro;
 
 import com.nti.SigaaBiblio.R;
 import com.nti.SigaaBiblio.R.layout;
@@ -21,6 +25,7 @@ public class DadosTituloActivity extends Activity {
 
 	Button buttonVerifDisp;
 	Artigo artigo;
+	Livro livro;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +34,7 @@ public class DadosTituloActivity extends Activity {
 		setContentView(R.layout.activity_dados_titulo);
 		
 		String[] values= new String[]{""};
-		artigo = (Artigo) getIntent().getExtras().getParcelable("ExemplarArtigo");
+							artigo = (Artigo) getIntent().getExtras().getParcelable("ExemplarArtigo");
 		
 		if(artigo!=null){
 			values = new String[] { "Autores Secundários: "+artigo.getAutoresSecundarios(), 
@@ -38,6 +43,20 @@ public class DadosTituloActivity extends Activity {
 					"Editora: "+artigo.getEditora(),
 			        "Ano: "+artigo.getAno(),
 			        "Resumo: "+artigo.getResumo()};
+		}
+		else{
+			livro=(Livro) getIntent().getExtras().getParcelable("InformacoesLivro");
+			if(livro!=null){
+				values = new String[] { "Registro no Sistema: "+livro.getRegistroNoSistema(), 
+						"Número da Chamada: "+livro.getNumeroChamada(),
+						"Título: "+ livro.getTitulo(),
+						"SubTítulo: "+livro.getSubTitulo(),
+				        "Assunto: "+livro.getAssunto(),
+				        "Autor: "+livro.getAutor(),
+				        "Local de Publicação: "+livro.getLocalDePublicação(),
+				        "Editora: "+ livro.getEditora(),
+				        "Ano de Publicação: "+livro.getAno()};
+			}
 		}
 				
 		
@@ -73,7 +92,10 @@ public class DadosTituloActivity extends Activity {
 					startActivity(intent);
 				}
 				else{
+					livro=(Livro) getIntent().getExtras().getParcelable("InformacoesLivro");
+					ArrayList<ExemplarLivro> exemplares = livro.getExemplares();
 					Intent intent = new Intent(DadosTituloActivity.this, ExemplaresActivity.class );
+					intent.putExtra("ExemplaresLivro", exemplares);
 					startActivity(intent);
 				}
 					

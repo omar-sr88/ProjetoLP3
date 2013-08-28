@@ -1,6 +1,9 @@
 package br.nti.SigaaBiblio.model;
 
-public class ExemplarLivro {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class ExemplarLivro implements Parcelable {
 
 	
 	private String codigoDeBarras;
@@ -11,17 +14,62 @@ public class ExemplarLivro {
 	private String situacao;
 	
 	public ExemplarLivro(String codigoDeBarras, String tipoDeMaterial,
-			String colecao, String biblioteca, String localizacao,
+			String colecao, /*String biblioteca, */String localizacao,
 			String situacao) {
 		super();
 		this.codigoDeBarras = codigoDeBarras;
 		this.tipoDeMaterial = tipoDeMaterial;
 		this.colecao = colecao;
-		this.biblioteca = biblioteca;
+		//this.biblioteca = biblioteca;
 		this.localizacao = localizacao;
 		this.situacao = situacao;
 	}
+	
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+		dest.writeString(this.codigoDeBarras);
+		dest.writeString(this.tipoDeMaterial);
+		dest.writeString(this.colecao);
+		dest.writeString(this.biblioteca);
+		dest.writeString(this.localizacao);
+		dest.writeString(this.situacao);
+		
+	}
+
+	public ExemplarLivro(Parcel in) {
+		
+		readFromParcel(in); }
+	
+	private void readFromParcel(Parcel in) {
+		this.codigoDeBarras = in.readString();;
+		this.tipoDeMaterial = in.readString();;
+		this.colecao = in.readString();;
+		this.biblioteca = in.readString();;
+		this.localizacao = in.readString();;
+		this.situacao = in.readString();;
+
+	}
+	
+	public static final Parcelable.Creator<ExemplarLivro> CREATOR = new Parcelable.Creator<ExemplarLivro>() {
+		public ExemplarLivro createFromParcel(Parcel in){
+			return new ExemplarLivro(in);
+		}
+		public ExemplarLivro[] newArray(int size) { 
+			return new ExemplarLivro[size]; 
+			}
+		
+	};
+
+	
+	
 	public String getCodigoDeBarras() {
 		return codigoDeBarras;
 	}

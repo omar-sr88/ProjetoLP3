@@ -10,10 +10,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import br.nti.SigaaBiblio.activities.BuscaLivroActivity;
+import br.nti.SigaaBiblio.activities.ExemplarArtigoActivity;
 import br.nti.SigaaBiblio.activities.ResultadoBuscaActivity;
 import br.nti.SigaaBiblio.model.Artigo;
 import br.nti.SigaaBiblio.model.Biblioteca;
 import br.nti.SigaaBiblio.model.Emprestimo;
+import br.nti.SigaaBiblio.model.ExemplarLivro;
 import br.nti.SigaaBiblio.model.Livro;
 import br.nti.SigaaBiblio.model.Usuario;
 
@@ -166,19 +168,50 @@ public class JSONOperations implements Operations {
 		map.put("IdDetalhes", pararametrosLivro[0]);					
 		JSONObject inputsJson = new JSONObject(map);
 		Livro livro=null;
-		String registro="", numero="", titulo="",subtitulo="",assunto="",autor="",autorSecundario="",publicacao="",editora="",ano="",notas="";
+		String registro="", numero="", titulo="",subtitulo="",assunto="",autor="",
+				autorSecundario="",publicacao="",editora="",ano="",notas="";
 		
+			
 		try {
 			jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
 			JSONObject resposta = new JSONObject(jsonString); 
+			registro= JSONObject.NULL.equals(resposta.get("Registro"))?"-":resposta.getString("Registro");
+			numero= JSONObject.NULL.equals(resposta.get("NumeroChamada"))?"-":resposta.getString("NumeroChamada");
+			titulo=JSONObject.NULL.equals(resposta.get("Titulo"))?"-":resposta.getString("Titulo");
+			subtitulo=JSONObject.NULL.equals(resposta.get("SubTitulo"))?"-":resposta.getString("SubTitulo");
+			assunto=JSONObject.NULL.equals(resposta.get("Assunto"))?"-":resposta.getString("Assunto");
+			autor=JSONObject.NULL.equals(resposta.get("Autor"))?"-":resposta.getString("Autor");
+			publicacao=JSONObject.NULL.equals(resposta.get("Publicacao"))?"-":resposta.getString("Publicacao");
+			editora=JSONObject.NULL.equals(resposta.get("Editora"))?"-":resposta.getString("Editora");
+			ano=JSONObject.NULL.equals(resposta.get("AnoPublicacao"))?"-":resposta.getString("AnoPublicacao");
+			notas=JSONObject.NULL.equals(resposta.get("NotasGerais"))?"-":resposta.getString("NotasGerais");
+			autorSecundario= JSONObject.NULL.equals(resposta.get("AutorSecundario"))?"-":resposta.getString("AutorSecundario");	 
 			
-				
+			livro = new Livro(autor,titulo,ano,registro,numero,subtitulo,assunto,publicacao,editora,notas,autorSecundario);
 			
+			JSONObject exemplaresJson = resposta.getJSONObject("Exemplares");
+			Iterator<String> keys = exemplaresJson.keys();
+			String codigoBarras="",tipoMaterial="",colecao="",status="",disponivel="",localizacao="";
+			ArrayList<ExemplarLivro> exemplares= new ArrayList<ExemplarLivro>();
+			while(keys.hasNext()){
+				String key=keys.next();
+
+				JSONObject exemplarJson= exemplaresJson.getJSONObject(key);
+				codigoBarras= JSONObject.NULL.equals(exemplarJson.get("CodigoBarras"))?"-":exemplarJson.getString("CodigoBarras");
+				tipoMaterial= JSONObject.NULL.equals(exemplarJson.get("TipoMaterial"))?"-":exemplarJson.getString("TipoMaterial");
+				colecao= JSONObject.NULL.equals(exemplarJson.get("Colecao"))?"-":exemplarJson.getString("Colecao");
+				status= JSONObject.NULL.equals(exemplarJson.get("Status"))?"-":exemplarJson.getString("Status");
+				disponivel= JSONObject.NULL.equals(exemplarJson.get("Disponivel"))?"-":exemplarJson.getString("Disponivel");
+				localizacao= JSONObject.NULL.equals(exemplarJson.get("Localizacao"))?"-":exemplarJson.getString("Localizacao");
+				exemplares.add(new ExemplarLivro(codigoBarras,tipoMaterial,colecao,localizacao,disponivel));
+			}
+			
+			livro.setExemplares(exemplares); //adiciona o exemplar
 			Log.d("MARCILIO_DEBUG", resposta.toString());
 		} catch (Exception ex){
 			ex.printStackTrace();
 		}
-		return null;
+		return livro;
 	}
 
 

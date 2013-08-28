@@ -8,6 +8,8 @@ import android.os.Parcelable;
 
 public class Livro implements Parcelable {
 
+	
+
 	/* Campos dados basico */
 	private String autor;
 	private String titulo;
@@ -21,18 +23,18 @@ public class Livro implements Parcelable {
 	private String assunto;
 	private String localDePublicação;
 	private String editora;
+	private String autorSecundario;
+	private String notas;
+	
 	
 	/*Campo Exemplar*/
-	//List<ExemplarLivro> exemplares;
+	ArrayList<ExemplarLivro> exemplares;
 	
 	
 	/* 
 	 * Construtor padrão, as outras informações são adquiridas através de outras
 	 * solicitações ao servidor
 	 */
-	
-	
-	
 	
 	
 	public Livro(String autor, String titulo, String edicao, String ano,
@@ -44,18 +46,67 @@ public class Livro implements Parcelable {
 		this.ano = ano;
 		this.quantidade = quantidade;
 		this.registroNoSistema=registroNoSistema;
-		//this.exemplares=new ArrayList<ExemplarLivro>();
+		
+	}
+	
+	/*
+	 * Construtor para operacoes de infomacoes adicionais de livros
+	 */
+	
+	public Livro(String autor, String titulo, String ano,
+			String registroNoSistema, String numeroChamada, String subTitulo,
+			String assunto, String localDePublicação, String editora, String notas,
+			String autorSecundario/*ArrayList<ExemplarLivro> exemplares*/) {
+		super();
+		this.autor = autor;
+		this.titulo = titulo;
+		this.ano = ano;
+		this.registroNoSistema = registroNoSistema;
+		this.numeroChamada = numeroChamada;
+		this.subTitulo = subTitulo;
+		this.assunto = assunto;
+		this.localDePublicação = localDePublicação;
+		this.editora = editora;
+		//this.exemplares = exemplares;
+		this.autorSecundario = autorSecundario;
+		this.notas= notas;
+	}
+	
+	/*
+	 * construtor para inicializar a lista
+	 */
+
+	public Livro(){
+		this.exemplares= new ArrayList<ExemplarLivro>();
+	}
+
+	
+	public String getAutorSecundario() {
+		return autorSecundario;
+	}
+
+	public void setAutorSecundario(String autorSecundario) {
+		this.autorSecundario = autorSecundario;
+	}
+
+	public String getNotas() {
+		return notas;
+	}
+
+	public void setNotas(String notas) {
+		this.notas = notas;
+	}
+
+	
+	
+	public ArrayList<ExemplarLivro> getExemplares() {
+		return exemplares;
 	}
 
 
-//	public List<ExemplarLivro> getExemplares() {
-//		return exemplares;
-//	}
-//
-//
-//	public void setExemplares(List<ExemplarLivro> exemplares) {
-//		this.exemplares = exemplares;
-//	}
+	public void setExemplares(ArrayList<ExemplarLivro> exemplares) {
+		this.exemplares = exemplares;
+	}
 
 
 	public String getAutor() {
@@ -194,10 +245,14 @@ public class Livro implements Parcelable {
 		dest.writeString(this.assunto);
 		dest.writeString(this.localDePublicação);
 		dest.writeString(this.editora);
+		dest.writeString(this.autorSecundario);
+		dest.writeString(this.notas);
+		dest.writeList(this.exemplares);
 		
 	}
 	
 	public Livro(Parcel in) {
+		this();
 		readFromParcel(in); }
 	
 	private void readFromParcel(Parcel in) {
@@ -212,6 +267,9 @@ public class Livro implements Parcelable {
 		this.assunto=in.readString();
 		this.localDePublicação=in.readString();
 		this.editora=in.readString();
+		this.autorSecundario=in.readString();
+		this.notas=in.readString();
+		in.readTypedList(exemplares, ExemplarLivro.CREATOR);
 		
 	}
 	

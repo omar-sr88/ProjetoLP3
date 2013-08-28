@@ -1,5 +1,9 @@
 package br.nti.SigaaBiblio.activities;
 
+import java.util.ArrayList;
+
+import br.nti.SigaaBiblio.model.ExemplarLivro;
+
 import com.nti.SigaaBiblio.R;
 import com.nti.SigaaBiblio.R.layout;
 import com.nti.SigaaBiblio.R.menu;
@@ -27,8 +31,14 @@ public class ExemplaresActivity extends Activity {
 		retornarMenu = (Button) findViewById(R.id.retornarMenu);
 
 		retornarPesquisa.setOnClickListener(new OnClickListener() {
-
-			@Override
+		
+		//Começa daqui Iron
+			ArrayList<ExemplarLivro> exemplares = getIntent().getParcelableArrayListExtra("ExemplaresLivros");
+			//seja feliz
+		
+			
+			
+			@Override 
 			public void onClick(View v) {
 				Intent intent = new Intent(ExemplaresActivity.this, BuscaLivroActivity.class );
 				startActivity(intent);
