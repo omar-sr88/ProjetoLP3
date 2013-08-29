@@ -314,9 +314,6 @@ public class MenuActivity extends Activity {
 			pd.setIndeterminate(false);
 			
 			
-			/*
-			 * OBTEM O NOMES DAS BIBLIOTECAS ATIVAS
-			 */
 			
 			new AsyncTask<Void,Void,Void>(){
 

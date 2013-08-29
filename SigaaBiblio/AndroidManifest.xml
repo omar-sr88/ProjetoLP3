@@ -125,6 +125,7 @@
             android:name="br.nti.SigaaBiblio.activities.ExemplarArtigoActivity"
             android:label="@string/title_activity_exemplar_artigo" >
         </activity>
+        
     </application>
 
 </manifest>

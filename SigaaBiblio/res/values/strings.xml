@@ -45,5 +45,6 @@
     <string name="title_activity_resultado_busca_artigoctivity">ResultadoBuscaArtigoctivity</string>
     <string name="title_activity_exemplar_artigo">ExemplarArtigoActivity</string>
     <string name="exemplar_artigo">Exemplar</string>
+    <string name="title_activity_renovacao_error">RenovacaoErrorActivity</string>
 
 </resources>

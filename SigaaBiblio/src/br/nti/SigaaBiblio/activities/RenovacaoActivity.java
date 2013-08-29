@@ -42,7 +42,7 @@ public class RenovacaoActivity extends Activity {
 	Map<String,Boolean> renovar;
 	Map<String,String> keysEmprestimos;
 	String resposta;
-	
+	ArrayList<EmprestimoAdapterUtils> lista_para_adapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,29 +57,39 @@ public class RenovacaoActivity extends Activity {
 		 Bundle bund = getIntent().getExtras();
 	     ArrayList<Emprestimo> emprestimos = (ArrayList<Emprestimo>) bund.get("EmprestimosRenovaveis");
 	     ArrayList<String> lista = new ArrayList<String>();
+	     ListView listaLivros = (ListView) findViewById(R.id.listViewResultados);
 	     
-	     for(Emprestimo e : emprestimos){
-	    	 lista.add(e.toString());
-	    	 keysEmprestimos.put(e.toString(), e.getCodigoLivro());
-	    	 renovar.put(e.getCodigoLivro(),false); 
-	     }
+	     if(emprestimos==null){
+	    	
+	    	 lista.add("Você não possui empréstimos ativos renováveis");
+	    	 ArrayAdapter<String> adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, lista);
+	    	 listaLivros.setAdapter(adapter);
+	    	 Button renovar = (Button) findViewById(R.id.renovarEmprestimo);
+	    	 renovar.setEnabled(false);
+	    	 
+	     }else{
+		    	 for(Emprestimo e : emprestimos){
+			    	 lista.add(e.toString());
+			    	 keysEmprestimos.put(e.toString(), e.getCodigoLivro());
+			    	 renovar.put(e.getCodigoLivro(),false); 
+			     	}
+		    	 
+		    	 lista_para_adapter = new ArrayList<EmprestimoAdapterUtils>();
+			       
+			       for(String emprestimo : lista){
+			    	   lista_para_adapter.add(new EmprestimoAdapterUtils(emprestimo));
+			       	}
+			       
+			       ArrayAdapter<EmprestimoAdapterUtils> adapter = new EmprestimoAdapter(this,lista_para_adapter);			       	 
+			       listaLivros.setAdapter(adapter);
+
+	     	}//end else
+	     
+	     
+	     
 		
 		
-		
-		
-		
-		ListView listaLivros = (ListView) findViewById(R.id.listViewResultados);
-		
-		       ArrayList<EmprestimoAdapterUtils> lista_para_adapter = new ArrayList<EmprestimoAdapterUtils>();
-		       
-		       for(String emprestimo : lista){
-		    	   lista_para_adapter.add(new EmprestimoAdapterUtils(emprestimo));
-		       }
-		       
-		       ArrayAdapter<EmprestimoAdapterUtils> adapter = new EmprestimoAdapter(this,lista_para_adapter);
-		       //ArrayAdapter<String> listViewAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, lista_para_adapter);	 
-		       listaLivros.setAdapter(adapter);
-	
+		       	
 	}
 
 	@Override
@@ -125,7 +135,6 @@ public class RenovacaoActivity extends Activity {
 			            	if(renovar.get(chave)){ //tem que renovar
 			            	   resposta = json.renovarEmprestimo(usuario,senha,chave);
 			            	   Log.d("MARCILIO_DEBUG", "ariaria: "+resposta);
-			            	   String ab;
 			            	}
 			            }
 			                  
@@ -146,8 +155,10 @@ public class RenovacaoActivity extends Activity {
 			
 			}.execute();
 			
+			
 			Toast.makeText(getApplicationContext(), "Emprestimo Renovado com Sucesso", Toast.LENGTH_LONG).show();
-
+			Intent intent = new Intent(RenovacaoActivity.this, MenuActivity.class );
+			startActivity(intent);
 	}
 	
 	
@@ -192,7 +203,7 @@ public class RenovacaoActivity extends Activity {
 		             //Aqui
 		             String idEmprestimo =keysEmprestimos.get(element.getDados());
 		 	    	 renovar.put(idEmprestimo,buttonView.isChecked());
-		             Toast.makeText(getApplicationContext(), ""+renovar.get(idEmprestimo), Toast.LENGTH_SHORT).show();
+		             //Toast.makeText(getApplicationContext(), ""+renovar.get(idEmprestimo), Toast.LENGTH_SHORT).show();
 
 		            }
 		          });
