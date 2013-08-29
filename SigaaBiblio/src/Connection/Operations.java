@@ -31,6 +31,7 @@ public interface Operations {
 	public ArrayList<Emprestimo> consultarEmprestimosRenovaveis(String ... parametrosUsuario);
 	
 	public ArrayList<Emprestimo> historicoEmprestimos(String ... parametrosUsuario);
+	public String renovarEmprestimo(String ... parametrosEmprestimos);
 	
 	
 

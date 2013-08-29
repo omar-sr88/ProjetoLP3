@@ -1,31 +1,49 @@
 package br.nti.SigaaBiblio.activities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
+import br.nti.SigaaBiblio.model.Biblioteca;
 import br.nti.SigaaBiblio.model.Emprestimo;
+import br.nti.SigaaBiblio.model.Usuario;
 
 import com.nti.SigaaBiblio.R;
 import com.nti.SigaaBiblio.R.layout;
 import com.nti.SigaaBiblio.R.menu;
 
+import Connection.Operations;
+import Connection.OperationsFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class RenovacaoActivity extends Activity {
 
+	Map<String,Boolean> renovar;
+	Map<String,String> keysEmprestimos;
+	String resposta;
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,12 +51,17 @@ public class RenovacaoActivity extends Activity {
 		setContentView(R.layout.activity_renovacao);
 		
 		
+		renovar= new HashMap<String, Boolean>();
+		keysEmprestimos= new HashMap<String, String>();
 		
 		 Bundle bund = getIntent().getExtras();
 	     ArrayList<Emprestimo> emprestimos = (ArrayList<Emprestimo>) bund.get("EmprestimosRenovaveis");
 	     ArrayList<String> lista = new ArrayList<String>();
+	     
 	     for(Emprestimo e : emprestimos){
 	    	 lista.add(e.toString());
+	    	 keysEmprestimos.put(e.toString(), e.getCodigoLivro());
+	    	 renovar.put(e.getCodigoLivro(),false); 
 	     }
 		
 		
@@ -47,19 +70,6 @@ public class RenovacaoActivity extends Activity {
 		
 		ListView listaLivros = (ListView) findViewById(R.id.listViewResultados);
 		
-		/*
-		 * A variavel livros_emprestados se tornará uma lista quando
-		 * a parte de conexão com o servidor for implementada 
-		 */
-		
-//		String[] livros_emprestados = new String[] { "Código do livro\nAutor\nTítulo\n" +
-//				"Ano\n"+"Data de empréstimo, data de devolução",
-//				"Código do livro\nAutor\nTítulo\n" +
-//						"Ano\n"+"Data de empréstimo, data de devolução","Código do livro\nAutor\nTítulo\n" +
-//								"Ano\n"+"Data de empréstimo, data de devolução","Código do livro\nAutor\nTítulo\n" +
-//										"Ano\n"+"Data de empréstimo, data de devolução","Código do livro\nAutor\nTítulo\n" +
-//												"Ano\n"+"Data de empréstimo, data de devolução",};
-//		
 		       ArrayList<EmprestimoAdapterUtils> lista_para_adapter = new ArrayList<EmprestimoAdapterUtils>();
 		       
 		       for(String emprestimo : lista){
@@ -78,6 +88,74 @@ public class RenovacaoActivity extends Activity {
 		getMenuInflater().inflate(R.menu.renovacao, menu);
 		return true;
 	}
+	
+	
+	/*
+	 * Renovacao dos emprestimos
+	 */
+	
+	public void renovar(View e){
+		final ProgressDialog pd = new ProgressDialog(RenovacaoActivity.this);
+		pd.setMessage("Processando...");
+		pd.setTitle("Aguarde");
+		pd.setIndeterminate(false);
+	
+	
+		
+		new AsyncTask<Void,Void,Void>(){
+
+			@Override
+			protected void onPreExecute() {
+				// TODO Auto-generated method stub
+				super.onPreExecute();
+				pd.show();
+			}
+			
+			
+			@Override
+			protected Void doInBackground(Void... arg0) {
+					Operations json = new OperationsFactory().getOperation(OperationsFactory.REMOTA);
+					String usuario = Usuario.INSTANCE.getLogin();
+					String senha = Usuario.INSTANCE.getSenha();
+					
+					Set<String> id = renovar.keySet();
+					for (String chave : id)  
+			        {  
+			            if(chave != null){
+			            	if(renovar.get(chave)){ //tem que renovar
+			            	   resposta = json.renovarEmprestimo(usuario,senha,chave);
+			            	   Log.d("MARCILIO_DEBUG", "ariaria: "+resposta);
+			            	   String ab;
+			            	}
+			            }
+			                  
+			        }  
+					
+					//Log.d("MARCILIO_DEBUG", ""+bibliotecas);
+				
+				return null;
+			}
+			
+			@Override
+			protected void onPostExecute(Void v) {
+				// TODO Auto-generated method stub
+				super.onPostExecute(v);
+				if(pd!= null && pd.isShowing())
+					pd.dismiss();
+			}
+			
+			}.execute();
+			
+			Toast.makeText(getApplicationContext(), "Emprestimo Renovado com Sucesso", Toast.LENGTH_LONG).show();
+
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	private class EmprestimoAdapter extends ArrayAdapter<EmprestimoAdapterUtils> {
 
@@ -111,6 +189,10 @@ public class RenovacaoActivity extends Activity {
 		                boolean isChecked) {
 		              EmprestimoAdapterUtils element = (EmprestimoAdapterUtils) viewHolder.checkbox.getTag();
 		              element.setSelected(buttonView.isChecked());
+		             //Aqui
+		             String idEmprestimo =keysEmprestimos.get(element.getDados());
+		 	    	 renovar.put(idEmprestimo,buttonView.isChecked());
+		             Toast.makeText(getApplicationContext(), ""+renovar.get(idEmprestimo), Toast.LENGTH_SHORT).show();
 
 		            }
 		          });

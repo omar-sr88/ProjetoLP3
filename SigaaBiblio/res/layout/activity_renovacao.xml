@@ -40,10 +40,11 @@
         android:layout_gravity="center" >
 
         <Button
-            android:id="@+id/consultarHistorico"
+            android:id="@+id/renovarEmprestimo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/header_renovacao" />
+            android:text="@string/header_renovacao"
+            android:onClick="renovar" />
 
     </LinearLayout>
 
