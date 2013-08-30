@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import br.nti.SigaaBiblio.model.Usuario;
 import br.nti.SigaaBiblio.model.VinculoUsuarioSistema;
+import br.nti.SigaaBiblio.persistence.RepositorioFake;
 
 import com.nti.SigaaBiblio.R;
 
@@ -39,14 +40,16 @@ public class LoginActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		
-		setContentView(R.layout.activity_login);
 
-			
-	 	//Na criacao da ACtivity eu tento buscar a preferencia "Lembrar usuario" 
+
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+		setContentView(R.layout.activity_login);
+		RepositorioFake db = new RepositorioFake(getApplicationContext());
+		db.resetRepositorioFake();
+		db.gerarRepositorioFake();
+		
+	 		//Na criacao da ACtivity eu tento buscar a preferencia "Lembrar usuario" 
 		logPref = "";
 		senhaPref = "";
 
@@ -57,7 +60,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 		//Se a pref lembrar eh true eu tento setar os vlores de logpref e senhapref
 		if (Prefs.getLembrar(this)) {
-		
+
 			if (getPreferences(MODE_PRIVATE).contains("login"))
 				logPref = getPreferences(MODE_PRIVATE).getString("login", "");
 
@@ -98,45 +101,45 @@ public class LoginActivity extends Activity implements OnClickListener {
 			}
 
 			jsonResult = con.get(20,TimeUnit.SECONDS);
-			
+
 		} catch (Exception ex) {
 			Toast.makeText(getApplicationContext(), "Ocorreu um error com a conexão!", Toast.LENGTH_LONG).show();
 			con.desabilitaProgressDialog();
 			ex.printStackTrace();
 			return;
 		}
-		
+
 		jsonResult = con.getJsonResult();
 
 		/**
 		 * Atributos
 		 */
 		Intent intent = new Intent(this, MenuActivity.class);		
-		
+
 		String erro = "";
 		String mensagem = "";
-		
+
 		//
 		try {
 			erro = jsonResult.getString("Error");
 			mensagem = jsonResult.getString("Mensagem");
-			
+
 			if(!erro.isEmpty()){
 				Toast.makeText(getApplicationContext(), erro, Toast.LENGTH_LONG)
 				.show();
 				return;
 			}
-			
+
 			user.setNome(jsonResult.getString("Nome"));
 			user.setIdUsuarioBiblioteca(jsonResult.getString("IdUsuarioBiblioteca"));
 			user.setAluno( Boolean.valueOf(jsonResult.getString("isAluno")));
 			user.setUrlFoto(ConnectJSON.SISTEMA	+ jsonResult.getString("Foto"));
 			user.setUserVinculo(new VinculoUsuarioSistema(jsonResult.getInt("EmprestimosAbertos"),jsonResult.getBoolean("PodeRealizarEmprestimo")));
-			
+
 			if (user.isAluno()) {
 				user.setMatricula(jsonResult.getString("Matricula"));
 				user.setCurso(jsonResult.getString("Curso"));
-							
+
 			} else {
 				user.setUnidade(jsonResult.getString("Unidade"));
 			}
@@ -156,10 +159,10 @@ public class LoginActivity extends Activity implements OnClickListener {
 			Toast.makeText(getApplicationContext(), user.toString(), Toast.LENGTH_LONG)
 					.show();
 		}
-		
+
 		if (Prefs.getLembrar(this)) {
 			//se fez o login corretamente, ele salva o usuario
-			
+
 			if (!login.isEmpty() && login != null && !senha.isEmpty()
 					&& senha != null) {
 				getPreferences(MODE_PRIVATE).edit().putString("login", login)
@@ -170,7 +173,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 			}
 
 		}
-		
+
 		/**
 		 * CAPTURA BIBLIOTECAS QUE ESTÃO NO BANCO
 		 * COLOCAR NO LUGAR CORRETO!
@@ -184,22 +187,22 @@ public class LoginActivity extends Activity implements OnClickListener {
 				map.put("Operacao", String.valueOf(Operations.LISTAR_BIBLIOTECAS));
 				JSONObject inputsJson = new JSONObject(map);
 				JSONObject resposta;
-				
+
 				try {
 					jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
 					resposta = new JSONObject(jsonString);
 					String bibliotecas = resposta.getString("Bibliotecas");
 					String nome = new JSONObject(bibliotecas).getString("9763");
-					
+
 					//Log.d("IRON DEBUG", nome);
 				} catch (Exception ex){
 					ex.printStackTrace();
 				}
 				return null;
 			}
-			
+
 			}.execute();
-			
+
 			new AsyncTask<Void,Void,Void>(){
 				//IdBiblioteca":"9763","TituloBusca":"Metodologia","AutorBusca":"","AssuntoBusca":""}
 				/**
@@ -228,14 +231,14 @@ public class LoginActivity extends Activity implements OnClickListener {
 					map.put("AssuntoBusca","");
 					JSONObject inputsJson = new JSONObject(map);
 					JSONObject resposta;
-					
+
 					try {
 						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
 						resposta = new JSONObject(jsonString);
 						resposta = new JSONObject(resposta.getString("Livros"));
 						resposta = resposta.getJSONObject("112204");
 						//String titulo = resposta.getString("Titulo");
-						
+
 						Log.d("IRON_DEBUG", resposta.toString());//ou Artigos
 					} catch (Exception ex){
 						ex.printStackTrace();
@@ -243,7 +246,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 					return null;
 				}				
 			}.execute();
-			
+
 			new AsyncTask<Void,Void,Void>(){
 				/**
 				 * Retorno: Emprestimos
@@ -267,7 +270,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 					map.put("Fim", "");
 					JSONObject inputsJson = new JSONObject(map);
 					JSONObject resposta;
-					
+
 					try {
 						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
 						resposta = new JSONObject(jsonString);					
@@ -283,7 +286,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 					return null;
 				}				
 			}.execute();
-			
+
 			new AsyncTask<Void,Void,Void>(){
 				/**
 				 * Retorno: EmprestimosAbertos
@@ -301,27 +304,27 @@ public class LoginActivity extends Activity implements OnClickListener {
 					map.put("Operacao", String.valueOf(Operations.LIVROS_EMPRESTADOS));
 					map.put("Login", "eduardogama");
 					map.put("Senha", "202cb962ac59075b964b07152d234b70");
-					
+
 					JSONObject inputsJson = new JSONObject(map);
 					JSONObject resposta;
-					
-					
+
+
 					jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
 					resposta = new JSONObject(jsonString);					
 					resposta = new JSONObject(resposta.getString("EmprestimosAbertos"));
 					Iterator it = resposta.keys();
 					String renovacao = "";
-					
+
 					while (it.hasNext()) {
 						JSONObject obj = resposta.getJSONObject((String) it.next());
 						renovacao += obj.getInt("IdMaterial")+";";              ///String de Renovacao: ID's separados por ';'
 						Log.d("IRON_DEBUG", obj.toString());// ou Artigos
 					}				
-					
-					
+
+
 					///// FIM DA LISTAGEM DOS EMPRESTIMOS
 					//// RENOVACAO DE EMPRESTIMOS
-					
+
 					/**
 					 * Retorno: RenovacaoEmprestimo
 					 * InfoRenovacao: String
@@ -330,16 +333,16 @@ public class LoginActivity extends Activity implements OnClickListener {
 					 * Verificar Mensagem e ERROR
 					 */
 					map = new HashMap<String, String>();					
-					
+
 					map.put("Operacao", String.valueOf(Operations.RENOVACAO));
 					map.put("Login", "ironaraujo");
 					map.put("Senha", "202cb962ac59075b964b07152d234b70");		
 					map.put("IdLivrosRenovacao", renovacao); // ESTA RENOVANDO TODOS OS LIVROS
 					inputsJson = new JSONObject(map);					
-					
+
 					jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
 					resposta = new JSONObject(jsonString);	
-					
+
 					resposta = new JSONObject(resposta.getString(("RenovacaoEmprestimo")));
 					//{"Mensagem":"","RenovacaoEmprestimo":"{\"InfoRenovacao\":\"00001\/06 - Verger, Pierre. Fluxo e refluxo do tráfico de escravos entre o Golfo do Benin e a Bahia de Todos os Santos dos séculos XVII a XIX.\/ - Biblioteca Central Prazo para Devolução: 12\/09\/2013 23:59:59\\n\",\"CodigoAutenticacao\":\"834B.7D5D5BB \"}","Error":"null"}
 					//Log.d("IRON_DEBUG_CODIGOAUTENTICACAO", resposta.getString("CodigoAutenticacao"));
@@ -349,8 +352,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 					return null;
 				}				
 			}.execute();
-			
-			
+
+
 			new AsyncTask<Void,Void,Void>(){
 				/**
 				 * Retorno:   Registro         : int
@@ -366,7 +369,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 				 * 			  NotasGerais 	   : String				
 				 * 
 				 */
-				
+
 				@Override
 				protected Void doInBackground(Void... arg0) {
 					Map<String, String> map = new HashMap<String, String>();
@@ -374,8 +377,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 					map.put("Operacao", String.valueOf(Operations.INFORMACOES_EXEMPLAR_ACERVO));
 					map.put("IdDetalhes", "112204");					
 					JSONObject inputsJson = new JSONObject(map);
-					
-					
+
+
 					try {
 						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
 						JSONObject resposta = new JSONObject(jsonString);					
@@ -386,8 +389,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 					return null;
 				}				
 			}.execute();
-			
-			
+
+
 			new AsyncTask<Void,Void,Void>(){
 				/**
 				 * Output  : Biblioteca       : String
@@ -413,8 +416,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 					map.put("Operacao", String.valueOf(Operations.INFORMACOES_EXEMPLAR_ARTIGO));
 					map.put("IdDetalhes", "6304");					
 					JSONObject inputsJson = new JSONObject(map);
-					
-					
+
+
 					try {
 						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
 						JSONObject resposta = new JSONObject(jsonString);					
@@ -425,9 +428,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 					return null;
 				}				
 			}.execute();
-			
-			
-			
+
+
+
 		startActivity(intent);
 		finish();
 

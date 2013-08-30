@@ -110,7 +110,8 @@ public class RenovacaoActivity extends Activity {
 		pd.setTitle("Aguarde");
 		pd.setIndeterminate(false);
 	
-	
+		final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+
 		
 		new AsyncTask<Void,Void,Void>(){
 
@@ -124,7 +125,6 @@ public class RenovacaoActivity extends Activity {
 			
 			@Override
 			protected Void doInBackground(Void... arg0) {
-					Operations json = new OperationsFactory().getOperation(OperationsFactory.REMOTA);
 					String usuario = Usuario.INSTANCE.getLogin();
 					String senha = Usuario.INSTANCE.getSenha();
 					
@@ -133,7 +133,7 @@ public class RenovacaoActivity extends Activity {
 			        {  
 			            if(chave != null){
 			            	if(renovar.get(chave)){ //tem que renovar
-			            	   resposta = json.renovarEmprestimo(usuario,senha,chave);
+			            	   resposta = operacao.renovarEmprestimo(usuario,senha,chave);
 			            	   Log.d("MARCILIO_DEBUG", "ariaria: "+resposta);
 			            	}
 			            }

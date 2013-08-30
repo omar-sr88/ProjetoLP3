@@ -87,7 +87,7 @@ public class BuscaArtigoActivity extends Activity {
 		pd.setMessage("Processando...");
 		pd.setTitle("Aguarde");
 		pd.setIndeterminate(false);
-		
+		final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 		
 		new AsyncTask<Void,Void,Void>(){
 			//IdBiblioteca":"9763","TituloBusca":"Metodologia","AutorBusca":"","AssuntoBusca":""}
@@ -113,8 +113,8 @@ public class BuscaArtigoActivity extends Activity {
 			protected Void doInBackground(Void... arg0) {
 				
 				
-				Operations json = new OperationsFactory().getOperation(OperationsFactory.REMOTA);
-				ArrayList<Artigo> artigos = json.consultarAcervoArtigo(bibliotecaSelecionada,titulo.getText().toString(),autor.getText().toString(),palavraChave.getText().toString());
+				
+				ArrayList<Artigo> artigos = operacao.consultarAcervoArtigo(bibliotecaSelecionada,titulo.getText().toString(),autor.getText().toString(),palavraChave.getText().toString());
 				Intent intent = new Intent(BuscaArtigoActivity.this, ResultadoBuscaArtigoctivity.class );
 				intent.putExtra("Artigos", artigos);
 				startActivity(intent);

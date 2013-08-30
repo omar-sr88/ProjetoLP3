@@ -18,7 +18,7 @@ public class VinculoUsuarioSistema {
 	private int totalEmprestimosAbertos;
 	private int totalEmprestimosAtrasados;
 	private boolean podeRealzarEmprestimos;
-	private List<Emprestimo> emprestimosPedendentes;
+	
 	
 	/* Construtor utilizado para exibir informacoes na activity principal */
 	public VinculoUsuarioSistema(int totalEmprestimosAbertos,
@@ -26,7 +26,7 @@ public class VinculoUsuarioSistema {
 		super();
 		this.totalEmprestimosAbertos = totalEmprestimosAbertos;
 		this.podeRealzarEmprestimos = podeRealzarEmprestimos;
-		this.emprestimosPedendentes=new ArrayList<Emprestimo>(); 
+		//this.emprestimosPedendentes=new ArrayList<Emprestimo>(); 
 	}
 
 	public String getSituacao() {
@@ -61,13 +61,13 @@ public class VinculoUsuarioSistema {
 		this.podeRealzarEmprestimos = podeRealzarEmprestimos;
 	}
 
-	public List<Emprestimo> getEmprestimosPedendentes() {
-		return emprestimosPedendentes;
-	}
-
-	public void setEmprestimosPedendentes(List<Emprestimo> emprestimosPedendentes) {
-		this.emprestimosPedendentes = emprestimosPedendentes;
-	}
+//	public List<Emprestimo> getEmprestimosPedendentes() {
+//		return emprestimosPedendentes;
+//	}
+//
+//	public void setEmprestimosPedendentes(List<Emprestimo> emprestimosPedendentes) {
+//		this.emprestimosPedendentes = emprestimosPedendentes;
+//	}
 	
 	
 	

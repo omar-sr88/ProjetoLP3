@@ -63,7 +63,8 @@ public class ResultadoBuscaArtigoctivity extends Activity {
 		pd.setTitle("Aguarde");
 		pd.setIndeterminate(false);
 		
-		
+		final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+
 	    listaResultados.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			// TODO Auto-generated method stub
 			@Override
@@ -105,8 +106,7 @@ public class ResultadoBuscaArtigoctivity extends Activity {
 					protected Void doInBackground(Void... arg0) {
 						
 						
-						Operations json = new OperationsFactory().getOperation(OperationsFactory.REMOTA);
-						Artigo artigo = json.informacoesExemplarArtigo(artigoSelecionado);
+						Artigo artigo = operacao.informacoesExemplarArtigo(artigoSelecionado);
 						Intent intent = new Intent(ResultadoBuscaArtigoctivity.this,DadosTituloActivity.class);
 						intent.putExtra("ExemplarArtigo", artigo);
 						startActivity(intent);

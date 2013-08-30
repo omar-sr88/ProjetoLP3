@@ -135,7 +135,8 @@ public class SelecionarHistoricoActivity extends Activity {
 		pd.setTitle("Aguarde");
 		pd.setIndeterminate(false);
 		
-		
+		final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+
 		new AsyncTask<Void,Void,Void>(){
 
 			@Override
@@ -148,12 +149,11 @@ public class SelecionarHistoricoActivity extends Activity {
 			
 			@Override
 			protected Void doInBackground(Void... arg0) {
-				Operations operation = new OperationsFactory().getOperation(OperationsFactory.REMOTA);
 				String usuario=Usuario.INSTANCE.getLogin();
 				String senha = Usuario.INSTANCE.getSenha();
 				String dataInicial= inputDataInicial.getText().toString();
 				String dataFinal= inputDataFinal.getText().toString();
-				ArrayList<Emprestimo> emprestimos = operation.historicoEmprestimos(usuario,senha,dataInicial,dataFinal) ;
+				ArrayList<Emprestimo> emprestimos = operacao.historicoEmprestimos(usuario,senha,dataInicial,dataFinal) ;
 				Intent intent = new Intent(SelecionarHistoricoActivity.this, HistoricoEmprestimosActivity.class );
 				intent.putExtra("Historico", emprestimos);
 				startActivity(intent);								

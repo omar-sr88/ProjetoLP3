@@ -71,7 +71,8 @@ public class ResultadoBuscaActivity extends Activity {
 		pd.setTitle("Aguarde");
 		pd.setIndeterminate(false);
 		
-	    
+		final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+
 		listaResultados.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 				// TODO Auto-generated method stub
 				@Override
@@ -111,8 +112,7 @@ public class ResultadoBuscaActivity extends Activity {
 						protected Void doInBackground(Void... arg0) {
 							
 							
-							Operations json = new OperationsFactory().getOperation(OperationsFactory.REMOTA);
-							Livro livro = json.informacoesLivro(livroSelecionado);
+							Livro livro = operacao.informacoesLivro(livroSelecionado);
 							Intent intent = new Intent(ResultadoBuscaActivity.this, DadosTituloActivity.class );
 							intent.putExtra("InformacoesLivro", livro);
 							startActivity(intent);

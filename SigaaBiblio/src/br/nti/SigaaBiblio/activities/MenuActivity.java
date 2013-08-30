@@ -68,6 +68,7 @@ public class MenuActivity extends Activity {
 		carregaDados();
 		
 
+		final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 
 
 		situacao.setOnClickListener(new OnClickListener() {
@@ -79,7 +80,9 @@ public class MenuActivity extends Activity {
 				pd.setMessage("Processando...");
 				pd.setTitle("Aguarde");
 				pd.setIndeterminate(false);
-
+				
+				
+				
 				AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
 
 					@Override
@@ -91,7 +94,6 @@ public class MenuActivity extends Activity {
 					@Override
 					protected Void doInBackground(Void... params) {
 												
-						Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA);
 						String mensagem = new String("");
 						ArrayList<Emprestimo> emprestimos = operacao.consultarSituacao(Usuario.INSTANCE.getLogin(),Usuario.INSTANCE.getSenha(),mensagem);
 						intent.putExtra("Mensagem", mensagem);
@@ -209,7 +211,8 @@ public class MenuActivity extends Activity {
 			pd.setTitle("Aguarde");
 			pd.setIndeterminate(false);
 			bibliotecas=null;
-			
+			final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.LOCAL,this);
+
 			/*
 			 * OBTEM O NOMES DAS BIBLIOTECAS ATIVAS
 			 */
@@ -226,8 +229,7 @@ public class MenuActivity extends Activity {
 				
 				@Override
 				protected Void doInBackground(Void... arg0) {
-						Operations json = new OperationsFactory().getOperation(OperationsFactory.REMOTA);
-						ArrayList<Biblioteca> bibliotecas = json.listarBibliotecas();
+						ArrayList<Biblioteca> bibliotecas = operacao.listarBibliotecas();
 						Intent intent = new Intent(MenuActivity.this, BuscaLivroActivity.class );
 						intent.putExtra("Bibliotecas", bibliotecas);
 						startActivity(intent);
@@ -262,6 +264,8 @@ public class MenuActivity extends Activity {
 			pd.setTitle("Aguarde");
 			pd.setIndeterminate(false);
 			bibliotecas=null;
+			final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+
 			
 			/*
 			 * OBTEM O NOMES DAS BIBLIOTECAS ATIVAS
@@ -279,8 +283,7 @@ public class MenuActivity extends Activity {
 				
 				@Override
 				protected Void doInBackground(Void... arg0) {
-					Operations json = new OperationsFactory().getOperation(OperationsFactory.REMOTA);
-					ArrayList<Biblioteca> bibliotecas = json.listarBibliotecas();
+					ArrayList<Biblioteca> bibliotecas = operacao.listarBibliotecas();
 					Intent intent = new Intent(MenuActivity.this, BuscaArtigoActivity.class );
 					intent.putExtra("Bibliotecas", bibliotecas);
 					startActivity(intent);								
@@ -313,7 +316,8 @@ public class MenuActivity extends Activity {
 			pd.setTitle("Aguarde");
 			pd.setIndeterminate(false);
 			
-			
+			final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+
 			
 			new AsyncTask<Void,Void,Void>(){
 
@@ -327,7 +331,6 @@ public class MenuActivity extends Activity {
 				
 				@Override
 				protected Void doInBackground(Void... arg0) {
-					Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA);
 					String usuario=Usuario.INSTANCE.getLogin();
 					String senha = Usuario.INSTANCE.getSenha();
 					ArrayList<Emprestimo> emprestimos = operacao.consultarEmprestimosRenovaveis(usuario,senha);
