@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-     android:background="#EFF3FA" >
+    android:background="#EFF3FA"
+    android:orientation="vertical" >
 
     <!-- android:background="#2932aa" -->
 
@@ -23,203 +23,38 @@
             android:textSize="25dp" />
     </LinearLayout>
 
+    <ViewFlipper
+        android:id="@+id/viewFlipper3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animationCache="true" >
+    </ViewFlipper>
 
-    	<ScrollView
-	    android:id="@+id/scrollView2"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent" 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal" >
 
-	    >
-    
-	    <LinearLayout
-	        android:layout_width="wrap_content"
-	        android:layout_height="match_parent"
-	        android:orientation="vertical" >
-
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:background="#FFFFFF"
-            android:stretchColumns="*" >
-
-            <TableRow
-                android:id="@+id/tableRow1"
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
-                
-                android:background="#000000" >
-
-                <TextView android:text="Código \nde Barras"
-                    android:layout_margin="1dp"
-                    android:layout_marginRight="0dp"
-                android:background="#C8D5EC"
-                android:padding="15dip" />
-
-                 <TextView android:id="@+id/InfoCodigoBarra" 
-                    android:text="1234456"
-                    
-                    android:layout_margin="1dp"
-                    android:layout_marginRight="0dp"
-                    android:layout_height="match_parent"
-                    
-                	android:background="#FFFFFF"
-                	android:paddingTop="15dip" 
-                	android:paddingLeft="15dip"
-                	></TextView>
-                
-                
-                </TableRow>
-                
-                <TableRow
-                android:id="@+id/tableRow1"
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
-                android:background="#000000">
-                
-                
-                <TextView 
-                    android:text="Tipo do \nmaterial" 
-                    android:layout_margin="1dp"
-                android:background="#C8D5EC"
-                android:layout_marginLeft="0dp"
-                android:padding="15dip"/>
-                
-                <TextView android:id="@+id/InfoMaterial" 
-                    android:text="Papel Revista"                   
-                    android:layout_margin="1dp"
-                    android:layout_marginRight="0dp"
-                    android:layout_height="match_parent"                  
-                	android:background="#FFFFFF"
-                	android:padding="15dip" />
-                
-                </TableRow>
-                
-        		<TableRow
-                android:id="@+id/tableRow1"
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
-                android:background="#000000">
-                
-                <TextView android:text="Coleção" 
-                android:layout_margin="1dp"
-                android:background="#C8D5EC"
-                android:padding="15dip"
-                android:layout_height="match_parent"
-              
-                />
-                
-                
-                <TextView android:id="@+id/InfoColecao" 
-                    android:text="Game of Thrones"                   
-                    android:layout_margin="1dp"
-                    android:layout_marginRight="0dp"
-                    android:layout_height="match_parent"                  
-                	android:background="#FFFFFF"
-                	android:padding="15dip" />
-                </TableRow>
-                
-        		<TableRow
-                android:id="@+id/tableRow1"
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
-                android:background="#000000"
-                >
-                <TextView android:text="Status" 
-                    android:layout_margin="1dp"
-                android:background="#C8D5EC"
-                android:padding="15dip"
-                android:layout_height="match_parent"/>
-                
-                
-                <TextView android:id="@+id/InfoStatus" 
-                    android:text="Status 200"                   
-                    android:layout_margin="1dp"
-                    android:layout_marginRight="0dp"
-                    android:layout_height="match_parent"                  
-                	android:background="#FFFFFF"
-                	android:padding="15dip" />
-                </TableRow>
-                
-                
-        		<TableRow
-                android:id="@+id/tableRow1"
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
-                android:background="#000000">
-                
-                <TextView android:text="Situação" 
-                    android:layout_margin="1dp"
-                android:background="#C8D5EC"
-                android:padding="15dip"
-                android:layout_height="match_parent"/>
-                
-                <TextView android:id="@+id/InfoStatus" 
-                    android:text="Disponível"                   
-                    android:layout_margin="1dp"
-                    android:layout_marginRight="0dp"
-                    android:layout_height="match_parent"                  
-                	android:background="#FFFFFF"
-                	android:padding="15dip" />
-                </TableRow>
-           		
-
-          
-        </TableLayout>
-
-        
-       
-
-
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Biblioteca"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Localização"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            >
         <Button
             android:id="@+id/retornarPesquisa"
             android:layout_width="103dp"
-            android:layout_margin="15dp"
             android:layout_height="wrap_content"
-            
+            android:layout_margin="15dp"
             android:text="Retornar a Pesquisa" />
-        
+
         <Button
             android:id="@+id/retornarMenu"
             android:layout_width="103dp"
-            android:layout_margin="15dp"
-           	
             android:layout_height="wrap_content"
+            android:layout_margin="15dp"
             android:text="Retornar ao Menu" />
-        </LinearLayout>
-        
-		</LinearLayout>
+    </LinearLayout>
 
-        </ScrollView>
-
-    	<LinearLayout
-    	    android:layout_width="match_parent"
-    	    android:layout_height="wrap_content"
-    	    android:orientation="vertical"
-    	    android:background="@drawable/background3" >
-    	</LinearLayout>
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background3"
+        android:orientation="vertical" >
+    </LinearLayout>
 </LinearLayout>

@@ -15,8 +15,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
+import br.nti.SigaaBiblio.layouts.HistoricoLayout;
 import br.nti.SigaaBiblio.model.Emprestimo;
-import br.nti.SigaaBiblio.model.Historico;
 import br.nti.SigaaBiblio.model.Usuario;
 
 import com.nti.SigaaBiblio.R;
@@ -59,14 +59,11 @@ public class SituacaoUsuarioActivity extends Activity {
         
         LinearLayout l1;
         for(Emprestimo emp : lista){
-        	l1 = Historico.TabelaHistorico(this, emp.getBiblioteca(), emp.getDataEmprestimo(), emp.getDataRenovacao(),
+        	l1 = HistoricoLayout.TabelaSituacao(this, emp.getBiblioteca(), emp.getDataEmprestimo(), emp.getDataRenovacao(),
         			emp.getDataDevolucao(), emp.isRenovavel(), emp.getInformacoesLivro());
         	page.addView(l1);
-//        	l1 = Historico.TabelaHistorico(activity, biblioteca, dataEmprestimo, dataRenovacao, dataDevolucao, renovavel, informacoes)
         }
-        // Conteudo das tabelas que serão exibidas
-        
-        //
+
         
 	}
 	
