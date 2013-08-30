@@ -103,15 +103,6 @@ public class SelecionarHistoricoActivity extends Activity {
 			}
 		});
 		
-//		pesquisar.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				Intent intent = new Intent(SelecionarHistoricoActivity.this, HistoricoEmprestimosActivity.class );
-//				startActivity(intent);
-//
-//			}
-//		});
 
 	}
 

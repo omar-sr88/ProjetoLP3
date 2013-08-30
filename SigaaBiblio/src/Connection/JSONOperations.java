@@ -191,7 +191,7 @@ public class JSONOperations implements Operations {
 			
 			livro = new Livro(autor,titulo,ano,registro,numero,subtitulo,assunto,publicacao,editora,notas,autorSecundario);
 			
-			JSONObject exemplaresJson = resposta.getJSONObject("Exemplares");
+			JSONObject exemplaresJson = new JSONObject(resposta.getString("Exemplares"));
 			Iterator<String> keys = exemplaresJson.keys();
 			String codigoBarras="",tipoMaterial="",colecao="",status="",disponivel="",localizacao="";
 			ArrayList<ExemplarLivro> exemplares= new ArrayList<ExemplarLivro>();
@@ -387,12 +387,12 @@ public class JSONOperations implements Operations {
 			Iterator it = resposta.keys();
 			while (it.hasNext()) {
 			JSONObject emprestimoJson = resposta.getJSONObject((String) it.next());
-			tipoEmprestimo= JSONObject.NULL.equals(resposta.get("TipoEmprestimo"))?"-":resposta.getString("TipoEmprestimo");
-			dataEmprestimo= JSONObject.NULL.equals(resposta.get("DataEmprestimo"))?"-":resposta.getString("DataEmprestimo");
-			dataRenovacao= JSONObject.NULL.equals(resposta.get("DataRenovacao"))?"-":resposta.getString("DataRenovacao");
-			informacao= JSONObject.NULL.equals(resposta.get("PrazoDevolucao"))?"-":resposta.getString("PrazoDevolucao");
-			prazoDevolucao= JSONObject.NULL.equals(resposta.get("DataDevolucao"))?"-":resposta.getString("DataDevolucao");
-			dataDevolucao= JSONObject.NULL.equals(resposta.get("Informacao"))?"-":resposta.getString("Informacao");
+			tipoEmprestimo= JSONObject.NULL.equals(emprestimoJson.get("TipoEmprestimo"))?"-":emprestimoJson.getString("TipoEmprestimo");
+			dataEmprestimo= JSONObject.NULL.equals(emprestimoJson.get("DataEmprestimo"))?"-":emprestimoJson.getString("DataEmprestimo");
+			dataRenovacao= (!emprestimoJson.has("DataRenovacao")) || JSONObject.NULL.equals(emprestimoJson.get("DataRenovacao"))?"-":emprestimoJson.getString("DataRenovacao");
+			informacao= JSONObject.NULL.equals(emprestimoJson.get("Informacao"))?"-":emprestimoJson.getString("Informacao");
+			prazoDevolucao= JSONObject.NULL.equals(emprestimoJson.get("PrazoDevolucao"))?"-":emprestimoJson.getString("PrazoDevolucao");
+			dataDevolucao =(!emprestimoJson.has("DataDevolucao")) || JSONObject.NULL.equals(emprestimoJson.get("DataDevolucao"))?"-":emprestimoJson.getString("DataDevolucao");
 			Emprestimo emprestimo = new Emprestimo(tipoEmprestimo,dataEmprestimo,dataRenovacao,
 													informacao,prazoDevolucao,dataDevolucao);
 	
