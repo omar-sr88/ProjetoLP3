@@ -115,7 +115,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="br.nti.SigaaBiblio.activities.Prefs"
+            android:name="br.nti.SigaaBiblio.activities.PrefsActivity"
             android:label="Preferências" />
         <activity
             android:name="br.nti.SigaaBiblio.activities.ResultadoBuscaArtigoctivity"

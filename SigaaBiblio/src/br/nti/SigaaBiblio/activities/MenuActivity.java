@@ -194,7 +194,7 @@ public class MenuActivity extends Activity {
 	  public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    case R.id.action_settings:
-	      startActivity(new Intent(this, Prefs.class));
+	      startActivity(new Intent(this, PrefsActivity.class));
 	      return true;
 	      // More items go here (if any) ...
 	    }
