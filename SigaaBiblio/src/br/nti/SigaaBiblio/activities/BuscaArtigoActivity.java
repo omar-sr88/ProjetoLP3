@@ -1,24 +1,12 @@
 package br.nti.SigaaBiblio.activities;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-
-
 import br.nti.SigaaBiblio.model.Artigo;
 import br.nti.SigaaBiblio.model.Biblioteca;
-import br.nti.SigaaBiblio.model.Livro;
-
 import com.nti.SigaaBiblio.R;
 
 
-import Connection.HttpUtils;
 import Connection.Operations;
 import Connection.OperationsFactory;
 import android.os.AsyncTask;
@@ -30,13 +18,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 public class BuscaArtigoActivity extends Activity {
