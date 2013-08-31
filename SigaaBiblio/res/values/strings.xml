@@ -38,6 +38,8 @@
     <string name="title_activity_exemplar_artigo">ExemplarArtigoActivity</string>
     <string name="exemplar_artigo">Exemplar</string>
     <string name="title_activity_renovacao_error">RenovacaoErrorActivity</string>
+    <string name="title_activity_cambridge">Cambridge</string>
+    <string name="title_activity_cabridge">CabridgeActivity</string>
 
     <!-- Preferências -->
     <string name="configuracoes_title" > Configurações</string>

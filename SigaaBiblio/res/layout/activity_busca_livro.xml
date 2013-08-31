@@ -141,7 +141,15 @@
 	    android:layout_gravity="center"
 	    android:layout_marginTop="30dp"
 	    android:text="Pesquisar"
-	    android:onClick="pesquisar" />
+	    android:onClick="pesquisar" />#FAEEA9
+	
+	<Button
+	    android:id="@+id/buttonCrambridge"
+	    android:layout_width="230dp"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center"
+	    android:layout_marginTop="10dp"
+	    android:text="Pesquisar em Cambridge" />
 	
 	</LinearLayout>
 	</ScrollView>

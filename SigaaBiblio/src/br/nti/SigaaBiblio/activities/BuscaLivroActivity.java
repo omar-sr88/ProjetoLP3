@@ -81,7 +81,13 @@ public class BuscaLivroActivity extends Activity {
 		//seta o onclick
 		
 		
-		
+		((Button)findViewById(R.id.buttonCrambridge)).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				startActivity(new Intent(BuscaLivroActivity.this, CambridgeActivity.class));				
+			}
+		});
 		
 
 		
