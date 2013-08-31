@@ -211,7 +211,7 @@ public class MenuActivity extends Activity {
 			pd.setTitle("Aguarde");
 			pd.setIndeterminate(false);
 			bibliotecas=null;
-			final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.LOCAL,this);
+			final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 
 			/*
 			 * OBTEM O NOMES DAS BIBLIOTECAS ATIVAS

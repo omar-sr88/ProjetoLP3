@@ -1,6 +1,9 @@
 package Connection;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,7 +23,9 @@ import br.nti.SigaaBiblio.model.Emprestimo;
 import br.nti.SigaaBiblio.model.ExemplarLivro;
 import br.nti.SigaaBiblio.model.Livro;
 import br.nti.SigaaBiblio.model.Usuario;
+import br.nti.SigaaBiblio.model.VinculoUsuarioSistema;
 
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
@@ -28,6 +33,111 @@ import android.widget.Toast;
 
 public class JSONOperations implements Operations {
 
+	
+	public static String SISTEMA = "http://testes.nti.ufpb.br/sigaa";
+//	public static String SISTEMA = "http://150.165.250.55:8080/sigaa";
+	public static String HOST = SISTEMA
+			+ "/public/biblioteca/SigaaAndroidServlet";
+	public Context contextoAplicacao;
+	
+	public JSONOperations(Context contextoAplicacao){
+		this.contextoAplicacao=contextoAplicacao;
+	}
+	
+	
+	
+	public String realizarLogin(String ... parametrosDoUsuario){
+		
+		Usuario user = Usuario.prepareUsuario();
+		String login = parametrosDoUsuario[0];
+		String senha = getMd5Hash(parametrosDoUsuario[1]);		
+		user.setLogin(login);
+		user.setSenha(senha);
+		
+		String erro = "";
+		String mensagem = "";
+		String jsonString = "";
+		try {
+			// JSONObject pode ser um String, HashMap ou um MBean
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("Operacao", String.valueOf(Operations.LOGIN));
+			map.put("Login", login);
+			map.put("Senha", senha);
+			JSONObject inputsJson = new JSONObject(map);
+
+			// Parametros: HOST, Identificador do Hash, Hash
+			jsonString = HttpUtils.urlContentPost(HOST, "sigaaAndroid", inputsJson.toString());
+
+			JSONObject jsonResult = new JSONObject(jsonString);
+			
+			
+			erro = jsonResult.getString("Error");
+			mensagem = jsonResult.getString("Mensagem");
+
+			if(!erro.isEmpty()){
+				return "SERVER#ERRO"+erro;
+			}
+			
+			user.setNome(jsonResult.getString("Nome"));
+			user.setIdUsuarioBiblioteca(jsonResult.getString("IdUsuarioBiblioteca"));
+			user.setAluno( Boolean.valueOf(jsonResult.getString("isAluno")));
+			user.setUrlFoto(SISTEMA	+ jsonResult.getString("Foto"));
+			user.setUserVinculo(new VinculoUsuarioSistema(jsonResult.getInt("EmprestimosAbertos"),jsonResult.getBoolean("PodeRealizarEmprestimo")));
+			if (user.isAluno()) {
+				user.setMatricula(jsonResult.getString("Matricula"));
+				user.setCurso(jsonResult.getString("Curso"));
+
+			} else {
+				user.setUnidade(jsonResult.getString("Unidade"));
+			}
+
+
+			
+		} catch (Exception e) {
+			
+				mensagem = "Ocorreu um erro";
+				e.printStackTrace();
+				return mensagem;
+				
+			}
+		
+		if (!erro.isEmpty()) {
+			return "SERVER#ERRO"+erro;
+		} 
+		
+		mensagem=user.toString();
+//		Toast.makeText(contextoAplicacao, user.toString(), Toast.LENGTH_LONG)
+//		.show();
+
+		return mensagem;
+	}
+	
+		
+		
+	
+	
+	/*
+	 * Encriptografa a senha do usuário para que possa ser autenticada
+	 * no servidor SIGAA
+	 */
+	public static String getMd5Hash(String input) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(input.getBytes());
+			BigInteger number = new BigInteger(1, messageDigest);
+			String md5 = number.toString(16);
+
+			while (md5.length() < 32)
+				md5 = "0" + md5;
+
+			return md5;
+		} catch (NoSuchAlgorithmException e) {
+			Log.e("MD5", e.getLocalizedMessage());
+			return null;
+		}
+	}
+	
+	
 	@Override
 	public ArrayList<Biblioteca> listarBibliotecas() {
 		// TODO Auto-generated method stub

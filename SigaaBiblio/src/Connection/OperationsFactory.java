@@ -11,7 +11,7 @@ public  class OperationsFactory {
 	public Operations getOperation(int persistencia, Context contexto){
 		
 		if(persistencia==REMOTA){
-			return new JSONOperations();
+			return new JSONOperations(contexto);
 		}
 		else
 			if(persistencia==LOCAL){

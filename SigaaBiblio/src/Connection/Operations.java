@@ -22,6 +22,7 @@ public interface Operations {
 	public static final int INFORMACOES_EXEMPLAR_ACERVO = 9;
 	public static final int INFORMACOES_EXEMPLAR_ARTIGO = 10;
 	
+	public String realizarLogin(String ...parametrosDoUsuario);
 	public ArrayList<Biblioteca> listarBibliotecas();
 	public ArrayList<Livro> consultarAcervoLivro(String ... parametrosConsulta);
 	public ArrayList<Artigo> consultarAcervoArtigo(String ... parametrosConsulta);

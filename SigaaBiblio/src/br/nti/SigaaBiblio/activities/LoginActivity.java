@@ -1,8 +1,10 @@
 package br.nti.SigaaBiblio.activities;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONException;
@@ -11,7 +13,10 @@ import org.json.JSONObject;
 import Connection.ConnectJSON;
 import Connection.HttpUtils;
 import Connection.Operations;
+import Connection.OperationsFactory;
+import android.R.string;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,6 +29,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import br.nti.SigaaBiblio.model.Emprestimo;
 import br.nti.SigaaBiblio.model.Usuario;
 import br.nti.SigaaBiblio.model.VinculoUsuarioSistema;
 import br.nti.SigaaBiblio.persistence.RepositorioFake;
@@ -83,356 +89,421 @@ public class LoginActivity extends Activity implements OnClickListener {
 		return true;
 	}
 
+	String mensagem;
+	
 	@Override
 	public void onClick(View v) {
 
-		ConnectJSON con = new ConnectJSON(LoginActivity.this);
-		JSONObject jsonResult = null;	
-		Usuario user = Usuario.prepareUsuario();
-		String login = etLogin.getText().toString().trim();
-		String senha = ConnectJSON.getMd5Hash(etSenha.getText().toString().trim());		
-		user.setLogin(login);
-		user.setSenha(senha);
-		try {
-			if (!Prefs.getLembrar(this)) {
-				con.execute(login, senha);
-			} else {
-				con.execute(logPref, senhaPref);
-			}
+		final String login = etLogin.getText().toString().trim();
+		final String senha = etSenha.getText().toString().trim();		
 
-			jsonResult = con.get(20,TimeUnit.SECONDS);
-
-		} catch (Exception ex) {
-			Toast.makeText(getApplicationContext(), "Ocorreu um error com a conexão!", Toast.LENGTH_LONG).show();
-			con.desabilitaProgressDialog();
-			ex.printStackTrace();
-			return;
-		}
-
-		jsonResult = con.getJsonResult();
-
-		/**
-		 * Atributos
-		 */
-		Intent intent = new Intent(this, MenuActivity.class);		
-
-		String erro = "";
-		String mensagem = "";
-
-		//
-		try {
-			erro = jsonResult.getString("Error");
-			mensagem = jsonResult.getString("Mensagem");
-
-			if(!erro.isEmpty()){
-				Toast.makeText(getApplicationContext(), erro, Toast.LENGTH_LONG)
-				.show();
-				return;
-			}
-
-			user.setNome(jsonResult.getString("Nome"));
-			user.setIdUsuarioBiblioteca(jsonResult.getString("IdUsuarioBiblioteca"));
-			user.setAluno( Boolean.valueOf(jsonResult.getString("isAluno")));
-			user.setUrlFoto(ConnectJSON.SISTEMA	+ jsonResult.getString("Foto"));
-			user.setUserVinculo(new VinculoUsuarioSistema(jsonResult.getInt("EmprestimosAbertos"),jsonResult.getBoolean("PodeRealizarEmprestimo")));
-
-			if (user.isAluno()) {
-				user.setMatricula(jsonResult.getString("Matricula"));
-				user.setCurso(jsonResult.getString("Curso"));
-
-			} else {
-				user.setUnidade(jsonResult.getString("Unidade"));
-			}
-
-		} catch (JSONException e) {
-			Toast.makeText(getApplicationContext(), "Ocorreu um erro!", Toast.LENGTH_LONG)
-			.show();
-			e.printStackTrace();
-			return;
-		}
-
-		if (!erro.isEmpty()) {
-			Toast.makeText(getApplicationContext(), erro, Toast.LENGTH_LONG)
-					.show();
-			return;
-		} else {
-			Toast.makeText(getApplicationContext(), user.toString(), Toast.LENGTH_LONG)
-					.show();
-		}
-
-		if (Prefs.getLembrar(this)) {
-			//se fez o login corretamente, ele salva o usuario
-
-			if (!login.isEmpty() && login != null && !senha.isEmpty()
-					&& senha != null) {
-				getPreferences(MODE_PRIVATE).edit().putString("login", login)
-						.commit();
-				getPreferences(MODE_PRIVATE).edit()
-						.putString("senha", ConnectJSON.getMd5Hash(senha))
-						.commit();
-			}
-
-		}
-
-		/**
-		 * CAPTURA BIBLIOTECAS QUE ESTÃO NO BANCO
-		 * COLOCAR NO LUGAR CORRETO!
-		 */
+		final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
+		pd.setMessage("Processando...");
+		pd.setTitle("Aguarde");
+		pd.setIndeterminate(false);
+		
+		
+		final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+		
+		final Semaphore sincronizador = new Semaphore(0,true); //para exclusão mutua
+		
+		
 		new AsyncTask<Void,Void,Void>(){
 
 			@Override
+			protected void onPreExecute() {
+				// TODO Auto-generated method stub
+				super.onPreExecute();
+				pd.show();
+			}
+			
+			
+			@Override
 			protected Void doInBackground(Void... arg0) {
-				Map<String, String> map = new HashMap<String, String>();
-				String jsonString;
-				map.put("Operacao", String.valueOf(Operations.LISTAR_BIBLIOTECAS));
-				JSONObject inputsJson = new JSONObject(map);
-				JSONObject resposta;
-
-				try {
-					jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
-					resposta = new JSONObject(jsonString);
-					String bibliotecas = resposta.getString("Bibliotecas");
-					String nome = new JSONObject(bibliotecas).getString("9763");
-
-					//Log.d("IRON DEBUG", nome);
-				} catch (Exception ex){
-					ex.printStackTrace();
-				}
+				mensagem = operacao.realizarLogin(login,senha);
+				sincronizador.release();
 				return null;
 			}
+			
+			@Override
+			protected void onPostExecute(Void v) {
+				// TODO Auto-generated method stub
+				super.onPostExecute(v);
+				if(pd!= null && pd.isShowing())
+					pd.dismiss();
+			}
+			
+			}.execute();			
 
-			}.execute();
+			
+			try {
+				sincronizador.acquire(); //espera a assyncTask obter as mensagens
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			Log.d("MARCILIO_DEBUG",mensagem.substring(0,11));
+			if(mensagem.equals("Ocorreu um erro") || mensagem.substring(0,11).equals("SERVER#ERRO")){
+				mensagem= mensagem.substring(11,mensagem.length());
+				Toast.makeText(LoginActivity.this, mensagem, Toast.LENGTH_LONG)
+				.show();
+			}else{
+				Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
+				Toast.makeText(LoginActivity.this, mensagem, Toast.LENGTH_LONG)
+				.show();
+				startActivity(intent);
+				
+				
+			}
+			
+//		ConnectJSON con = new ConnectJSON(LoginActivity.this);
+//		JSONObject jsonResult = null;	
+//		Usuario user = Usuario.prepareUsuario();
+//		String login = etLogin.getText().toString().trim();
+//		String senha = ConnectJSON.getMd5Hash(etSenha.getText().toString().trim());		
+//		user.setLogin(login);
+//		user.setSenha(senha);
+//		try {
+//			if (!Prefs.getLembrar(this)) {
+//				con.execute(login, senha);
+//			} else {
+//				con.execute(logPref, senhaPref);
+//			}
+//
+//			jsonResult = con.get(20,TimeUnit.SECONDS);
+//
+//		} catch (Exception ex) {
+//			Toast.makeText(getApplicationContext(), "Ocorreu um error com a conexão!", Toast.LENGTH_LONG).show();
+//			con.desabilitaProgressDialog();
+//			ex.printStackTrace();
+//			return;
+//		} //ignora
+//
+//		jsonResult = con.getJsonResult();
+//
+//		/**
+//		 * Atributos
+//		 */
+//		Intent intent = new Intent(this, MenuActivity.class);		
+//
+//		String erro = "";
+//		String mensagem = "";
+//
+//		//
+//		try {
+//			erro = jsonResult.getString("Error");
+//			mensagem = jsonResult.getString("Mensagem");
+//
+//			if(!erro.isEmpty()){
+//				Toast.makeText(getApplicationContext(), erro, Toast.LENGTH_LONG)
+//				.show();
+//				return;
+//			}
+//
+//			user.setNome(jsonResult.getString("Nome"));
+//			user.setIdUsuarioBiblioteca(jsonResult.getString("IdUsuarioBiblioteca"));
+//			user.setAluno( Boolean.valueOf(jsonResult.getString("isAluno")));
+//			user.setUrlFoto(ConnectJSON.SISTEMA	+ jsonResult.getString("Foto"));
+//			user.setUserVinculo(new VinculoUsuarioSistema(jsonResult.getInt("EmprestimosAbertos"),jsonResult.getBoolean("PodeRealizarEmprestimo")));
+//
+//			if (user.isAluno()) {
+//				user.setMatricula(jsonResult.getString("Matricula"));
+//				user.setCurso(jsonResult.getString("Curso"));
+//
+//			} else {
+//				user.setUnidade(jsonResult.getString("Unidade"));
+//			}
+//
+//		} catch (JSONException e) {
+//			Toast.makeText(getApplicationContext(), "Ocorreu um erro!", Toast.LENGTH_LONG)
+//			.show();
+//			e.printStackTrace();
+//			return;
+//		}
+//
+//		if (!erro.isEmpty()) {
+//			Toast.makeText(getApplicationContext(), erro, Toast.LENGTH_LONG)
+//					.show();
+//			return;
+//		} else {
+//			Toast.makeText(getApplicationContext(), user.toString(), Toast.LENGTH_LONG)
+//					.show();
+//		}
+//
+//		if (Prefs.getLembrar(this)) {
+//			//se fez o login corretamente, ele salva o usuario
+//
+//			if (!login.isEmpty() && login != null && !senha.isEmpty()
+//					&& senha != null) {
+//				getPreferences(MODE_PRIVATE).edit().putString("login", login)
+//						.commit();
+//				getPreferences(MODE_PRIVATE).edit()
+//						.putString("senha", ConnectJSON.getMd5Hash(senha))
+//						.commit();
+//			}
+//
+//		}
+//
+//		/**
+//		 * CAPTURA BIBLIOTECAS QUE ESTÃO NO BANCO
+//		 * COLOCAR NO LUGAR CORRETO!
+//		 */
+//		new AsyncTask<Void,Void,Void>(){
+//
+//			@Override
+//			protected Void doInBackground(Void... arg0) {
+//				Map<String, String> map = new HashMap<String, String>();
+//				String jsonString;
+//				map.put("Operacao", String.valueOf(Operations.LISTAR_BIBLIOTECAS));
+//				JSONObject inputsJson = new JSONObject(map);
+//				JSONObject resposta;
+//
+//				try {
+//					jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+//					resposta = new JSONObject(jsonString);
+//					String bibliotecas = resposta.getString("Bibliotecas");
+//					String nome = new JSONObject(bibliotecas).getString("9763");
+//
+//					//Log.d("IRON DEBUG", nome);
+//				} catch (Exception ex){
+//					ex.printStackTrace();
+//				}
+//				return null;
+//			}
+//
+//			}.execute();
+//
+//			new AsyncTask<Void,Void,Void>(){
+//				//IdBiblioteca":"9763","TituloBusca":"Metodologia","AutorBusca":"","AssuntoBusca":""}
+//				/**
+//				 * Retorno: Livros
+//				 * Autor  (String)
+//				 * Titulo (String)
+//				 * Edicao (String)
+//				 * Ano    (Int)
+//				 * QuantidadeAtivos (Int)
+//				 * Exemplares:  : JSONObject (Lista dos Exemplares)
+//				 * 			    CodigoBarras   : String
+//				 * 				TipoMateria    : String
+//				 * 				Colecao        : String
+//				 * 				Status         : String
+//				 * 				Disponivel     : String
+//				 *				Localizacao    : String		
+//				 */
+//				@Override
+//				protected Void doInBackground(Void... arg0) {
+//					Map<String, String> map = new HashMap<String, String>();
+//					String jsonString;
+//					map.put("Operacao", String.valueOf(Operations.CONSULTAR_ACERVO_LIVRO));
+//					map.put("IdBiblioteca","0");
+//					map.put("TituloBusca", "Metodologia");
+//					map.put("AutorBusca", "");
+//					map.put("AssuntoBusca","");
+//					JSONObject inputsJson = new JSONObject(map);
+//					JSONObject resposta;
+//
+//					try {
+//						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+//						resposta = new JSONObject(jsonString);
+//						resposta = new JSONObject(resposta.getString("Livros"));
+//						resposta = resposta.getJSONObject("112204");
+//						//String titulo = resposta.getString("Titulo");
+//
+//						Log.d("IRON_DEBUG", resposta.toString());//ou Artigos
+//					} catch (Exception ex){
+//						ex.printStackTrace();
+//					}
+//					return null;
+//				}				
+//			}.execute();
+//
+//			new AsyncTask<Void,Void,Void>(){
+//				/**
+//				 * Retorno: Emprestimos
+//				 * TipoEmprestimo (String)
+//				 * DataEmprestimo (Date)
+//				 * DataRenovacao  (Date)
+//				 * PrazoDevolucao (Date)
+//				 * DataDevolucao  (Date)
+//				 * Informacao     (String)   -- Informacao do Material
+//				 * 
+//				 */
+//				//{"Login":"eduardogama","Senha":"202cb962ac59075b964b07152d234b70","Operacao":"6","Fim":"","Inicio":""}
+//				@Override
+//				protected Void doInBackground(Void... arg0) {
+//					Map<String, String> map = new HashMap<String, String>();
+//					String jsonString;
+//					map.put("Operacao", String.valueOf(Operations.MEUS_EMPRESTIMOS));
+//					map.put("Login", "eduardogama");
+//					map.put("Senha", "202cb962ac59075b964b07152d234b70");
+//					map.put("Inicio", "");
+//					map.put("Fim", "");
+//					JSONObject inputsJson = new JSONObject(map);
+//					JSONObject resposta;
+//
+//					try {
+//						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+//						resposta = new JSONObject(jsonString);					
+//						resposta = new JSONObject(resposta.getString("Emprestimos"));
+//						Iterator it = resposta.keys();
+//					while (it.hasNext()) {
+//						JSONObject obj = resposta.getJSONObject((String) it.next());
+//						//Log.d("IRON_DEBUG", obj.toString());
+//					}
+//					} catch (Exception ex){
+//						ex.printStackTrace();
+//					}
+//					return null;
+//				}				
+//			}.execute();
+//
+//			new AsyncTask<Void,Void,Void>(){
+//				/**
+//				 * Retorno: EmprestimosAbertos
+//				 * Informacao         (String)
+//				 * DataEmprestimo     (Date)
+//				 * Prazo              (Date)
+//				 * IdMaterial         (int) -> Será usado para renovacao
+//				 * 
+//				 */
+//				@Override
+//				protected Void doInBackground(Void... arg0) {
+//					try {
+//					Map<String, String> map = new HashMap<String, String>();
+//					String jsonString;
+//					map.put("Operacao", String.valueOf(Operations.LIVROS_EMPRESTADOS));
+//					map.put("Login", "eduardogama");
+//					map.put("Senha", "202cb962ac59075b964b07152d234b70");
+//
+//					JSONObject inputsJson = new JSONObject(map);
+//					JSONObject resposta;
+//
+//
+//					jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+//					resposta = new JSONObject(jsonString);					
+//					resposta = new JSONObject(resposta.getString("EmprestimosAbertos"));
+//					Iterator it = resposta.keys();
+//					String renovacao = "";
+//
+//					while (it.hasNext()) {
+//						JSONObject obj = resposta.getJSONObject((String) it.next());
+//						renovacao += obj.getInt("IdMaterial")+";";              ///String de Renovacao: ID's separados por ';'
+//						Log.d("IRON_DEBUG", obj.toString());// ou Artigos
+//					}				
+//
+//
+//					///// FIM DA LISTAGEM DOS EMPRESTIMOS
+//					//// RENOVACAO DE EMPRESTIMOS
+//
+//					/**
+//					 * Retorno: RenovacaoEmprestimo
+//					 * InfoRenovacao: String
+//					 * CodigoAutenticacao : String
+//					 * 
+//					 * Verificar Mensagem e ERROR
+//					 */
+//					map = new HashMap<String, String>();					
+//
+//					map.put("Operacao", String.valueOf(Operations.RENOVACAO));
+//					map.put("Login", "ironaraujo");
+//					map.put("Senha", "202cb962ac59075b964b07152d234b70");		
+//					map.put("IdLivrosRenovacao", renovacao); // ESTA RENOVANDO TODOS OS LIVROS
+//					inputsJson = new JSONObject(map);					
+//
+//					jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+//					resposta = new JSONObject(jsonString);	
+//
+//					resposta = new JSONObject(resposta.getString(("RenovacaoEmprestimo")));
+//					//{"Mensagem":"","RenovacaoEmprestimo":"{\"InfoRenovacao\":\"00001\/06 - Verger, Pierre. Fluxo e refluxo do tráfico de escravos entre o Golfo do Benin e a Bahia de Todos os Santos dos séculos XVII a XIX.\/ - Biblioteca Central Prazo para Devolução: 12\/09\/2013 23:59:59\\n\",\"CodigoAutenticacao\":\"834B.7D5D5BB \"}","Error":"null"}
+//					//Log.d("IRON_DEBUG_CODIGOAUTENTICACAO", resposta.getString("CodigoAutenticacao"));
+//					} catch (Exception ex){
+//						ex.printStackTrace();
+//					}
+//					return null;
+//				}				
+//			}.execute();
+//
+//
+//			new AsyncTask<Void,Void,Void>(){
+//				/**
+//				 * Retorno:   Registro         : int
+//				 * 			  NumeroChamada    : String
+//				 * 			  Titulo           : String  
+//				 * 			  SubTitulo        : String
+//				 * 			  Assunto          : String
+//				 * 			  Autor            : String
+//				 * 			  AutorSecundario  : String
+//				 * 			  Publicacao       : String    (Local de Publicacao)
+//				 * 		      Editora 		   : String
+//				 * 			  AnoPublicacao    : int
+//				 * 			  NotasGerais 	   : String				
+//				 * 
+//				 */
+//
+//				@Override
+//				protected Void doInBackground(Void... arg0) {
+//					Map<String, String> map = new HashMap<String, String>();
+//					String jsonString;
+//					map.put("Operacao", String.valueOf(Operations.INFORMACOES_EXEMPLAR_ACERVO));
+//					map.put("IdDetalhes", "112204");					
+//					JSONObject inputsJson = new JSONObject(map);
+//
+//
+//					try {
+//						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+//						JSONObject resposta = new JSONObject(jsonString);					
+//						Log.d("IRON_DEBUG", resposta.toString());
+//					} catch (Exception ex){
+//						ex.printStackTrace();
+//					}
+//					return null;
+//				}				
+//			}.execute();
+//
+//
+//			new AsyncTask<Void,Void,Void>(){
+//				/**
+//				 * Output  : Biblioteca       : String
+//				 * 			 CodigoBarras     : String
+//				 * 			 Localizacao      : String
+//				 * 			 Situacao         : String
+//				 * 			 AnoCronologico   : String
+//				 * 			 Ano			  : String
+//				 * 			 DiaMes  		  : String
+//				 * 			 Volume			  : String
+//				 * 			 Numero			  : String
+//				 * 			 AutorSecundario  : String
+//				 * 			 IntervaloPaginas : String
+//				 * 			 LocalPublicacao  : String
+//				 * 			 Editora   		  : String
+//				 * 			 AnoExemplar 	  : String
+//				 * 		     Resumo			  : String		
+//				 */
+//				@Override
+//				protected Void doInBackground(Void... arg0) {
+//					Map<String, String> map = new HashMap<String, String>();
+//					String jsonString;
+//					map.put("Operacao", String.valueOf(Operations.INFORMACOES_EXEMPLAR_ARTIGO));
+//					map.put("IdDetalhes", "6304");					
+//					JSONObject inputsJson = new JSONObject(map);
+//
+//
+//					try {
+//						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+//						JSONObject resposta = new JSONObject(jsonString);					
+//						//Log.d("IRON_DEBUG", resposta.toString());
+//					} catch (Exception ex){
+//						ex.printStackTrace();
+//					}
+//					return null;
+//				}				
+//			}.execute();
 
-			new AsyncTask<Void,Void,Void>(){
-				//IdBiblioteca":"9763","TituloBusca":"Metodologia","AutorBusca":"","AssuntoBusca":""}
-				/**
-				 * Retorno: Livros
-				 * Autor  (String)
-				 * Titulo (String)
-				 * Edicao (String)
-				 * Ano    (Int)
-				 * QuantidadeAtivos (Int)
-				 * Exemplares:  : JSONObject (Lista dos Exemplares)
-				 * 			    CodigoBarras   : String
-				 * 				TipoMateria    : String
-				 * 				Colecao        : String
-				 * 				Status         : String
-				 * 				Disponivel     : String
-				 *				Localizacao    : String		
-				 */
-				@Override
-				protected Void doInBackground(Void... arg0) {
-					Map<String, String> map = new HashMap<String, String>();
-					String jsonString;
-					map.put("Operacao", String.valueOf(Operations.CONSULTAR_ACERVO_LIVRO));
-					map.put("IdBiblioteca","0");
-					map.put("TituloBusca", "Metodologia");
-					map.put("AutorBusca", "");
-					map.put("AssuntoBusca","");
-					JSONObject inputsJson = new JSONObject(map);
-					JSONObject resposta;
-
-					try {
-						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
-						resposta = new JSONObject(jsonString);
-						resposta = new JSONObject(resposta.getString("Livros"));
-						resposta = resposta.getJSONObject("112204");
-						//String titulo = resposta.getString("Titulo");
-
-						Log.d("IRON_DEBUG", resposta.toString());//ou Artigos
-					} catch (Exception ex){
-						ex.printStackTrace();
-					}
-					return null;
-				}				
-			}.execute();
-
-			new AsyncTask<Void,Void,Void>(){
-				/**
-				 * Retorno: Emprestimos
-				 * TipoEmprestimo (String)
-				 * DataEmprestimo (Date)
-				 * DataRenovacao  (Date)
-				 * PrazoDevolucao (Date)
-				 * DataDevolucao  (Date)
-				 * Informacao     (String)   -- Informacao do Material
-				 * 
-				 */
-				//{"Login":"eduardogama","Senha":"202cb962ac59075b964b07152d234b70","Operacao":"6","Fim":"","Inicio":""}
-				@Override
-				protected Void doInBackground(Void... arg0) {
-					Map<String, String> map = new HashMap<String, String>();
-					String jsonString;
-					map.put("Operacao", String.valueOf(Operations.MEUS_EMPRESTIMOS));
-					map.put("Login", "eduardogama");
-					map.put("Senha", "202cb962ac59075b964b07152d234b70");
-					map.put("Inicio", "");
-					map.put("Fim", "");
-					JSONObject inputsJson = new JSONObject(map);
-					JSONObject resposta;
-
-					try {
-						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
-						resposta = new JSONObject(jsonString);					
-						resposta = new JSONObject(resposta.getString("Emprestimos"));
-						Iterator it = resposta.keys();
-					while (it.hasNext()) {
-						JSONObject obj = resposta.getJSONObject((String) it.next());
-						//Log.d("IRON_DEBUG", obj.toString());
-					}
-					} catch (Exception ex){
-						ex.printStackTrace();
-					}
-					return null;
-				}				
-			}.execute();
-
-			new AsyncTask<Void,Void,Void>(){
-				/**
-				 * Retorno: EmprestimosAbertos
-				 * Informacao         (String)
-				 * DataEmprestimo     (Date)
-				 * Prazo              (Date)
-				 * IdMaterial         (int) -> Será usado para renovacao
-				 * 
-				 */
-				@Override
-				protected Void doInBackground(Void... arg0) {
-					try {
-					Map<String, String> map = new HashMap<String, String>();
-					String jsonString;
-					map.put("Operacao", String.valueOf(Operations.LIVROS_EMPRESTADOS));
-					map.put("Login", "eduardogama");
-					map.put("Senha", "202cb962ac59075b964b07152d234b70");
-
-					JSONObject inputsJson = new JSONObject(map);
-					JSONObject resposta;
 
 
-					jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
-					resposta = new JSONObject(jsonString);					
-					resposta = new JSONObject(resposta.getString("EmprestimosAbertos"));
-					Iterator it = resposta.keys();
-					String renovacao = "";
-
-					while (it.hasNext()) {
-						JSONObject obj = resposta.getJSONObject((String) it.next());
-						renovacao += obj.getInt("IdMaterial")+";";              ///String de Renovacao: ID's separados por ';'
-						Log.d("IRON_DEBUG", obj.toString());// ou Artigos
-					}				
-
-
-					///// FIM DA LISTAGEM DOS EMPRESTIMOS
-					//// RENOVACAO DE EMPRESTIMOS
-
-					/**
-					 * Retorno: RenovacaoEmprestimo
-					 * InfoRenovacao: String
-					 * CodigoAutenticacao : String
-					 * 
-					 * Verificar Mensagem e ERROR
-					 */
-					map = new HashMap<String, String>();					
-
-					map.put("Operacao", String.valueOf(Operations.RENOVACAO));
-					map.put("Login", "ironaraujo");
-					map.put("Senha", "202cb962ac59075b964b07152d234b70");		
-					map.put("IdLivrosRenovacao", renovacao); // ESTA RENOVANDO TODOS OS LIVROS
-					inputsJson = new JSONObject(map);					
-
-					jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
-					resposta = new JSONObject(jsonString);	
-
-					resposta = new JSONObject(resposta.getString(("RenovacaoEmprestimo")));
-					//{"Mensagem":"","RenovacaoEmprestimo":"{\"InfoRenovacao\":\"00001\/06 - Verger, Pierre. Fluxo e refluxo do tráfico de escravos entre o Golfo do Benin e a Bahia de Todos os Santos dos séculos XVII a XIX.\/ - Biblioteca Central Prazo para Devolução: 12\/09\/2013 23:59:59\\n\",\"CodigoAutenticacao\":\"834B.7D5D5BB \"}","Error":"null"}
-					//Log.d("IRON_DEBUG_CODIGOAUTENTICACAO", resposta.getString("CodigoAutenticacao"));
-					} catch (Exception ex){
-						ex.printStackTrace();
-					}
-					return null;
-				}				
-			}.execute();
-
-
-			new AsyncTask<Void,Void,Void>(){
-				/**
-				 * Retorno:   Registro         : int
-				 * 			  NumeroChamada    : String
-				 * 			  Titulo           : String  
-				 * 			  SubTitulo        : String
-				 * 			  Assunto          : String
-				 * 			  Autor            : String
-				 * 			  AutorSecundario  : String
-				 * 			  Publicacao       : String    (Local de Publicacao)
-				 * 		      Editora 		   : String
-				 * 			  AnoPublicacao    : int
-				 * 			  NotasGerais 	   : String				
-				 * 
-				 */
-
-				@Override
-				protected Void doInBackground(Void... arg0) {
-					Map<String, String> map = new HashMap<String, String>();
-					String jsonString;
-					map.put("Operacao", String.valueOf(Operations.INFORMACOES_EXEMPLAR_ACERVO));
-					map.put("IdDetalhes", "112204");					
-					JSONObject inputsJson = new JSONObject(map);
-
-
-					try {
-						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
-						JSONObject resposta = new JSONObject(jsonString);					
-						Log.d("IRON_DEBUG", resposta.toString());
-					} catch (Exception ex){
-						ex.printStackTrace();
-					}
-					return null;
-				}				
-			}.execute();
-
-
-			new AsyncTask<Void,Void,Void>(){
-				/**
-				 * Output  : Biblioteca       : String
-				 * 			 CodigoBarras     : String
-				 * 			 Localizacao      : String
-				 * 			 Situacao         : String
-				 * 			 AnoCronologico   : String
-				 * 			 Ano			  : String
-				 * 			 DiaMes  		  : String
-				 * 			 Volume			  : String
-				 * 			 Numero			  : String
-				 * 			 AutorSecundario  : String
-				 * 			 IntervaloPaginas : String
-				 * 			 LocalPublicacao  : String
-				 * 			 Editora   		  : String
-				 * 			 AnoExemplar 	  : String
-				 * 		     Resumo			  : String		
-				 */
-				@Override
-				protected Void doInBackground(Void... arg0) {
-					Map<String, String> map = new HashMap<String, String>();
-					String jsonString;
-					map.put("Operacao", String.valueOf(Operations.INFORMACOES_EXEMPLAR_ARTIGO));
-					map.put("IdDetalhes", "6304");					
-					JSONObject inputsJson = new JSONObject(map);
-
-
-					try {
-						jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
-						JSONObject resposta = new JSONObject(jsonString);					
-						//Log.d("IRON_DEBUG", resposta.toString());
-					} catch (Exception ex){
-						ex.printStackTrace();
-					}
-					return null;
-				}				
-			}.execute();
-
-
-
-		startActivity(intent);
-		finish();
+		
+		//finish();
 
 	}
 

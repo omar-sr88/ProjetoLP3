@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Semaphore;
 
 
 import br.nti.SigaaBiblio.model.Biblioteca;
@@ -111,7 +112,7 @@ public class RenovacaoActivity extends Activity {
 		pd.setIndeterminate(false);
 	
 		final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
-
+		final Semaphore sincronizador = new Semaphore(0);
 		
 		new AsyncTask<Void,Void,Void>(){
 
@@ -134,6 +135,7 @@ public class RenovacaoActivity extends Activity {
 			            if(chave != null){
 			            	if(renovar.get(chave)){ //tem que renovar
 			            	   resposta = operacao.renovarEmprestimo(usuario,senha,chave);
+			            	   sincronizador.release();
 			            	   Log.d("MARCILIO_DEBUG", "ariaria: "+resposta);
 			            	}
 			            }
@@ -156,7 +158,13 @@ public class RenovacaoActivity extends Activity {
 			}.execute();
 			
 			
-			Toast.makeText(getApplicationContext(), "Emprestimo Renovado com Sucesso", Toast.LENGTH_LONG).show();
+			try {
+				sincronizador.acquire();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			Toast.makeText(getApplicationContext(), resposta, Toast.LENGTH_LONG).show();
 			Intent intent = new Intent(RenovacaoActivity.this, MenuActivity.class );
 			startActivity(intent);
 	}

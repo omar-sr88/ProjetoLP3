@@ -129,7 +129,7 @@ public class LocalStorageOperations implements Operations {
 		String tabela = "usuario";
 		String[] colunas = {};
 		String[] userAutenticacao = {parametrosUsuario[0],parametrosUsuario[1]};
-//		Cursor resultados = sqLite.query("usuario","idUsuarioBiblioteca","login = ? AND senha = ?",userAutenticacao,null,null,null);
+		//Cursor resultados = sqLite.query("usuario","idUsuarioBiblioteca","login = ? AND senha = ?",userAutenticacao,null,null,null);
 //		
 //		
 //		String tabela="emprestimo";
@@ -169,6 +169,12 @@ public class LocalStorageOperations implements Operations {
 
 	@Override
 	public String renovarEmprestimo(String... parametrosEmprestimos) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String realizarLogin(String... parametrosDoUsuario) {
 		// TODO Auto-generated method stub
 		return null;
 	}
