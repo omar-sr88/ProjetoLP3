@@ -18,7 +18,6 @@ import br.nti.SigaaBiblio.model.Livro;
 
 import com.nti.SigaaBiblio.R;
 
-import Connection.ConnectJSON;
 import Connection.HttpUtils;
 import Connection.Operations;
 import Connection.OperationsFactory;

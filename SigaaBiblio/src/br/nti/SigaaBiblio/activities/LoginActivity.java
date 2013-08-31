@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import Connection.ConnectJSON;
+
 import Connection.HttpUtils;
 import Connection.Operations;
 import Connection.OperationsFactory;
@@ -143,7 +143,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 				e.printStackTrace();
 			}
 			
-			Log.d("MARCILIO_DEBUG",mensagem.substring(0,11));
+			//Log.d("MARCILIO_DEBUG",mensagem.substring(0,11));
 			if(mensagem.equals("Ocorreu um erro") || mensagem.substring(0,11).equals("SERVER#ERRO")){
 				mensagem= mensagem.substring(11,mensagem.length());
 				Toast.makeText(LoginActivity.this, mensagem, Toast.LENGTH_LONG)

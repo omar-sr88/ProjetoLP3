@@ -19,7 +19,7 @@ public class RepositorioLocalSigaa extends SQLiteOpenHelper {
 		// TODO Auto-generated method stub
 		
 		/* Criação das tabelas que representam as entidades*/
-		database.execSQL("CREATE TABLE vinculoUsuarioSistema(idUsuarioBiblioteca INTEGER PRIMARY KEY, situacao TEXT, totalEmprestimosAbertos INTEGER, totalEmprestimosAtrasados, podeRealzarEmprestimos INTEGER)");
+		database.execSQL("CREATE TABLE vinculoUsuarioSistema(idUsuarioBiblioteca INTEGER PRIMARY KEY, situacao TEXT, totalEmprestimosAbertos INTEGER, totalEmprestimosAtrasados, podeRealizarEmprestimos INTEGER)");
 		
 		database.execSQL("CREATE TABLE usuario(idUsuarioBiblioteca INTEGER, nome TEXT, matricula TEXT, isAluno INTEGER, curso TEXT, urlFoto TEXT, unidade TEXT, login TEXT, senha TEXT)");
 		

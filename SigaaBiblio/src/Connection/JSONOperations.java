@@ -149,7 +149,7 @@ public class JSONOperations implements Operations {
 		String bibliotecas="";
 		ArrayList<Biblioteca> bibliotecasLista = new ArrayList<Biblioteca>();
 		try {
-			jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+			jsonString = HttpUtils.urlContentPost(HOST, "sigaaAndroid", inputsJson.toString());
 			resposta = new JSONObject(jsonString);
 			bibliotecas = resposta.getString("Bibliotecas");
 			JSONObject bibliotecasJson = new JSONObject(bibliotecas);
@@ -185,7 +185,7 @@ public class JSONOperations implements Operations {
 		ArrayList<Livro> listaLivros = new ArrayList<Livro>();
 		
 		try {
-			jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+			jsonString = HttpUtils.urlContentPost(HOST, "sigaaAndroid", inputsJson.toString());
 			resposta = new JSONObject(jsonString);
 			livros =resposta.getString("Livros");
 			JSONObject livrosJson = new JSONObject(livros);
@@ -239,7 +239,7 @@ public class JSONOperations implements Operations {
 		
 
 		try {
-			jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+			jsonString = HttpUtils.urlContentPost(HOST, "sigaaAndroid", inputsJson.toString());
 			resposta = new JSONObject(jsonString);
 			artigosRaw =resposta.getString("Artigos");
 			JSONObject artigosJSON = new JSONObject(artigosRaw);
@@ -285,7 +285,7 @@ public class JSONOperations implements Operations {
 		
 			
 		try {
-			jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+			jsonString = HttpUtils.urlContentPost(HOST, "sigaaAndroid", inputsJson.toString());
 			JSONObject resposta = new JSONObject(jsonString); 
 			registro= JSONObject.NULL.equals(resposta.get("Registro"))?"-":resposta.getString("Registro");
 			numero= JSONObject.NULL.equals(resposta.get("NumeroChamada"))?"-":resposta.getString("NumeroChamada");
@@ -343,7 +343,7 @@ public class JSONOperations implements Operations {
 				
 		
 		try {
-			jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+			jsonString = HttpUtils.urlContentPost(HOST, "sigaaAndroid", inputsJson.toString());
 			JSONObject resposta = new JSONObject(jsonString);					
 			
 			biblioteca= JSONObject.NULL.equals(resposta.get("Biblioteca"))?"-":resposta.getString("Biblioteca");
@@ -390,7 +390,7 @@ public class JSONOperations implements Operations {
 		JSONObject resposta;
 		
 		try {
-			jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+			jsonString = HttpUtils.urlContentPost(HOST, "sigaaAndroid", inputsJson.toString());
 			resposta = new JSONObject(jsonString);
 			parametrosUsuario[2] = resposta.getString("Mensagem"); //informa a mensagem
 			resposta = new JSONObject(resposta.getString("Emprestimos"));
@@ -402,7 +402,7 @@ public class JSONOperations implements Operations {
 			for(Iterator obj = resposta.keys(); obj.hasNext();){
 				key = (String)obj.next();
 				content = new JSONObject(resposta.getString(key));
-				Log.d("IRON_DEBUG", content.toString());	
+					
 				emp = new Emprestimo(content.getString("CodigoDeBarras"),content.getString("Autor"),
 						content.getString("Titulo"),content.getString("Ano"),content.getString("DataEmprestimo"), 
 						content.getString("DataRenovacao"), content.getString("Devolucao"), "", content.getString("Biblioteca"),
@@ -436,7 +436,7 @@ public class JSONOperations implements Operations {
 		JSONObject resposta;
 		ArrayList<Emprestimo> emprestimos= null ;
 		try {
-			jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+			jsonString = HttpUtils.urlContentPost(HOST, "sigaaAndroid", inputsJson.toString());
 			resposta = new JSONObject(jsonString);					
 			resposta = new JSONObject(resposta.getString("EmprestimosAbertos"));
 			
@@ -487,7 +487,7 @@ public class JSONOperations implements Operations {
 		JSONObject resposta;
 		ArrayList<Emprestimo> emprestimos= new ArrayList<Emprestimo>();
 		try {
-			jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+			jsonString = HttpUtils.urlContentPost(HOST, "sigaaAndroid", inputsJson.toString());
 			resposta = new JSONObject(jsonString);					
 			resposta = new JSONObject(resposta.getString("Emprestimos"));
 			
@@ -533,7 +533,7 @@ public class JSONOperations implements Operations {
 		String respostaRenovacao=null;
 		String jsonString;
 		try {
-			jsonString = HttpUtils.urlContentPost(ConnectJSON.HOST, "sigaaAndroid", inputsJson.toString());
+			jsonString = HttpUtils.urlContentPost(HOST, "sigaaAndroid", inputsJson.toString());
 			JSONObject resposta = new JSONObject(jsonString);	
 			resposta = new JSONObject(resposta.getString(("RenovacaoEmprestimo")));
 			Log.d("MARCILIO_DEBUG","LOL "+ resposta.toString());
