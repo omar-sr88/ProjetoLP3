@@ -42,7 +42,7 @@
     <string name="title_activity_cabridge">CabridgeActivity</string>
 
     <!-- Preferências -->
-    <string name="configuracoes_title" > Configurações</string>
+    <string name="configuracoes_title"> Configurações</string>
     <string name="configuracoes_atalho">s</string>
     <string name="lembrar">Lembrar Usuário</string>
     <string name="lembrar_texto">Realiza login automático</string>
@@ -52,7 +52,8 @@
     <string name="guardar_texto">Recuperar a ultimo histórico de emprestimos consultado</string>
     <string name="guardarCamposPesquisas">Salvar Campos de Pesquisa </string>
     <string name="pesquisas_texto">Recuperar os campos utilizados na ultima consulta</string>
-   	<string name="guardarPesquisa">Recuperar Pesquisa</string>
-    <string name="guardar_pesquisa_texto">Recuperar a ultima pesquisa realizada</string>
-    
+    <string name="guardarRenovacao">Registro de Renovação</string>
+    <string name="guardar_renovacao_texto">Manter um registro das renovações realizadas</string>
+    <string name="title_activity_registro_renovacoes">RegistroRenovacoesActivity</string>
+
 </resources>

@@ -20,6 +20,7 @@ public class RepositorioPreferencias extends SQLiteOpenHelper {
 		
 		/* Criação das tabelas que representam as entidades*/
 		database.execSQL("CREATE TABLE emprestimo(dataEmprestimo TEXT, dataDevolucao TEXT, tipoEmprestimo TEXT, dataRenovacao TEXT, prazoDevolucao TEXT, informacoes TEXT)");
+		database.execSQL("CREATE TABLE renovacoes(informacoes TEXT)");
 		
 		//geraRepositorioFake(database);
 
@@ -29,6 +30,7 @@ public class RepositorioPreferencias extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
 		db.execSQL("DROP TABLE IF EXIST emprestimo");
+		db.execSQL("DROP TABLE IF EXIST renovacoes");
 		onCreate(db);
 		
 	}

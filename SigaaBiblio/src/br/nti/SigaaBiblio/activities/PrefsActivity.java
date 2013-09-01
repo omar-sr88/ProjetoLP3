@@ -22,8 +22,8 @@ public class PrefsActivity extends PreferenceActivity {
   private static final String OPT_CAMPOS_PESQUISA = "guardarCamposPesquisa";
   private static final boolean OPT_CAMPOS_PESQUISA_DEF = false;
 
-  private static final String OPT_PESQUISA = "guardarPesquisa";
-  private static final boolean OPT_PESQUISA_DEF = false;
+  private static final String OPT_RENOVACAO = "guardarRenovacao";
+  private static final boolean OPT_RENOVACAO_DEF = false;
   
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +57,8 @@ public class PrefsActivity extends PreferenceActivity {
     		OPT_CAMPOS_PESQUISA, OPT_CAMPOS_PESQUISA_DEF);
   }
   
-  public static boolean getPesquisa(Context context) {
+  public static boolean getRenovacao(Context context) {
 	    return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
-	    		OPT_PESQUISA, OPT_PESQUISA_DEF);
+	    		OPT_RENOVACAO, OPT_RENOVACAO_DEF);
 	  }
 }

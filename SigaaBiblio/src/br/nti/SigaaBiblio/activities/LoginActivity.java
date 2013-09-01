@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import Connection.HttpUtils;
 import Connection.OperationsInterface;
 import Connection.OperationsFactory;
+import Connection.PreferenciasOperation;
 import android.R.string;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -56,13 +57,25 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 		setContentView(R.layout.activity_login);
 		
-		setBackground();
-					
+		setBackground(); //seleciona a cor escolhida
+		
+		//gera dados para teste com persistencia local
 		RepositorioFake db = new RepositorioFake(getApplicationContext());
 		db.resetRepositorioFake();
 		db.gerarRepositorioFake();
 		
-	 		//Na criacao da ACtivity eu tento buscar a preferencia "Lembrar usuario" 
+		if(!PrefsActivity.getRenovacao(this)){ //se nao quiser mater registro de renovacos
+			PreferenciasOperation pref = new PreferenciasOperation(this);
+			pref.resetRenovacoesRepositorio(); //apaga renovacoes atualmentes salvas 
+		}
+		
+		if(!PrefsActivity.getHistorico(this)){ //se nao quiser mater o historico
+			PreferenciasOperation pref = new PreferenciasOperation(this);
+			pref.resetHistoricoRepositorio();
+		}
+		
+		
+	  
 		logPref = "";
 		senhaPref = "";
 
@@ -92,7 +105,12 @@ public class LoginActivity extends Activity implements OnClickListener {
 					login.performClick();
 				}
 
-			}							
+			}
+			else{ //vai logar com outro usuario logo eu devo apagar historico e renovacoes
+				PreferenciasOperation pref = new PreferenciasOperation(this);
+				pref.resetHistoricoRepositorio();
+				pref.resetRenovacoesRepositorio();
+			}
 		}//end preferencias 
 	
 	}

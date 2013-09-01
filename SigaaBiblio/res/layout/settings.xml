@@ -28,9 +28,9 @@
 		android:defaultValue="false" />
 	
 	<CheckBoxPreference
-	    android:key="guardarPesquisa"
-		android:title="@string/guardarPesquisa"
-		android:summary="@string/guardar_pesquisa_texto"
+	    android:key="guardarRenovacao"
+		android:title="@string/guardarRenovacao"
+		android:summary="@string/guardar_renovacao_texto"
 		android:defaultValue="false" />
 	
 	

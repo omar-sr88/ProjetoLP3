@@ -18,6 +18,7 @@ import com.nti.SigaaBiblio.R.menu;
 
 import Connection.OperationsInterface;
 import Connection.OperationsFactory;
+import Connection.PreferenciasOperation;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -103,6 +104,7 @@ public class RenovacaoActivity extends Activity {
 	}
 	
 	
+	
 	/*
 	 * Renovacao dos emprestimos
 	 */
@@ -114,6 +116,7 @@ public class RenovacaoActivity extends Activity {
 		pd.setIndeterminate(false);
 	
 		final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+		final Context context = getApplicationContext();
 		final Semaphore sincronizador = new Semaphore(0);
 		
 		new AsyncTask<Void,Void,Void>(){
@@ -137,12 +140,14 @@ public class RenovacaoActivity extends Activity {
 			            if(chave != null){
 			            	if(renovar.get(chave)){ //tem que renovar
 			            	   resposta = operacao.renovarEmprestimo(usuario,senha,chave);
-			            	   sincronizador.release();
+			            	   PreferenciasOperation pref = new PreferenciasOperation(context); 
+			            	   pref.salvaRenovacoes(resposta);
 			            	   Log.d("MARCILIO_DEBUG", "ariaria: "+resposta);
 			            	}
 			            }
 			                  
-			        }  
+			        }
+					sincronizador.release();
 					
 					//Log.d("MARCILIO_DEBUG", ""+bibliotecas);
 				
@@ -180,6 +185,9 @@ public class RenovacaoActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.action_settings:
 			startActivity(new Intent(this, PrefsActivity.class));
+			return true;
+		case R.id.renovacao_storage:
+			startActivity(new Intent(this, RegistroRenovacoesActivity.class));
 			return true;
 			
 		}

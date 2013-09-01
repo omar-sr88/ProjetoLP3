@@ -86,4 +86,63 @@ public class PreferenciasOperation {
 		return emprestimos;
 	}
 
+	public boolean salvaRenovacoes(String infoRenovacao){
+		
+		SQLiteDatabase sqLite = new RepositorioPreferencias(context).getWritableDatabase();
+		 
+		ContentValues content = new ContentValues();
+		
+		content.put("informacoes", infoRenovacao);
+		
+		sqLite.insert("renovacoes", null, content);
+		
+		sqLite.close();
+		
+		return true;
+ 
+	}
+	
+	public ArrayList<String> recuperarRenovacoes(){
+		
+		SQLiteDatabase sqLite = new  RepositorioPreferencias(context).getWritableDatabase();
+		
+		String tabela="renovacoes";
+		String[] colunas = {"informacoes"};
+		Cursor resultados = sqLite.query(tabela,colunas,null,null,null,null,null);
+		
+		ArrayList<String> renovacoes = new ArrayList<String>();
+		
+		if(resultados.getCount()>0){
+			
+			resultados.moveToFirst();
+			
+			do{
+				String renovacao = resultados.getString(0);
+				renovacoes.add(renovacao);
+			}while(resultados.moveToNext());
+			
+		}
+		
+		resultados.close();
+		sqLite.close();
+		return renovacoes;
+	}
+	
+	public void resetHistoricoRepositorio(){
+	
+		SQLiteDatabase db = new RepositorioPreferencias(context).getWritableDatabase();
+		db.execSQL("DELETE  FROM emprestimo");
+		db.close();
+	}
+	
+	public void resetRenovacoesRepositorio(){
+		
+		SQLiteDatabase db = new RepositorioPreferencias(context).getWritableDatabase();
+		db.execSQL("DELETE  FROM renovacoes");
+		db.close();
+		
+		}
+	
+
 }
+
