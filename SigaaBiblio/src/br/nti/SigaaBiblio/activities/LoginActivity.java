@@ -107,6 +107,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 			}
 			else{ //vai logar com outro usuario logo eu devo apagar historico e renovacoes
+				getPreferences(MODE_PRIVATE).edit().remove("login").commit();
+				getPreferences(MODE_PRIVATE).edit().remove("senha").commit();
 				PreferenciasOperation pref = new PreferenciasOperation(this);
 				pref.resetHistoricoRepositorio();
 				pref.resetRenovacoesRepositorio();

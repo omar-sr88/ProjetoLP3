@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,7 +71,10 @@ public class BuscaLivroActivity extends Activity {
 		//recupera o nome das bibliotecas
 		
 		bibliotecasLista=new ArrayList<String>();
-		bibliotecas = getIntent().getParcelableArrayListExtra("Bibliotecas");	
+		bibliotecas = getIntent().getParcelableArrayListExtra("Bibliotecas");
+		if(bibliotecas==null){
+			bibliotecas=loadBibliotecas();
+		}
 		for(Biblioteca b : bibliotecas){
 			bibliotecasLista.add(b.getNome());
 		}
@@ -277,6 +281,59 @@ public class BuscaLivroActivity extends Activity {
 					t.setBackgroundResource(R.drawable.background_verde2);
 				}
 
+		}
+	
+		public ArrayList<Biblioteca> loadBibliotecas() {
+			
+			final ProgressDialog pd = new ProgressDialog(BuscaLivroActivity.this);
+			pd.setMessage("Processando...");
+			pd.setTitle("Aguarde");
+			pd.setIndeterminate(false);
+			bibliotecas=null;
+			final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+			final Semaphore sincronizador = new Semaphore(0);
+			/*
+			 * OBTEM O NOMES DAS BIBLIOTECAS ATIVAS
+			 */
+			
+			new AsyncTask<Void,Void,Void>(){
+
+				@Override
+				protected void onPreExecute() {
+					// TODO Auto-generated method stub
+					super.onPreExecute();
+					pd.show();
+				}
+				
+				
+				@Override
+				protected Void doInBackground(Void... arg0) {
+						bibliotecas = operacao.listarBibliotecas();
+						sincronizador.release();
+						//Log.d("MARCILIO_DEBUG", ""+bibliotecas);
+					
+					return null;
+				}
+				
+				@Override
+				protected void onPostExecute(Void v) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(v);
+					if(pd!= null && pd.isShowing())
+						pd.dismiss();
+				}
+				
+				}.execute();			
+
+				try {
+					sincronizador.acquire();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				return bibliotecas;
+				
 		}
 
 

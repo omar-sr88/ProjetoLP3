@@ -63,7 +63,9 @@ public class ExemplarArtigoActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(ExemplarArtigoActivity.this, BuscaLivroActivity.class );
+				finish();
 				startActivity(intent);
+				
 
 			}
 		});

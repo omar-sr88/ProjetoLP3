@@ -1,8 +1,11 @@
 package br.nti.SigaaBiblio.activities;
 
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.prefs.Preferences;
 
 import br.nti.SigaaBiblio.model.Emprestimo;
@@ -73,7 +76,10 @@ public class SelecionarHistoricoActivity extends Activity {
 				@Override
 				public void onDateSet(DatePicker view, int ano, int mes,int dia) {
 					// TODO Auto-generated method stub
-					inputDataInicial.setText(""+dia+"-"+mes+"-"+ano);
+					String  mesS = (mes+1)<10?"0"+(mes+1):""+(mes+1);
+					String  diaS = (dia)<10?"0"+(dia):""+(dia);
+					String 	anoS = ""+ano;
+					inputDataInicial.setText(diaS+"-"+mesS+"-"+anoS);
 				}
 			};
 
@@ -82,8 +88,10 @@ public class SelecionarHistoricoActivity extends Activity {
 				@Override
 				public void onDateSet(DatePicker view, int ano, int mes,int dia) {
 					// TODO Auto-generated method stub
-				inputDataFinal.setText(""+dia+"-"+mes+"-"+ano);
-
+					String  mesS = (mes+1)<10?"0"+(mes+1):""+(mes+1);
+					String  diaS = (dia)<10?"0"+(dia):""+(dia);
+					String 	anoS = ""+ano;
+					inputDataFinal.setText(diaS+"-"+mesS+"-"+anoS);
 				}
 			};
 
@@ -156,7 +164,31 @@ public class SelecionarHistoricoActivity extends Activity {
 		
 		final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 		final Context contexto = getApplicationContext();
-				
+		
+	
+		
+		
+		Date dataInicialAux=null;
+		Date dataFinalAux=null;
+		
+		if(!inputDataInicial.getText().toString().trim().equals("")&&!inputDataFinal.getText().toString().trim().equals("")){
+			try {
+				String[] dataInicalraw = inputDataInicial.getText().toString().trim().split("-");
+				String dataInicalString = dataInicalraw[2]+"-"+dataInicalraw[1]+"-"+dataInicalraw[0];
+				dataInicialAux = new SimpleDateFormat("yyyy-mm-dd").parse(dataInicalString);
+				String[] dataFinalraw = inputDataFinal.getText().toString().trim().split("-");
+				String dataFinalString = dataFinalraw[0]+"-"+dataFinalraw[1]+"-"+dataFinalraw[2];
+				dataFinalAux = new SimpleDateFormat("yyyy-mm-dd").parse(dataFinalString);
+			
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		final Date dataInicial = dataInicialAux;		
+		final Date dataFinal = dataFinalAux;
 		
 		new AsyncTask<Void,Void,Void>(){
 
@@ -172,9 +204,17 @@ public class SelecionarHistoricoActivity extends Activity {
 			protected Void doInBackground(Void... arg0) {
 				String usuario=Usuario.INSTANCE.getLogin();
 				String senha = Usuario.INSTANCE.getSenha();
-				String dataInicial= inputDataInicial.getText().toString();
-				String dataFinal= inputDataFinal.getText().toString();
-				ArrayList<Emprestimo> emprestimos = operacao.historicoEmprestimos(usuario,senha,dataInicial,dataFinal) ;
+				
+				String dataI = inputDataInicial.getText().toString().trim();
+				String dataF = inputDataFinal.getText().toString().trim();
+				
+				ArrayList<Emprestimo> emprestimos = null;
+				if(dataI.equals("")&&dataF.equals("")){
+					emprestimos=operacao.historicoEmprestimos(usuario,senha,dataI,dataF);
+				}else{
+					emprestimos=operacao.historicoEmprestimos(usuario,senha,dataInicial.toString(),dataFinal.toString());
+				}
+						
 				
 				if(PrefsActivity.getHistorico(contexto)){
 					PreferenciasOperation pref = new PreferenciasOperation(contexto);

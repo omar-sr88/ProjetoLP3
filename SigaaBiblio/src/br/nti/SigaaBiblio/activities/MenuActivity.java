@@ -131,16 +131,7 @@ public class MenuActivity extends Activity {
 
 
 
-		sair.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(MenuActivity.this, LoginActivity.class );
-				intent.putExtra("logarComOutroUsuario", true); //setta para que seja escolhido um novo usuário
-				startActivity(intent);
-
-			}
-		});
 
 		final Context contexto = getApplicationContext();
 		
@@ -168,6 +159,14 @@ public class MenuActivity extends Activity {
 
 	}
 	
+	
+	public void mudarUsuario(View v){
+		
+		Intent intent = new Intent(MenuActivity.this, LoginActivity.class );
+		intent.putExtra("logarComOutroUsuario", true); //setta para que seja escolhido um novo usuário
+		startActivity(intent);
+		finish();
+	}
 	
 	@Override
 	protected void onResume(){

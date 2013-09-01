@@ -2,6 +2,8 @@ package br.nti.SigaaBiblio.activities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
+
 import br.nti.SigaaBiblio.model.Artigo;
 import br.nti.SigaaBiblio.model.Biblioteca;
 import com.nti.SigaaBiblio.R;
@@ -34,7 +36,7 @@ public class BuscaArtigoActivity extends Activity {
 	Button goResultados;
 	Spinner bibliotecasDisponiveis;
 	List<String> bibliotecasLista;
-	List<Biblioteca> bibliotecas;
+	ArrayList<Biblioteca> bibliotecas;
 	String bibliotecaSelecionada;
 	EditText titulo;
 	EditText autor;
@@ -52,6 +54,9 @@ public class BuscaArtigoActivity extends Activity {
 		setBackground();
 		bibliotecasLista=new ArrayList<String>();
 		bibliotecas = getIntent().getParcelableArrayListExtra("Bibliotecas");	
+		if(bibliotecas==null){
+			bibliotecas=loadBibliotecas();
+		}
 		for(Biblioteca b : bibliotecas){
 			bibliotecasLista.add(b.getNome());
 		}
@@ -234,6 +239,61 @@ public class BuscaArtigoActivity extends Activity {
 				}
 
 		}
+	
+	
+	public ArrayList<Biblioteca> loadBibliotecas() {
+		
+		final ProgressDialog pd = new ProgressDialog(BuscaArtigoActivity.this);
+		pd.setMessage("Processando...");
+		pd.setTitle("Aguarde");
+		pd.setIndeterminate(false);
+		bibliotecas=null;
+		final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+		final Semaphore sincronizador = new Semaphore(0);
+		/*
+		 * OBTEM O NOMES DAS BIBLIOTECAS ATIVAS
+		 */
+		
+		new AsyncTask<Void,Void,Void>(){
+
+			@Override
+			protected void onPreExecute() {
+				// TODO Auto-generated method stub
+				super.onPreExecute();
+				pd.show();
+			}
+			
+			
+			@Override
+			protected Void doInBackground(Void... arg0) {
+					bibliotecas = operacao.listarBibliotecas();
+					sincronizador.release();
+					//Log.d("MARCILIO_DEBUG", ""+bibliotecas);
+				
+				return null;
+			}
+			
+			@Override
+			protected void onPostExecute(Void v) {
+				// TODO Auto-generated method stub
+				super.onPostExecute(v);
+				if(pd!= null && pd.isShowing())
+					pd.dismiss();
+			}
+			
+			}.execute();			
+
+			try {
+				sincronizador.acquire();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return bibliotecas;
+			
+	}
+
 
 
 }
