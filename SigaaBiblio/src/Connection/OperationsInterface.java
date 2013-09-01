@@ -9,7 +9,7 @@ import br.nti.SigaaBiblio.model.Biblioteca;
 import br.nti.SigaaBiblio.model.Emprestimo;
 import br.nti.SigaaBiblio.model.Livro;
 
-public interface Operations {
+public interface OperationsInterface {
 	
 	public  final int LOGIN = 1;
 	public  final int CONSULTAR_ACERVO_LIVRO = 2;

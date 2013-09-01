@@ -3,9 +3,12 @@ package br.nti.SigaaBiblio.activities;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -33,7 +36,7 @@ public class SituacaoUsuarioActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_situacao_usuario);
-		
+		setBackground();
 		emprestimosAbertos = (TextView)findViewById(R.id.textViewSituacaoUsuario1);
 		podeEmprestimo = (TextView)findViewById(R.id.textViewSituacaoUsuario2);
 		
@@ -66,6 +69,36 @@ public class SituacaoUsuarioActivity extends Activity {
 
         
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.menu, menu);
+		return true;
+	}
+	
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_settings:
+			startActivity(new Intent(this, PrefsActivity.class));
+			return true;
+			
+		}
+		return false;
+	}
+	
+	
+	@Override
+	protected void onResume(){
+		
+		super.onResume();
+		setBackground();
+				
+	}
+	
+
 	
 	
 	// Implementacao da mudanca entre tabelas
@@ -114,5 +147,31 @@ public class SituacaoUsuarioActivity extends Activity {
     
     GestureDetector gestureDetector
 	= new GestureDetector(simpleOnGestureListener);
+
+    public void setBackground(){
+		LinearLayout lb = (LinearLayout) findViewById(R.id.login_body);
+		LinearLayout lh = (LinearLayout) findViewById(R.id.login_header);
+		
+//		
+		
+		
+		if(PrefsActivity.getCor(this).equals("Azul")){
+			lb.setBackgroundResource(R.color.background_softblue);
+			lh.setBackgroundResource(R.drawable.background_azul1);
+			
+		}else 
+			if(PrefsActivity.getCor(this).equals("Vermelho")){
+				lb.setBackgroundResource(R.color.background_softred);
+				lh.setBackgroundResource(R.drawable.background_vermelho1);
+				
+			}else
+				if(PrefsActivity.getCor(this).equals("Verde")){
+					lb.setBackgroundResource(R.color.background_softgreen);
+					lh.setBackgroundResource(R.drawable.background_verde1);
+					
+				}
+
+		}
+
 
 }

@@ -5,11 +5,15 @@
 		android:title="@string/lembrar"
 		android:summary="@string/lembrar_texto"
 		android:defaultValue="false" />
-	<CheckBoxPreference
-	    android:key="cores"
-		android:title="@string/cor"
-		android:summary="@string/cor_texto"
-		android:defaultValue="false" />
+	
+	<ListPreference
+        android:key="cor"
+        android:title="@string/cor"
+        android:summary="@string/cor_texto"
+        android:entries="@array/background"
+        android:entryValues="@array/background_values"
+        android:defaultValue="Azul"
+        />
 	
 	<CheckBoxPreference
 	    android:key="guardarHistorico"
@@ -18,13 +22,13 @@
 		android:defaultValue="false" />
 	
 	<CheckBoxPreference
-	    android:key="guardarPesquisa"
+	    android:key="guardarCamposPesquisa"
 		android:title="@string/guardarCamposPesquisas"
 		android:summary="@string/pesquisas_texto"
 		android:defaultValue="false" />
 	
 	<CheckBoxPreference
-	    android:key="guardarDadosPesquisa"
+	    android:key="guardarPesquisa"
 		android:title="@string/guardarPesquisa"
 		android:summary="@string/guardar_pesquisa_texto"
 		android:defaultValue="false" />

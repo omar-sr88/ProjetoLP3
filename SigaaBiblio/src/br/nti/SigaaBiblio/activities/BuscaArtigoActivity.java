@@ -7,22 +7,26 @@ import br.nti.SigaaBiblio.model.Biblioteca;
 import com.nti.SigaaBiblio.R;
 
 
-import Connection.Operations;
+import Connection.OperationsInterface;
 import Connection.OperationsFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 public class BuscaArtigoActivity extends Activity {
@@ -35,13 +39,17 @@ public class BuscaArtigoActivity extends Activity {
 	EditText titulo;
 	EditText autor;
 	EditText palavraChave;
+	String tituloPref;
+	String autorPref;
+	String palavraChavesPref;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_busca_artigo);
-
+		setBackground();
 		bibliotecasLista=new ArrayList<String>();
 		bibliotecas = getIntent().getParcelableArrayListExtra("Bibliotecas");	
 		for(Biblioteca b : bibliotecas){
@@ -57,7 +65,27 @@ public class BuscaArtigoActivity extends Activity {
 		bibliotecasDisponiveis.setOnItemSelectedListener(new BiblioItemSelectedListener());
 		bibliotecaSelecionada="0";
 	
-	
+		if (PrefsActivity.getCamposPesquisa(this)){ //recupera os campos da pesquisa
+			if (getPreferences(MODE_PRIVATE).contains("tituloArtigo")){
+				tituloPref = getPreferences(MODE_PRIVATE).getString("tituloArtigo", "");
+				EditText titulo = (EditText)findViewById(R.id.editTextTituloArtigo);
+				titulo.setText(tituloPref);
+			}
+				
+			if (getPreferences(MODE_PRIVATE).contains("autorArtigo")){
+				autorPref = getPreferences(MODE_PRIVATE).getString("autorArtigo", "");
+				EditText autor = (EditText)findViewById(R.id.editTextAutorArtigo);
+				autor.setText(autorPref);
+			}
+				
+			if(getPreferences(MODE_PRIVATE).contains("palavraChaveArtigo")){
+				palavraChavesPref = getPreferences(MODE_PRIVATE).getString("palavraChaveArtigo", "");
+				EditText palavra = (EditText)findViewById(R.id.editTextPalavraChaveArtigo);
+				palavra.setText(palavraChavesPref);
+			}
+			
+			
+		}//end preferencias
 	
 	
 	}
@@ -73,7 +101,16 @@ public class BuscaArtigoActivity extends Activity {
 		pd.setMessage("Processando...");
 		pd.setTitle("Aguarde");
 		pd.setIndeterminate(false);
-		final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+		final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+		
+		
+		if (PrefsActivity.getCamposPesquisa(this)){
+			
+			getPreferences(MODE_PRIVATE).edit().putString("tituloArtigo", titulo.getText().toString().trim()).commit();
+			getPreferences(MODE_PRIVATE).edit().putString("autorArtigo", autor.getText().toString().trim()).commit();
+			getPreferences(MODE_PRIVATE).edit().putString("palavraChaveArtigo", palavraChave.getText().toString().trim()).commit();
+			
+		}
 		
 		new AsyncTask<Void,Void,Void>(){
 			//IdBiblioteca":"9763","TituloBusca":"Metodologia","AutorBusca":"","AssuntoBusca":""}
@@ -142,12 +179,61 @@ public class BuscaArtigoActivity extends Activity {
 		}
 	
 	
+		@Override
+		public boolean onCreateOptionsMenu(Menu menu) {
+			// Inflate the menu; this adds items to the action bar if it is present.
+			getMenuInflater().inflate(R.menu.menu, menu);
+			return true;
+		}
+		
+		
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item) {
+			switch (item.getItemId()) {
+			case R.id.action_settings:
+				startActivity(new Intent(this, PrefsActivity.class));
+				return true;
+				
+			}
+			return false;
+		}
+		
+		
+		@Override
+		protected void onResume(){
+			
+			super.onResume();
+			setBackground();
+					
+		}
+		
+
 	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.busca_artigo, menu);
-		return true;
-	}
+	public void setBackground(){
+		LinearLayout lb = (LinearLayout) findViewById(R.id.login_body);
+		LinearLayout lh = (LinearLayout) findViewById(R.id.login_header);
+		TextView t = (TextView) findViewById(R.id.login_header_2);
+//		
+//		
+		
+		
+		if(PrefsActivity.getCor(this).equals("Azul")){
+			lb.setBackgroundResource(R.color.background_softblue);
+			lh.setBackgroundResource(R.drawable.background_azul1);
+			t.setBackgroundResource(R.drawable.background_azul2);
+		}else 
+			if(PrefsActivity.getCor(this).equals("Vermelho")){
+				lb.setBackgroundResource(R.color.background_softred);
+				lh.setBackgroundResource(R.drawable.background_vermelho1);
+				t.setBackgroundResource(R.drawable.background_vermelho2);
+			}else
+				if(PrefsActivity.getCor(this).equals("Verde")){
+					lb.setBackgroundResource(R.color.background_softgreen);
+					lh.setBackgroundResource(R.drawable.background_verde1);
+					t.setBackgroundResource(R.drawable.background_verde2);
+				}
+
+		}
+
 
 }

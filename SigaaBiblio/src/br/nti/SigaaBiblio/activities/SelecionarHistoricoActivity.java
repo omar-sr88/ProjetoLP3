@@ -3,6 +3,7 @@ package br.nti.SigaaBiblio.activities;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.prefs.Preferences;
 
 import br.nti.SigaaBiblio.model.Emprestimo;
 import br.nti.SigaaBiblio.model.Usuario;
@@ -11,16 +12,20 @@ import com.nti.SigaaBiblio.R;
 import com.nti.SigaaBiblio.R.layout;
 import com.nti.SigaaBiblio.R.menu;
 
-import Connection.Operations;
+import Connection.OperationsInterface;
 import Connection.OperationsFactory;
+import Connection.PreferenciasOperation;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -28,6 +33,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class SelecionarHistoricoActivity extends Activity {
@@ -44,13 +50,12 @@ public class SelecionarHistoricoActivity extends Activity {
 
 
 
-
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_selecionar_historico);
+		setBackground();
 		pesquisar = (Button) findViewById(R.id.consultarHistorico);
 		dataInicialButton = (ImageButton) findViewById(R.id.calendario_img1);
 		dataFinalButton = (ImageButton) findViewById(R.id.calendario_img2);
@@ -110,9 +115,32 @@ public class SelecionarHistoricoActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.selecionar_historico, menu);
+		getMenuInflater().inflate(R.menu.menu, menu);
 		return true;
 	}
+	
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_settings:
+			startActivity(new Intent(this, PrefsActivity.class));
+			return true;
+			
+		}
+		return false;
+	}
+	
+	
+	@Override
+	protected void onResume(){
+		
+		super.onResume();
+		setBackground();
+				
+	}
+	
+
 
 	
 	/*
@@ -126,8 +154,10 @@ public class SelecionarHistoricoActivity extends Activity {
 		pd.setTitle("Aguarde");
 		pd.setIndeterminate(false);
 		
-		final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
-
+		final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+		final Context contexto = getApplicationContext();
+				
+		
 		new AsyncTask<Void,Void,Void>(){
 
 			@Override
@@ -145,6 +175,11 @@ public class SelecionarHistoricoActivity extends Activity {
 				String dataInicial= inputDataInicial.getText().toString();
 				String dataFinal= inputDataFinal.getText().toString();
 				ArrayList<Emprestimo> emprestimos = operacao.historicoEmprestimos(usuario,senha,dataInicial,dataFinal) ;
+				
+				if(PrefsActivity.getHistorico(contexto)){
+					PreferenciasOperation pref = new PreferenciasOperation(contexto);
+					pref.salvarHistorico(emprestimos);
+				}
 				Intent intent = new Intent(SelecionarHistoricoActivity.this, HistoricoEmprestimosActivity.class );
 				intent.putExtra("Historico", emprestimos);
 				startActivity(intent);								
@@ -164,6 +199,34 @@ public class SelecionarHistoricoActivity extends Activity {
 
 		
 	}
+	
+	
+	public void setBackground(){
+		LinearLayout lb = (LinearLayout) findViewById(R.id.login_body);
+		LinearLayout lh = (LinearLayout) findViewById(R.id.login_header);
+		TextView t = (TextView) findViewById(R.id.login_header_2);
+//		
+//		
+		
+		
+		if(PrefsActivity.getCor(this).equals("Azul")){
+			lb.setBackgroundResource(R.color.background_softblue);
+			lh.setBackgroundResource(R.drawable.background_azul1);
+			t.setBackgroundResource(R.drawable.background_azul2);
+		}else 
+			if(PrefsActivity.getCor(this).equals("Vermelho")){
+				lb.setBackgroundResource(R.color.background_softred);
+				lh.setBackgroundResource(R.drawable.background_vermelho1);
+				t.setBackgroundResource(R.drawable.background_vermelho2);
+			}else
+				if(PrefsActivity.getCor(this).equals("Verde")){
+					lb.setBackgroundResource(R.color.background_softgreen);
+					lh.setBackgroundResource(R.drawable.background_verde1);
+					t.setBackgroundResource(R.drawable.background_verde2);
+				}
+
+		}
+
 
 
 

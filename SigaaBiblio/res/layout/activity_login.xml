@@ -3,12 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background_softblue" >
+    android:background="@color/background_softblue"
+    android:id="@+id/login_body" >
 	 <!-- android:background="#2932aa"-->
 	<LinearLayout
+	    android:id="@+id/login_head"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:background="@drawable/background1"
+	    android:background="@drawable/background_azul1"
 	    android:gravity="center"
 	    android:orientation="horizontal" >
 
@@ -36,7 +38,7 @@
 	        android:layout_height="match_parent"
 	        android:orientation="vertical">
 	<TextView
-	    android:id="@+id/textViewDataEmprestimo"
+	    android:id="@+id/login_subheader"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_gravity="center"
@@ -44,7 +46,7 @@
 	    android:text="Informe seu cadastro no SIGAA UFPB"
 		android:gravity="center"
 	    android:textSize="20dp"
-	    android:background="@drawable/background2" />
+	    android:background="@drawable/background_azul2" />
 	
 	<LinearLayout
 	    android:layout_width="match_parent"

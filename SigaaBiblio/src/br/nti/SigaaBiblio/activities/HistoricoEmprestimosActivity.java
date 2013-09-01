@@ -2,12 +2,14 @@ package br.nti.SigaaBiblio.activities;
 
 import java.util.ArrayList;
 
+import Connection.PreferenciasOperation;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,6 +36,7 @@ public class HistoricoEmprestimosActivity extends Activity {
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		setContentView(R.layout.activity_historico_emprestimos);
+		setBackground();
 		page = (ViewFlipper)findViewById(R.id.viewFlipper2);	      
 		animFlipInForeward = AnimationUtils.loadAnimation(this, R.anim.flipin);
         animFlipOutForeward = AnimationUtils.loadAnimation(this, R.anim.flipout);
@@ -50,10 +53,21 @@ public class HistoricoEmprestimosActivity extends Activity {
         
 		retornaMenuButton = (Button) findViewById(R.id.retornarMenu);
 		retornaPesquisaButton = (Button) findViewById(R.id.retornarPesquisa);	
-		Intent intent = getIntent();
+		
+		ArrayList<Emprestimo> listaHistorico=null;
+		
+		if(PrefsActivity.getHistorico(this) && getIntent().getExtras()==null){ //consulta historico do bd
+			
+			PreferenciasOperation pref = new PreferenciasOperation(this);
+			listaHistorico= pref.recuperarHistorico();
+		}
+		else{
+			Intent intent = getIntent();
 
-		ArrayList<Emprestimo> listaHistorico = (ArrayList<Emprestimo>) intent.getExtras().get("Historico");
-				
+			listaHistorico = (ArrayList<Emprestimo>) intent.getExtras().get("Historico");
+
+		}
+						
 		LinearLayout table;
 		for (Emprestimo historico : listaHistorico) {
 
@@ -96,9 +110,32 @@ public class HistoricoEmprestimosActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.historico_emprestimos, menu);
+		getMenuInflater().inflate(R.menu.menu, menu);
 		return true;
 	}
+	
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_settings:
+			startActivity(new Intent(this, PrefsActivity.class));
+			return true;
+			
+		}
+		return false;
+	}
+	
+	
+	@Override
+	protected void onResume(){
+		
+		super.onResume();
+		setBackground();
+				
+	}
+	
+
 	
 	
 	
@@ -149,5 +186,32 @@ public class HistoricoEmprestimosActivity extends Activity {
 	    
 	    GestureDetector gestureDetector
 		= new GestureDetector(simpleOnGestureListener);
+	    
+	    
+	    public void setBackground(){
+			LinearLayout lb = (LinearLayout) findViewById(R.id.login_body);
+			LinearLayout lh = (LinearLayout) findViewById(R.id.login_header);
+			
+//			
+			
+			
+			if(PrefsActivity.getCor(this).equals("Azul")){
+				lb.setBackgroundResource(R.color.background_softblue);
+				lh.setBackgroundResource(R.drawable.background_azul1);
+				
+			}else 
+				if(PrefsActivity.getCor(this).equals("Vermelho")){
+					lb.setBackgroundResource(R.color.background_softred);
+					lh.setBackgroundResource(R.drawable.background_vermelho1);
+					
+				}else
+					if(PrefsActivity.getCor(this).equals("Verde")){
+						lb.setBackgroundResource(R.color.background_softgreen);
+						lh.setBackgroundResource(R.drawable.background_verde1);
+						
+					}
+
+			}
+
 
 }

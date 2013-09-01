@@ -12,6 +12,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -26,6 +27,7 @@ public class CambridgeActivity extends Activity {
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
+			this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 			setContentView(R.layout.activity_cambridge);
 		}
 

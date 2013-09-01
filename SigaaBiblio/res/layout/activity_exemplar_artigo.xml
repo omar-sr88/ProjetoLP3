@@ -3,16 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-     android:background="#EFF3FA" >
+     android:background="#EFF3FA"
+     android:id="@+id/login_body" >
 
     <!-- android:background="#2932aa" -->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="@drawable/background1"
+        android:background="@drawable/background_azul1"
         android:gravity="center"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:id="@+id/login_header" >
 
         <TextView
             android:id="@+id/textViewExemplares"
@@ -219,7 +221,7 @@
     	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content"
     	    android:orientation="vertical"
-    	    android:background="@drawable/background3" >
+    	    android:background="@drawable/background_azul2" >
     	</LinearLayout>
 
 </LinearLayout>

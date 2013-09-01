@@ -1,17 +1,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linear"
+    android:id="@+id/login_body"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background_softblue" >
+    android:background="@color/background_softblue"
+     >
 
 	<LinearLayout
 	    android:layout_width="match_parent"
 	    android:layout_height="70dp"
-	    android:background="@drawable/background1"
+	    android:background="@drawable/background_azul1"
 	    android:gravity="center"
-	    android:orientation="horizontal" >
+	    android:orientation="horizontal"
+	    android:id="@+id/login_header" >
 
 	    <TextView
 	        android:id="@+id/textViewTitleArtigo"

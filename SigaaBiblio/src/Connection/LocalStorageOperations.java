@@ -26,7 +26,7 @@ import br.nti.SigaaBiblio.model.Usuario;
 import br.nti.SigaaBiblio.model.VinculoUsuarioSistema;
 import br.nti.SigaaBiblio.persistence.RepositorioLocalSigaa;
 
-public class LocalStorageOperations implements Operations {
+public class LocalStorageOperations implements OperationsInterface {
 
 	private Context context;
 	
@@ -428,7 +428,6 @@ public class LocalStorageOperations implements Operations {
 						if(dataFinal.compareTo(dataEmprestimoDate)<=0){
 							
 							String prazo="",informacoes="",devolucao="",tipo="",dataRenovacao="";
-							Boolean renovavel=false;
 							
 							prazo = resultados.getString(resultados.getColumnIndex("prazoDevolucao"));
 							informacoes= resultados.getString(resultados.getColumnIndex("informacoes"));
@@ -456,8 +455,8 @@ public class LocalStorageOperations implements Operations {
 				
 		}//if emprestimo
 				
-		
-		
+		resultados.close();
+		sqLite.close();
 		
 		return emprestimos;
 	}

@@ -10,13 +10,16 @@ import org.json.JSONObject;
 
 
 import Connection.HttpUtils;
-import Connection.Operations;
+import Connection.OperationsInterface;
 import Connection.OperationsFactory;
+import Connection.PreferenciasOperation;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +28,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import br.nti.SigaaBiblio.model.Biblioteca;
@@ -44,7 +48,7 @@ public class MenuActivity extends Activity {
 	TextView textViewSituacaoUsuario;
 	TextView textViewPodeFazerEmprestimo;
 	TextView textViewTotalEmprestimosAbertos;
-	ImageView imageView1;
+	ImageView imageView1; 
 	String bibliotecas;
 
 	
@@ -53,6 +57,8 @@ public class MenuActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_menu);
+		
+		setBackground();
 
 		textViewSituacaoUsuario = (TextView)findViewById(R.id.textViewSituacaoUsuario1);
 		textViewPodeFazerEmprestimo = (TextView)findViewById(R.id.textViewPodeFazerEmprestimo);
@@ -68,7 +74,7 @@ public class MenuActivity extends Activity {
 		carregaDados();
 		
 
-		final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+		final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 
 
 		situacao.setOnClickListener(new OnClickListener() {
@@ -123,36 +129,52 @@ public class MenuActivity extends Activity {
 			}
 		});
 
-//		renovacao.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				Intent intent = new Intent(MenuActivity.this, RenovacaoActivity.class );
-//				startActivity(intent);
-//
-//			}
-//		});
+
 
 		sair.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(MenuActivity.this, LoginActivity.class );
+				intent.putExtra("logarComOutroUsuario", true); //setta para que seja escolhido um novo usuário
 				startActivity(intent);
 
 			}
 		});
 
+		final Context contexto = getApplicationContext();
+		
 		historico.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(MenuActivity.this, SelecionarHistoricoActivity.class );
-				startActivity(intent);
+				
+				if(PrefsActivity.getHistorico(contexto)){
+					//realiza a consulta no banco de dados
+					Intent intent = new Intent(MenuActivity.this, HistoricoEmprestimosActivity.class );
+					PreferenciasOperation pref = new PreferenciasOperation(contexto);
+					ArrayList<Emprestimo> emprestimos = pref.recuperarHistorico();
+					intent.putExtra("Historico", emprestimos);
+					startActivity(intent);
 
+				}else{
+					Intent intent = new Intent(MenuActivity.this, SelecionarHistoricoActivity.class );
+					startActivity(intent);
+
+				}
+				
 			}
 		});
 
+	}
+	
+	
+	@Override
+	protected void onResume(){
+		
+		super.onResume();
+		setBackground();
+				
 	}
 
 	private void carregaDados() {		
@@ -211,7 +233,7 @@ public class MenuActivity extends Activity {
 			pd.setTitle("Aguarde");
 			pd.setIndeterminate(false);
 			bibliotecas=null;
-			final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+			final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 
 			/*
 			 * OBTEM O NOMES DAS BIBLIOTECAS ATIVAS
@@ -264,7 +286,7 @@ public class MenuActivity extends Activity {
 			pd.setTitle("Aguarde");
 			pd.setIndeterminate(false);
 			bibliotecas=null;
-			final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+			final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 
 			
 			/*
@@ -316,7 +338,7 @@ public class MenuActivity extends Activity {
 			pd.setTitle("Aguarde");
 			pd.setIndeterminate(false);
 			
-			final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+			final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 
 			
 			new AsyncTask<Void,Void,Void>(){
@@ -352,6 +374,34 @@ public class MenuActivity extends Activity {
 				}.execute();			
 			
 		}
+		
+		
+		public void setBackground(){
+			LinearLayout lb = (LinearLayout) findViewById(R.id.login_body);
+			LinearLayout lh = (LinearLayout) findViewById(R.id.login_header);
+			LinearLayout t = (LinearLayout) findViewById(R.id.login_header_3);
+//			
+//			
+			
+			
+			if(PrefsActivity.getCor(this).equals("Azul")){
+				lb.setBackgroundResource(R.color.background_softblue);
+				lh.setBackgroundResource(R.drawable.background_azul1);
+				t.setBackgroundResource(R.drawable.background_azul2);
+			}else 
+				if(PrefsActivity.getCor(this).equals("Vermelho")){
+					lb.setBackgroundResource(R.color.background_softred);
+					lh.setBackgroundResource(R.drawable.background_vermelho1);
+					t.setBackgroundResource(R.drawable.background_vermelho2);
+				}else
+					if(PrefsActivity.getCor(this).equals("Verde")){
+						lb.setBackgroundResource(R.color.background_softgreen);
+						lh.setBackgroundResource(R.drawable.background_verde1);
+						t.setBackgroundResource(R.drawable.background_verde2);
+					}
+
+			}
+
 
 		
 

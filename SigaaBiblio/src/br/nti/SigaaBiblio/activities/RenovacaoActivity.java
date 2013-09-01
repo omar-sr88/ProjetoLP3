@@ -16,7 +16,7 @@ import com.nti.SigaaBiblio.R;
 import com.nti.SigaaBiblio.R.layout;
 import com.nti.SigaaBiblio.R.menu;
 
-import Connection.Operations;
+import Connection.OperationsInterface;
 import Connection.OperationsFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -34,6 +35,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,7 +52,7 @@ public class RenovacaoActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_renovacao);
-		
+		setBackground();
 		
 		renovar= new HashMap<String, Boolean>();
 		keysEmprestimos= new HashMap<String, String>();
@@ -111,7 +113,7 @@ public class RenovacaoActivity extends Activity {
 		pd.setTitle("Aguarde");
 		pd.setIndeterminate(false);
 	
-		final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+		final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 		final Semaphore sincronizador = new Semaphore(0);
 		
 		new AsyncTask<Void,Void,Void>(){
@@ -171,6 +173,55 @@ public class RenovacaoActivity extends Activity {
 	
 	
 	
+	
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_settings:
+			startActivity(new Intent(this, PrefsActivity.class));
+			return true;
+			
+		}
+		return false;
+	}
+	
+	
+	@Override
+	protected void onResume(){
+		
+		super.onResume();
+		setBackground();
+				
+	}
+	
+	public void setBackground(){
+		LinearLayout lb = (LinearLayout) findViewById(R.id.login_body);
+		LinearLayout lh = (LinearLayout) findViewById(R.id.login_header);
+		
+//		
+		
+		
+		if(PrefsActivity.getCor(this).equals("Azul")){
+			lb.setBackgroundResource(R.color.background_softblue);
+			lh.setBackgroundResource(R.drawable.background_azul1);
+			
+		}else 
+			if(PrefsActivity.getCor(this).equals("Vermelho")){
+				lb.setBackgroundResource(R.color.background_softred);
+				lh.setBackgroundResource(R.drawable.background_vermelho1);
+				
+			}else
+				if(PrefsActivity.getCor(this).equals("Verde")){
+					lb.setBackgroundResource(R.color.background_softgreen);
+					lh.setBackgroundResource(R.drawable.background_verde1);
+					
+				}
+
+		}
+
+	
+
 	
 	
 	

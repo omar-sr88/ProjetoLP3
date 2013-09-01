@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -12,12 +13,13 @@ import org.json.JSONObject;
 
 
 import Connection.HttpUtils;
-import Connection.Operations;
+import Connection.OperationsInterface;
 import Connection.OperationsFactory;
 import android.R.string;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +30,8 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import br.nti.SigaaBiblio.model.Emprestimo;
 import br.nti.SigaaBiblio.model.Usuario;
@@ -51,6 +55,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.activity_login);
+		
+		setBackground();
+					
 		RepositorioFake db = new RepositorioFake(getApplicationContext());
 		db.resetRepositorioFake();
 		db.gerarRepositorioFake();
@@ -63,24 +70,40 @@ public class LoginActivity extends Activity implements OnClickListener {
 		etLogin = (EditText) findViewById(R.id.editTextLoginUsuario);
 		etSenha = (EditText) findViewById(R.id.editTextSenhaUsuario);
 		login.setOnClickListener(this);
+		
+		
+		if (PrefsActivity.getLembrarLogin(this)) {
 
-		//Se a pref lembrar eh true eu tento setar os vlores de logpref e senhapref
-		if (PrefsActivity.getLembrar(this)) {
+			//descobre se quer logar como outro usuário
+			Bundle bund = getIntent().getExtras();
+			
+			if(bund==null){ //se nao quiser logar como outro usuário
+			
+				if (getPreferences(MODE_PRIVATE).contains("login"))
+					logPref = getPreferences(MODE_PRIVATE).getString("login", "");
 
-			if (getPreferences(MODE_PRIVATE).contains("login"))
-				logPref = getPreferences(MODE_PRIVATE).getString("login", "");
+				if (getPreferences(MODE_PRIVATE).contains("senha"))
+					senhaPref = getPreferences(MODE_PRIVATE).getString("senha", "");
+				//se nao forem nulos, ele ja realiza o login chamando o botao de login
+				if (!logPref.isEmpty() && logPref != null && !senhaPref.isEmpty()
+						&& senhaPref != null){
+					etLogin.setText(logPref);
+					etSenha.setText(senhaPref);
+					login.performClick();
+				}
 
-			if (getPreferences(MODE_PRIVATE).contains("senha"))
-				senhaPref = getPreferences(MODE_PRIVATE).getString("senha", "");
-
-			//se nao forem nulos, ele ja realiza o login chamando o botao de login
-			if (!logPref.isEmpty() && logPref != null && !senhaPref.isEmpty()
-					&& senhaPref != null)
-				login.performClick();
-
-		}
+			}							
+		}//end preferencias 
+	
 	}
 
+	@Override
+	protected void onStop() {
+		super.onStop();
+		//finish();
+	}
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -99,6 +122,16 @@ public class LoginActivity extends Activity implements OnClickListener {
 		}
 		return false;
 	}
+	
+	
+	@Override
+	protected void onResume(){
+		
+		super.onResume();
+		setBackground();
+				
+	}
+	
 
 	String mensagem;
 	
@@ -107,14 +140,17 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 		final String login = etLogin.getText().toString().trim();
 		final String senha = etSenha.getText().toString().trim();		
-
+		
+		
+		
+		
 		final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
 		pd.setMessage("Processando...");
 		pd.setTitle("Aguarde");
 		pd.setIndeterminate(false);
 		
 		
-		final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+		final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 		
 		final Semaphore sincronizador = new Semaphore(0,true); //para exclusão mutua
 		
@@ -159,7 +195,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 				mensagem= mensagem.substring(11,mensagem.length());
 				Toast.makeText(LoginActivity.this, mensagem, Toast.LENGTH_LONG)
 				.show();
-			}else{
+				mensagem=null;
+			}else{			
 				Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
 				Toast.makeText(LoginActivity.this, mensagem, Toast.LENGTH_LONG)
 				.show();
@@ -168,9 +205,55 @@ public class LoginActivity extends Activity implements OnClickListener {
 				
 			}
 	
-	
+			if(PrefsActivity.getLembrarLogin(this)){
+				
+				
+				if(mensagem!=null){
+					getPreferences(MODE_PRIVATE).edit().putString("login", login).commit();
+					
+					getPreferences(MODE_PRIVATE).edit().putString("senha", senha).commit();
+					
+					finish();
+				}else{
+					getPreferences(MODE_PRIVATE).edit().remove("login").commit();
+					getPreferences(MODE_PRIVATE).edit().remove("senha").commit();
+					
+				}
+				
+			}
+			
 	}
+	
+	
+	/*
+	 * Setta a cor de background
+	 */
+	
+	public void setBackground(){
+		LinearLayout lb = (LinearLayout) findViewById(R.id.login_body);
+		LinearLayout lh = (LinearLayout) findViewById(R.id.login_head);
+		TextView t = (TextView) findViewById(R.id.login_subheader);
+//		
+//		
+		
+		
+		if(PrefsActivity.getCor(this).equals("Azul")){
+			lb.setBackgroundResource(R.color.background_softblue);
+			lh.setBackgroundResource(R.drawable.background_azul1);
+			t.setBackgroundResource(R.drawable.background_azul2);
+		}else 
+			if(PrefsActivity.getCor(this).equals("Vermelho")){
+				lb.setBackgroundResource(R.color.background_softred);
+				lh.setBackgroundResource(R.drawable.background_vermelho1);
+				t.setBackgroundResource(R.drawable.background_vermelho2);
+			}else
+				if(PrefsActivity.getCor(this).equals("Verde")){
+					lb.setBackgroundResource(R.color.background_softgreen);
+					lh.setBackgroundResource(R.drawable.background_verde1);
+					t.setBackgroundResource(R.drawable.background_verde2);
+				}
 
+		}
 	
 
 }
