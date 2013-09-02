@@ -7,9 +7,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import android.content.ContentUris;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.BaseColumns;
 
 public class Usuario {
 	
@@ -114,7 +117,41 @@ public class Usuario {
 	public static Usuario prepareUsuario() {
 		return INSTANCE = new Usuario();
 	}
+	
+public static final class Usuarios implements BaseColumns {
+		
+		public static final String IDUSUARIOBIBLIOTECA = "idUsuarioBiblioteca";
+		public static final String NOME = "nome";
+		public static final String MATRICULA = "matricula";
+		public static final String ISALUNO = "isAluno";
+		public static final String CURSO = "curso";
+		public static final String URLFOTO = "urlFoto";
+		public static final String UNIDADE = "unidade";
+		public static final String LOGIN =  "login";
+		public static final String SENHA = "senha";
+		
+		public static final String TIPO = "usuario";
+		
+		public static final String [] COLUNAS = {
+			Usuarios._ID, Usuarios.IDUSUARIOBIBLIOTECA, Usuarios.NOME, Usuarios.MATRICULA, ""+Usuarios.ISALUNO,Usuarios.CURSO,
+			Usuarios.URLFOTO,Usuarios.UNIDADE, Usuarios.LOGIN, Usuarios.SENHA};
+		
+		// Daqui para baixo � usado para provedor de conte�do (ContentProvider)
+		public static final String AUTHORITY = "br.nti.SigaaBiblio.provider";
+		public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY +"/"+ TIPO);
 
+		public static final String DEFAULT_SORT_ORDER = "_id ASC";
+		
+		public static Uri getUriId(long id) {
+			Uri uri = ContentUris.withAppendedId(CONTENT_URI, id);
+			return uri;
+		}
+		
+		public static long getIdFromUri(Uri uri) {
+			String id = uri.getPathSegments().get(1);
+			return Long.parseLong(id);
+		}
+	}
 	
 	
 }
