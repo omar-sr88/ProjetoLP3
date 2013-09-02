@@ -164,31 +164,8 @@ public class SelecionarHistoricoActivity extends Activity {
 		
 		final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 		final Context contexto = getApplicationContext();
-		
-	
-		
-		
-		Date dataInicialAux=null;
-		Date dataFinalAux=null;
-		
-		if(!inputDataInicial.getText().toString().trim().equals("")&&!inputDataFinal.getText().toString().trim().equals("")){
-			try {
-				String[] dataInicalraw = inputDataInicial.getText().toString().trim().split("-");
-				String dataInicalString = dataInicalraw[2]+"-"+dataInicalraw[1]+"-"+dataInicalraw[0];
-				dataInicialAux = new SimpleDateFormat("yyyy-mm-dd").parse(dataInicalString);
-				String[] dataFinalraw = inputDataFinal.getText().toString().trim().split("-");
-				String dataFinalString = dataFinalraw[0]+"-"+dataFinalraw[1]+"-"+dataFinalraw[2];
-				dataFinalAux = new SimpleDateFormat("yyyy-mm-dd").parse(dataFinalString);
 			
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		
-		
-		final Date dataInicial = dataInicialAux;		
-		final Date dataFinal = dataFinalAux;
 		
 		new AsyncTask<Void,Void,Void>(){
 
@@ -205,15 +182,16 @@ public class SelecionarHistoricoActivity extends Activity {
 				String usuario=Usuario.INSTANCE.getLogin();
 				String senha = Usuario.INSTANCE.getSenha();
 				
-				String dataI = inputDataInicial.getText().toString().trim();
-				String dataF = inputDataFinal.getText().toString().trim();
+				
 				
 				ArrayList<Emprestimo> emprestimos = null;
-				if(dataI.equals("")&&dataF.equals("")){
-					emprestimos=operacao.historicoEmprestimos(usuario,senha,dataI,dataF);
-				}else{
-					emprestimos=operacao.historicoEmprestimos(usuario,senha,dataInicial.toString(),dataFinal.toString());
-				}
+				String[] dataInicalraw = inputDataInicial.getText().toString().trim().split("-");
+				String dataInical = dataInicalraw[2]+"-"+dataInicalraw[1]+"-"+dataInicalraw[0];
+				String[] dataFinalraw = inputDataFinal.getText().toString().trim().split("-");
+				String dataFinal= dataFinalraw[2]+"-"+dataFinalraw[1]+"-"+dataFinalraw[0];
+				
+				emprestimos=operacao.historicoEmprestimos(usuario,senha,dataInical,dataFinal);
+				
 						
 				
 				if(PrefsActivity.getHistorico(contexto)){

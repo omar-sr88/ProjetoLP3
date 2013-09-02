@@ -2,6 +2,7 @@ package br.ufrn.sigaa.biblioteca.android_service;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -143,8 +144,8 @@ public class SigaaAndroidServlet extends HttpServlet {
 				case Operations.MEUS_EMPRESTIMOS:
 					login = inputValues.getString("Login");
 					senha = inputValues.getString("Senha");
-					java.util.Date Inicio = inputValues.getString("Inicio").isEmpty() ? null : (java.util.Date)inputValues.get("Inicio"); 
-					java.util.Date Fim = inputValues.getString("Fim").isEmpty() ? null : (java.util.Date)inputValues.get("Fim");
+					java.util.Date Inicio = inputValues.getString("Inicio").isEmpty() ? null :  new SimpleDateFormat("yyyy-MM-dd").parse(inputValues.getString("Inicio")); 
+					java.util.Date Fim = inputValues.getString("Fim").isEmpty() ? null : new SimpleDateFormat("yyyy-MM-dd").parse(inputValues.getString("Fim"));
 					GeneralOperationAndroid.historicoEmprestimos(login, senha, Inicio,Fim, map);
 					break;
 					
