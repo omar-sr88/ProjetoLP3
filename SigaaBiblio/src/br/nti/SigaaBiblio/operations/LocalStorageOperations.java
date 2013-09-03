@@ -1,4 +1,4 @@
-package Connection;
+package br.nti.SigaaBiblio.operations;
 
 
 import java.text.ParseException;
@@ -146,20 +146,7 @@ public class LocalStorageOperations implements OperationsInterface {
 	public ArrayList<Artigo> consultarAcervoArtigo(String... parametrosConsulta) {
 		// TODO Auto-generated method stub
 		
-		SQLiteDatabase sqLite = new  RepositorioLocalSigaa(context).getReadableDatabase();
-		String tabela="artigo";
-		String[] colunas = {"autor","titulo","palavrasChave"};
-		String biblioteca = parametrosConsulta[0];
-		String titulo =parametrosConsulta[1];
-		String autor= parametrosConsulta[2];
-		String palavrasChave = parametrosConsulta[3];
-		
-		Cursor resultados = sqLite.query(true, tabela, colunas,  colunas[0]+ " LIKE '%" +titulo +"%'", null, null, null, null, null);
-//		where+= parametrosConsulta[0].equals("")?"":"autor LIKE ?%";
-//		where+=parametrosConsulta[1].equals("")?"":"titulo = ?";
-//		where+=parametrosConsulta[2].equals("")?"": "palavrasChave = ?";
-//		
-		return null;
+		return  null;
 	}
 
 	@Override

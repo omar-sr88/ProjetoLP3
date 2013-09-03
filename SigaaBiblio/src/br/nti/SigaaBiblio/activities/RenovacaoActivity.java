@@ -11,14 +11,15 @@ import java.util.concurrent.Semaphore;
 import br.nti.SigaaBiblio.model.Biblioteca;
 import br.nti.SigaaBiblio.model.Emprestimo;
 import br.nti.SigaaBiblio.model.Usuario;
+import br.nti.SigaaBiblio.operations.OperationsFactory;
+import br.nti.SigaaBiblio.operations.OperationsInterface;
+import br.nti.SigaaBiblio.operations.PreferenciasOperation;
 
 import com.nti.SigaaBiblio.R;
 import com.nti.SigaaBiblio.R.layout;
 import com.nti.SigaaBiblio.R.menu;
+import com.nti.SigaaBiblio.utils.EmprestimoAdapterUtils;
 
-import Connection.OperationsInterface;
-import Connection.OperationsFactory;
-import Connection.PreferenciasOperation;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -173,6 +174,9 @@ public class RenovacaoActivity extends Activity {
 			}
 			Toast.makeText(getApplicationContext(), resposta, Toast.LENGTH_LONG).show();
 			Intent intent = new Intent(RenovacaoActivity.this, MenuActivity.class );
+			finish();
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(intent);
 	}
 	

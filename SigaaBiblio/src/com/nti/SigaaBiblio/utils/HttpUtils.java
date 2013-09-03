@@ -1,4 +1,4 @@
-package Connection;
+package com.nti.SigaaBiblio.utils;
 
 import java.io.IOException;
 import java.util.*;

@@ -2,7 +2,6 @@ package br.nti.SigaaBiblio.activities;
 
 import java.util.ArrayList;
 
-import Connection.PreferenciasOperation;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.ViewFlipper;
 import br.nti.SigaaBiblio.layouts.HistoricoLayout;
 import br.nti.SigaaBiblio.model.Emprestimo;
+import br.nti.SigaaBiblio.operations.PreferenciasOperation;
 
 import com.nti.SigaaBiblio.R;
 
@@ -89,7 +89,11 @@ public class HistoricoEmprestimosActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(HistoricoEmprestimosActivity.this, MenuActivity.class );
+				finish();
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(intent);
+				
 
 			}
 		});
@@ -98,6 +102,9 @@ public class HistoricoEmprestimosActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(HistoricoEmprestimosActivity.this, SelecionarHistoricoActivity.class );
+				finish();
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(intent);
 
 			}

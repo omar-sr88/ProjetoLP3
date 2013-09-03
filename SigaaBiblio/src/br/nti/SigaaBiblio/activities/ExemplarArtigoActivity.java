@@ -62,8 +62,10 @@ public class ExemplarArtigoActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(ExemplarArtigoActivity.this, BuscaLivroActivity.class );
+				Intent intent = new Intent(ExemplarArtigoActivity.this, BuscaArtigoActivity.class );
 				finish();
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(intent);
 				
 
@@ -75,6 +77,9 @@ public class ExemplarArtigoActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(ExemplarArtigoActivity.this, MenuActivity.class );
+				finish();
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(intent);
 			}
 		});

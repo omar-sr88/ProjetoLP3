@@ -1,11 +1,11 @@
 package br.nti.SigaaBiblio.model;
 
-public class LivroCambidge {
+public class LivroCambridge {
 
 	private String edition;
 	private String title;
 
-	public LivroCambidge(String edition, String title) {
+	public LivroCambridge(String edition, String title) {
 		super();
 		this.edition = edition;
 		this.title = title;

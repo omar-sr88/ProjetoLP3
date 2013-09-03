@@ -6,7 +6,6 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import Connection.HttpUtils;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
@@ -14,28 +13,43 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-import br.nti.SigaaBiblio.model.LivroCambidge;
+import br.nti.SigaaBiblio.model.LivroCambridge;
 
 import com.nti.SigaaBiblio.R;
+import com.nti.SigaaBiblio.utils.HttpUtils;
 
 public class CambridgeActivity extends Activity {
 
-
+		
+		
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 			setContentView(R.layout.activity_cambridge);
+			Bundle bundle = getIntent().getExtras();
+			String busca=bundle.getString("busca");
+			EditText editText = (EditText) findViewById(R.id.editTextCambridge1);
+			editText.setText(busca);
+			Button goSearch = (Button) findViewById(R.id.buttonCambridge1);
+			goSearch.performClick();
+			
 		}
 
 		
 		public void buscarCatalogo(View v) {
 			EditText editText = (EditText) findViewById(R.id.editTextCambridge1);
-			String inputString = editText.getText().toString();
+			String inputString = editText.getText().toString().trim();
 
+			//caso tenha espaco em branco 
+			inputString = inputString.replace(" ","%20");
+			
+			
+			
 			final String url = "http://www.lib.cam.ac.uk/api/aquabrowser/abSearchThin.cgi?searchArg="
 					+ inputString.trim() + "&format=json&resultsPage=1";
 
@@ -83,16 +97,16 @@ public class CambridgeActivity extends Activity {
 
 				resultados = search.get();
 
-				List<LivroCambidge> lista_resultados = new ArrayList<LivroCambidge>();
+				List<LivroCambridge> lista_resultados = new ArrayList<LivroCambridge>();
 				for (int i = 0; i < resultados.length(); i++) {
 					JSONObject r = resultados.getJSONObject(i);
-					lista_resultados.add(new LivroCambidge((String) r.get("edition"), r.getString("title")));
+					lista_resultados.add(new LivroCambridge((String) r.get("edition"), r.getString("title")));
 
 					;
 				}
 				ListView listaResultados = (ListView) findViewById(R.id.listViewCrambridge1);
 				ArrayList<String> values = new ArrayList<String>();
-				for (LivroCambidge p : lista_resultados) {
+				for (LivroCambridge p : lista_resultados) {
 					values.add(p.toString());
 				}
 
@@ -100,7 +114,7 @@ public class CambridgeActivity extends Activity {
 
 				listaResultados.setAdapter(adapter);
 			} catch (Exception e) {
-				Toast.makeText(getApplicationContext(), "Error!", Toast.LENGTH_LONG)
+				Toast.makeText(getApplicationContext(), "A Busca não Retornou Resultados!", Toast.LENGTH_LONG)
 						.show();
 				e.printStackTrace();
 			}

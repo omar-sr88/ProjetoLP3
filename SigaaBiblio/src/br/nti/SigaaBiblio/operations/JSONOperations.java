@@ -1,4 +1,4 @@
-package Connection;
+package br.nti.SigaaBiblio.operations;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -13,6 +13,8 @@ import java.util.Map;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.nti.SigaaBiblio.utils.HttpUtils;
 
 import br.nti.SigaaBiblio.activities.BuscaLivroActivity;
 import br.nti.SigaaBiblio.activities.ExemplarArtigoActivity;

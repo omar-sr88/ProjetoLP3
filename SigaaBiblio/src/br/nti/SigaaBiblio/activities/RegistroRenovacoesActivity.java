@@ -2,11 +2,12 @@ package br.nti.SigaaBiblio.activities;
 
 import java.util.ArrayList;
 
+import br.nti.SigaaBiblio.operations.PreferenciasOperation;
+
 import com.nti.SigaaBiblio.R;
 import com.nti.SigaaBiblio.R.layout;
 import com.nti.SigaaBiblio.R.menu;
 
-import Connection.PreferenciasOperation;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;

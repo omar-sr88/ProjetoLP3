@@ -10,14 +10,14 @@ import java.util.prefs.Preferences;
 
 import br.nti.SigaaBiblio.model.Emprestimo;
 import br.nti.SigaaBiblio.model.Usuario;
+import br.nti.SigaaBiblio.operations.OperationsFactory;
+import br.nti.SigaaBiblio.operations.OperationsInterface;
+import br.nti.SigaaBiblio.operations.PreferenciasOperation;
 
 import com.nti.SigaaBiblio.R;
 import com.nti.SigaaBiblio.R.layout;
 import com.nti.SigaaBiblio.R.menu;
 
-import Connection.OperationsInterface;
-import Connection.OperationsFactory;
-import Connection.PreferenciasOperation;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -65,6 +65,8 @@ public class SelecionarHistoricoActivity extends Activity {
 		inputDataInicial = (EditText) findViewById(R.id.dataInicialText);
 		inputDataFinal= (EditText) findViewById(R.id.editTextLoginUsuario);
 
+		inputDataInicial.setText("");
+		inputDataFinal.setText("");
 		//obtem a instancia do calendario
 		formatDateTime=DateFormat.getDateTimeInstance();
 		dateTime=Calendar.getInstance();
@@ -145,8 +147,12 @@ public class SelecionarHistoricoActivity extends Activity {
 		
 		super.onResume();
 		setBackground();
+		inputDataInicial.setText("");
+		inputDataFinal.setText("");
 				
 	}
+	
+	
 	
 
 
@@ -182,15 +188,20 @@ public class SelecionarHistoricoActivity extends Activity {
 				String usuario=Usuario.INSTANCE.getLogin();
 				String senha = Usuario.INSTANCE.getSenha();
 				
-				
+				String dataInicial="",dataFinal="";
 				
 				ArrayList<Emprestimo> emprestimos = null;
-				String[] dataInicalraw = inputDataInicial.getText().toString().trim().split("-");
-				String dataInical = dataInicalraw[2]+"-"+dataInicalraw[1]+"-"+dataInicalraw[0];
-				String[] dataFinalraw = inputDataFinal.getText().toString().trim().split("-");
-				String dataFinal= dataFinalraw[2]+"-"+dataFinalraw[1]+"-"+dataFinalraw[0];
+				if(!inputDataInicial.getText().toString().equals("")){
+					String[] dataInicalraw = inputDataInicial.getText().toString().trim().split("-");
+					dataInicial = dataInicalraw[2]+"-"+dataInicalraw[1]+"-"+dataInicalraw[0];
+				}
+				if(!inputDataFinal.getText().toString().equals("")){
+					String[] dataFinalraw = inputDataFinal.getText().toString().trim().split("-");
+					dataFinal= dataFinalraw[2]+"-"+dataFinalraw[1]+"-"+dataFinalraw[0];
+				}
+
 				
-				emprestimos=operacao.historicoEmprestimos(usuario,senha,dataInical,dataFinal);
+				emprestimos=operacao.historicoEmprestimos(usuario,senha,dataInicial,dataFinal);
 				
 						
 				

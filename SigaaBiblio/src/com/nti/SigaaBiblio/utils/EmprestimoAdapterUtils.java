@@ -1,4 +1,4 @@
-package br.nti.SigaaBiblio.activities;
+package com.nti.SigaaBiblio.utils;
 
 /*
  *  Esta classe armazena as informações que serão exibidas na lisview

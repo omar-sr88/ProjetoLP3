@@ -10,13 +10,13 @@ import org.w3c.dom.ls.LSInput;
 
 import br.nti.SigaaBiblio.model.Biblioteca;
 import br.nti.SigaaBiblio.model.Livro;
+import br.nti.SigaaBiblio.operations.OperationsFactory;
+import br.nti.SigaaBiblio.operations.OperationsInterface;
 
 import com.nti.SigaaBiblio.R;
 import com.nti.SigaaBiblio.R.layout;
 import com.nti.SigaaBiblio.R.menu;
 
-import Connection.OperationsInterface;
-import Connection.OperationsFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;

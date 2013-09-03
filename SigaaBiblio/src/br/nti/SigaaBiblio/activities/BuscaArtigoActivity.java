@@ -6,11 +6,12 @@ import java.util.concurrent.Semaphore;
 
 import br.nti.SigaaBiblio.model.Artigo;
 import br.nti.SigaaBiblio.model.Biblioteca;
+import br.nti.SigaaBiblio.operations.OperationsFactory;
+import br.nti.SigaaBiblio.operations.OperationsInterface;
+
 import com.nti.SigaaBiblio.R;
 
 
-import Connection.OperationsInterface;
-import Connection.OperationsFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;

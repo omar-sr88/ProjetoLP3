@@ -1,4 +1,4 @@
-package Connection;
+package br.nti.SigaaBiblio.operations;
 
 import android.content.Context;
 

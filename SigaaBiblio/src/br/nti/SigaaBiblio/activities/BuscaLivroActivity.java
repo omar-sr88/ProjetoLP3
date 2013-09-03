@@ -16,12 +16,12 @@ import org.json.JSONObject;
 
 import br.nti.SigaaBiblio.model.Biblioteca;
 import br.nti.SigaaBiblio.model.Livro;
+import br.nti.SigaaBiblio.operations.OperationsFactory;
+import br.nti.SigaaBiblio.operations.OperationsInterface;
 
 import com.nti.SigaaBiblio.R;
+import com.nti.SigaaBiblio.utils.HttpUtils;
 
-import Connection.HttpUtils;
-import Connection.OperationsInterface;
-import Connection.OperationsFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -67,6 +67,9 @@ public class BuscaLivroActivity extends Activity {
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		setContentView(R.layout.activity_busca_livro);
+		titulo = (EditText) findViewById(R.id.editTextTituloLivro);
+		assunto= (EditText)findViewById(R.id.editTextAssuntoLivro);
+		autor = (EditText)findViewById(R.id.editTextAutorLivro);
 		setBackground();
 		//recupera o nome das bibliotecas
 		
@@ -95,20 +98,19 @@ public class BuscaLivroActivity extends Activity {
 		if (PrefsActivity.getCamposPesquisa(this)){ //recupera os campos da pesquisa
 			if (getPreferences(MODE_PRIVATE).contains("tituloLivro")){
 				tituloPref = getPreferences(MODE_PRIVATE).getString("tituloLivro", "");
-				EditText titulo = (EditText)findViewById(R.id.editTextTituloLivro);
 				titulo.setText(tituloPref);
 			}
 				
 			if (getPreferences(MODE_PRIVATE).contains("autorLivro")){
 				autorPref = getPreferences(MODE_PRIVATE).getString("autorLivro", "");
-				EditText autor = (EditText)findViewById(R.id.editTextAutorLivro);
+				
 				autor.setText(autorPref);
 			}
 				
 			if(getPreferences(MODE_PRIVATE).contains("assuntoLivro")){
 				assuntoPref = getPreferences(MODE_PRIVATE).getString("assuntoLivro", "");
-				EditText palavra = (EditText)findViewById(R.id.editTextAssuntoLivro);
-				palavra.setText(assuntoPref);
+				
+				assunto.setText(assuntoPref);
 			}
 			
 			
@@ -116,14 +118,14 @@ public class BuscaLivroActivity extends Activity {
 	
 		
 		
-		
-		((Button)findViewById(R.id.buttonCrambridge)).setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				startActivity(new Intent(BuscaLivroActivity.this, CambridgeActivity.class));				
-			}
-		});
+//		
+//		((Button)findViewById(R.id.buttonCrambridge)).setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View arg0) {
+//				startActivity(new Intent(BuscaLivroActivity.this, CambridgeActivity.class));				
+//			}
+//		});
 		
 
 		
@@ -136,6 +138,7 @@ public class BuscaLivroActivity extends Activity {
 		setBackground();
 				
 	}
+	
 		
 		
 	/* Realiza Uma pesquisa
@@ -236,21 +239,34 @@ public class BuscaLivroActivity extends Activity {
 		@Override
 		public boolean onCreateOptionsMenu(Menu menu) {
 			// Inflate the menu; this adds items to the action bar if it is present.
-			getMenuInflater().inflate(R.menu.menu, menu);
+			getMenuInflater().inflate(R.menu.busca_livro, menu);
 			return true;
 		}
 		
-		
+
 		@Override
 		public boolean onOptionsItemSelected(MenuItem item) {
 			switch (item.getItemId()) {
 			case R.id.action_settings:
 				startActivity(new Intent(this, PrefsActivity.class));
 				return true;
+			case R.id.cambridge_search:{
+				Intent intent = new Intent(this, CambridgeActivity.class);
+				String tituloC = titulo.getText().toString().trim();
+				String autorC = autor.getText().toString().trim();
+				String assuntoC = assunto.getText().toString().trim();
+				intent.putExtra("busca", tituloC+" "+autorC+" "+assuntoC);
+				startActivity(intent);
+				return true;
+				
+			}
 				
 			}
 			return false;
 		}
+		
+		
+		
 		
 		
 		

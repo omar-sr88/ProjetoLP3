@@ -9,10 +9,6 @@ import java.util.Map;
 import org.json.JSONObject;
 
 
-import Connection.HttpUtils;
-import Connection.OperationsInterface;
-import Connection.OperationsFactory;
-import Connection.PreferenciasOperation;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -34,8 +30,12 @@ import android.widget.Toast;
 import br.nti.SigaaBiblio.model.Biblioteca;
 import br.nti.SigaaBiblio.model.Emprestimo;
 import br.nti.SigaaBiblio.model.Usuario;
+import br.nti.SigaaBiblio.operations.OperationsFactory;
+import br.nti.SigaaBiblio.operations.OperationsInterface;
+import br.nti.SigaaBiblio.operations.PreferenciasOperation;
 
 import com.nti.SigaaBiblio.R;
+import com.nti.SigaaBiblio.utils.HttpUtils;
 
 
 public class MenuActivity extends Activity {

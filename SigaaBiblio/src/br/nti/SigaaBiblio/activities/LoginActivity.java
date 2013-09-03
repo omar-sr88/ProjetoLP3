@@ -12,10 +12,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-import Connection.HttpUtils;
-import Connection.OperationsInterface;
-import Connection.OperationsFactory;
-import Connection.PreferenciasOperation;
 import android.R.string;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -37,9 +33,13 @@ import android.widget.Toast;
 import br.nti.SigaaBiblio.model.Emprestimo;
 import br.nti.SigaaBiblio.model.Usuario;
 import br.nti.SigaaBiblio.model.VinculoUsuarioSistema;
+import br.nti.SigaaBiblio.operations.OperationsFactory;
+import br.nti.SigaaBiblio.operations.OperationsInterface;
+import br.nti.SigaaBiblio.operations.PreferenciasOperation;
 import br.nti.SigaaBiblio.persistence.RepositorioFake;
 
 import com.nti.SigaaBiblio.R;
+import com.nti.SigaaBiblio.utils.HttpUtils;
 
 public class LoginActivity extends Activity implements OnClickListener {
 
