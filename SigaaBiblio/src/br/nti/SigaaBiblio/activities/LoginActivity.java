@@ -34,7 +34,7 @@ import br.nti.SigaaBiblio.model.Emprestimo;
 import br.nti.SigaaBiblio.model.Usuario;
 import br.nti.SigaaBiblio.model.VinculoUsuarioSistema;
 import br.nti.SigaaBiblio.operations.OperationsFactory;
-import br.nti.SigaaBiblio.operations.OperationsInterface;
+import br.nti.SigaaBiblio.operations.Operations;
 import br.nti.SigaaBiblio.operations.PreferenciasOperation;
 import br.nti.SigaaBiblio.persistence.RepositorioFake;
 
@@ -170,7 +170,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		pd.setIndeterminate(false);
 		
 		
-		final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+		final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 		
 		final Semaphore sincronizador = new Semaphore(0,true); //para exclusão mutua
 		

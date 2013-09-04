@@ -12,7 +12,7 @@ import br.nti.SigaaBiblio.model.Biblioteca;
 import br.nti.SigaaBiblio.model.Emprestimo;
 import br.nti.SigaaBiblio.model.Usuario;
 import br.nti.SigaaBiblio.operations.OperationsFactory;
-import br.nti.SigaaBiblio.operations.OperationsInterface;
+import br.nti.SigaaBiblio.operations.Operations;
 import br.nti.SigaaBiblio.operations.PreferenciasOperation;
 
 import com.nti.SigaaBiblio.R;
@@ -116,7 +116,7 @@ public class RenovacaoActivity extends Activity {
 		pd.setTitle("Aguarde");
 		pd.setIndeterminate(false);
 	
-		final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+		final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 		final Context context = getApplicationContext();
 		final Semaphore sincronizador = new Semaphore(0);
 		

@@ -26,7 +26,7 @@ import br.nti.SigaaBiblio.model.Usuario;
 import br.nti.SigaaBiblio.model.VinculoUsuarioSistema;
 import br.nti.SigaaBiblio.persistence.RepositorioLocalSigaa;
 
-public class LocalStorageOperations implements OperationsInterface {
+public class LocalStorageOperations implements Operations {
 
 	private Context context;
 	

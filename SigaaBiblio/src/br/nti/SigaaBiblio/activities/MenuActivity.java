@@ -31,7 +31,7 @@ import br.nti.SigaaBiblio.model.Biblioteca;
 import br.nti.SigaaBiblio.model.Emprestimo;
 import br.nti.SigaaBiblio.model.Usuario;
 import br.nti.SigaaBiblio.operations.OperationsFactory;
-import br.nti.SigaaBiblio.operations.OperationsInterface;
+import br.nti.SigaaBiblio.operations.Operations;
 import br.nti.SigaaBiblio.operations.PreferenciasOperation;
 
 import com.nti.SigaaBiblio.R;
@@ -74,7 +74,7 @@ public class MenuActivity extends Activity {
 		carregaDados();
 		
 
-		final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+		final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 
 
 		situacao.setOnClickListener(new OnClickListener() {
@@ -232,7 +232,7 @@ public class MenuActivity extends Activity {
 			pd.setTitle("Aguarde");
 			pd.setIndeterminate(false);
 			bibliotecas=null;
-			final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+			final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 
 			/*
 			 * OBTEM O NOMES DAS BIBLIOTECAS ATIVAS
@@ -285,7 +285,7 @@ public class MenuActivity extends Activity {
 			pd.setTitle("Aguarde");
 			pd.setIndeterminate(false);
 			bibliotecas=null;
-			final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+			final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 
 			
 			/*
@@ -337,7 +337,7 @@ public class MenuActivity extends Activity {
 			pd.setTitle("Aguarde");
 			pd.setIndeterminate(false);
 			
-			final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+			final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 
 			
 			new AsyncTask<Void,Void,Void>(){

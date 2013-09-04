@@ -33,7 +33,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 
-public class JSONOperations implements OperationsInterface {
+public class JSONOperations implements Operations {
 
 	
 	public static String SISTEMA = "http://testes.nti.ufpb.br/sigaa";
@@ -62,7 +62,7 @@ public class JSONOperations implements OperationsInterface {
 		try {
 			// JSONObject pode ser um String, HashMap ou um MBean
 			Map<String, String> map = new HashMap<String, String>();
-			map.put("Operacao", String.valueOf(OperationsInterface.LOGIN));
+			map.put("Operacao", String.valueOf(Operations.LOGIN));
 			map.put("Login", login);
 			map.put("Senha", senha);
 			JSONObject inputsJson = new JSONObject(map);
@@ -145,7 +145,7 @@ public class JSONOperations implements OperationsInterface {
 		// TODO Auto-generated method stub
 		Map<String, String> map = new HashMap<String, String>();
 		String jsonString;
-		map.put("Operacao", String.valueOf(OperationsInterface.LISTAR_BIBLIOTECAS));
+		map.put("Operacao", String.valueOf(Operations.LISTAR_BIBLIOTECAS));
 		JSONObject inputsJson = new JSONObject(map);
 		JSONObject resposta;
 		String bibliotecas="";
@@ -176,7 +176,7 @@ public class JSONOperations implements OperationsInterface {
 		// TODO Auto-generated method stub
 		Map<String, String> map = new HashMap<String, String>();
 		String jsonString;
-		map.put("Operacao", String.valueOf(OperationsInterface.CONSULTAR_ACERVO_LIVRO));
+		map.put("Operacao", String.valueOf(Operations.CONSULTAR_ACERVO_LIVRO));
 		map.put("IdBiblioteca",parametrosConsulta[0]);
 		map.put("TituloBusca", parametrosConsulta[1]);
 		map.put("AutorBusca", parametrosConsulta[2]);
@@ -227,7 +227,7 @@ public class JSONOperations implements OperationsInterface {
 		// TODO Auto-generated method stub
 		Map<String, String> map = new HashMap<String, String>();
 		String jsonString;
-		map.put("Operacao", String.valueOf(OperationsInterface.CONSULTAR_ACERVO_LIVRO));
+		map.put("Operacao", String.valueOf(Operations.CONSULTAR_ACERVO_LIVRO));
 		map.put("IdBiblioteca",parametrosConsulta[0]);
 		map.put("TituloBusca", parametrosConsulta[1]);
 		map.put("AutorBusca", parametrosConsulta[2]);
@@ -278,7 +278,7 @@ public class JSONOperations implements OperationsInterface {
 		// TODO Auto-generated method stub
 		Map<String, String> map = new HashMap<String, String>();
 		String jsonString;
-		map.put("Operacao", String.valueOf(OperationsInterface.INFORMACOES_EXEMPLAR_ACERVO));
+		map.put("Operacao", String.valueOf(Operations.INFORMACOES_EXEMPLAR_ACERVO));
 		map.put("IdDetalhes", pararametrosLivro[0]);					
 		JSONObject inputsJson = new JSONObject(map);
 		Livro livro=null;
@@ -335,7 +335,7 @@ public class JSONOperations implements OperationsInterface {
 		// TODO Auto-generated method stub
 		Map<String, String> map = new HashMap<String, String>();
 		String jsonString;
-		map.put("Operacao", String.valueOf(OperationsInterface.INFORMACOES_EXEMPLAR_ARTIGO));
+		map.put("Operacao", String.valueOf(Operations.INFORMACOES_EXEMPLAR_ARTIGO));
 		map.put("IdDetalhes", pararametrosArtigo[0]);					
 		JSONObject inputsJson = new JSONObject(map);
 		Artigo artigo = null;
@@ -384,7 +384,7 @@ public class JSONOperations implements OperationsInterface {
 		Map<String, String> map = new HashMap<String, String>();
 		String jsonString;
 		map.put("Operacao",
-				String.valueOf(OperationsInterface.MINHA_SITUACAO));
+				String.valueOf(Operations.MINHA_SITUACAO));
 		map.put("Login", parametrosUsuario[0]);
 		map.put("Senha", parametrosUsuario[1]);
 		ArrayList<Emprestimo> emprestimos = new ArrayList<Emprestimo>();
@@ -431,7 +431,7 @@ public class JSONOperations implements OperationsInterface {
 		// TODO Auto-generated method stub
 		Map<String, String> map = new HashMap<String, String>();
 		String jsonString;
-		map.put("Operacao", String.valueOf(OperationsInterface.LIVROS_EMPRESTADOS));
+		map.put("Operacao", String.valueOf(Operations.LIVROS_EMPRESTADOS));
 		map.put("Login", parametrosUsuario[0]);
 		map.put("Senha", parametrosUsuario[1]);
 		JSONObject inputsJson = new JSONObject(map);
@@ -480,7 +480,7 @@ public class JSONOperations implements OperationsInterface {
 		// TODO Auto-generated method stub
 		Map<String, String> map = new HashMap<String, String>();
 		String jsonString;
-		map.put("Operacao", String.valueOf(OperationsInterface.MEUS_EMPRESTIMOS));
+		map.put("Operacao", String.valueOf(Operations.MEUS_EMPRESTIMOS));
 		map.put("Login", parametrosUsuario[0]);
 		map.put("Senha", parametrosUsuario[1]);
 		map.put("Inicio", parametrosUsuario[2]);
@@ -527,7 +527,7 @@ public class JSONOperations implements OperationsInterface {
 		// TODO Auto-generated method stub
 		Map<String, String> map = new HashMap<String, String>();					
 		
-		map.put("Operacao", String.valueOf(OperationsInterface.RENOVACAO));
+		map.put("Operacao", String.valueOf(Operations.RENOVACAO));
 		map.put("Login", parametrosEmprestimos[0]);
 		map.put("Senha", parametrosEmprestimos[0]);		
 		map.put("IdLivrosRenovacao", parametrosEmprestimos[2]); 

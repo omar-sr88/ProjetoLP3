@@ -11,7 +11,7 @@ import org.w3c.dom.ls.LSInput;
 import br.nti.SigaaBiblio.model.Biblioteca;
 import br.nti.SigaaBiblio.model.Livro;
 import br.nti.SigaaBiblio.operations.OperationsFactory;
-import br.nti.SigaaBiblio.operations.OperationsInterface;
+import br.nti.SigaaBiblio.operations.Operations;
 
 import com.nti.SigaaBiblio.R;
 import com.nti.SigaaBiblio.R.layout;
@@ -73,7 +73,7 @@ public class ResultadoBuscaActivity extends Activity {
 		pd.setTitle("Aguarde");
 		pd.setIndeterminate(false);
 		
-		final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+		final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 
 		listaResultados.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 				// TODO Auto-generated method stub

@@ -17,7 +17,7 @@ import org.json.JSONObject;
 import br.nti.SigaaBiblio.model.Biblioteca;
 import br.nti.SigaaBiblio.model.Livro;
 import br.nti.SigaaBiblio.operations.OperationsFactory;
-import br.nti.SigaaBiblio.operations.OperationsInterface;
+import br.nti.SigaaBiblio.operations.Operations;
 
 import com.nti.SigaaBiblio.R;
 import com.nti.SigaaBiblio.utils.HttpUtils;
@@ -164,7 +164,7 @@ public class BuscaLivroActivity extends Activity {
 			pd.setMessage("Processando...");
 			pd.setTitle("Aguarde");
 			pd.setIndeterminate(false);
-			final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+			final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 
 			
 			new AsyncTask<Void,Void,Void>(){
@@ -306,7 +306,7 @@ public class BuscaLivroActivity extends Activity {
 			pd.setTitle("Aguarde");
 			pd.setIndeterminate(false);
 			bibliotecas=null;
-			final OperationsInterface operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
+			final Operations operacao = new OperationsFactory().getOperation(OperationsFactory.REMOTA,this);
 			final Semaphore sincronizador = new Semaphore(0);
 			/*
 			 * OBTEM O NOMES DAS BIBLIOTECAS ATIVAS
