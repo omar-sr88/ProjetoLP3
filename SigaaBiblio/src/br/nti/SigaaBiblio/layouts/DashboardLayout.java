@@ -5,10 +5,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * Custom layout that arranges children in a grid-like manner, optimizing for even horizontal and
- * vertical whitespace.
- */
+
 public class DashboardLayout extends ViewGroup {
 	 
     private static final int UNEVEN_GRID_PENALTY_MULTIPLIER = 10;
@@ -97,12 +94,9 @@ public class DashboardLayout extends ViewGroup {
             return;
         }
  
-        // Calculate what number of rows and columns will optimize for even horizontal and
-        // vertical whitespace between items. Start with a 1 x N grid, then try 2 x N, and so on.
         int bestSpaceDifference = Integer.MAX_VALUE;
         int spaceDifference;
  
-        // Horizontal and vertical space between items
         int hSpace = 0;
         int vSpace = 0;
  
@@ -124,13 +118,10 @@ public class DashboardLayout extends ViewGroup {
                 // Found a better whitespace squareness/ratio
                 bestSpaceDifference = spaceDifference;
  
-                // If we found a better whitespace squareness and there's only 1 row, this is
-                // the best we can do.
                 if (rows == 1) {
                     break;
                 }
             } else {
-                // This is a worse whitespace ratio, use the previous value of cols and exit.
                 --cols;
                 rows = (visibleCount - 1) / cols + 1;
                 hSpace = ((width - mMaxChildWidth * cols) / (cols + 1));
@@ -141,13 +132,9 @@ public class DashboardLayout extends ViewGroup {
             ++cols;
         }
  
-        // Lay out children based on calculated best-fit number of rows and cols.
- 
-        // If we chose a layout that has negative horizontal or vertical space, force it to zero.
         hSpace = Math.max(0, hSpace);
         vSpace = Math.max(0, vSpace);
  
-        // Re-use width/height variables to be child width/height.
         width = (width - hSpace * (cols + 1)) / cols;
         height = (height - vSpace * (rows + 1)) / rows;
  

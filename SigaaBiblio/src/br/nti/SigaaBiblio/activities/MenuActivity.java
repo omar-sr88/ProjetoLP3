@@ -160,12 +160,11 @@ public class MenuActivity extends Activity {
 	}
 	
 	
-	public void mudarUsuario(View v){
-		
-		Intent intent = new Intent(MenuActivity.this, LoginActivity.class );
-		intent.putExtra("logarComOutroUsuario", true); //setta para que seja escolhido um novo usuário
+	public void localizarBibliotecas(View v){
+		Intent intent = new Intent(MenuActivity.this, MapsActivity.class );
 		startActivity(intent);
-		finish();
+
+		
 	}
 	
 	@Override
@@ -218,6 +217,11 @@ public class MenuActivity extends Activity {
 	      startActivity(new Intent(this, PrefsActivity.class));
 	      return true;
 	      // More items go here (if any) ...
+	    case R.id.logout:
+	    	Intent intent = new Intent(MenuActivity.this, LoginActivity.class );
+			intent.putExtra("logarComOutroUsuario", true); //setta para que seja escolhido um novo usuário
+			startActivity(intent);
+			finish();
 	    }
 	    return false;
 	  }
