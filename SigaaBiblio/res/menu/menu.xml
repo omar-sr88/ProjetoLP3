@@ -4,5 +4,10 @@
         android:id="@+id/action_settings"
         android:title="@string/configuracoes_title"
 		android:alphabeticShortcut="@string/configuracoes_atalho"/>
+    <item
+        android:id="@+id/logout"
+        android:title="Sair da Minha Conta"
+		/>
+    
 
 </menu>
