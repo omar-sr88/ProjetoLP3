@@ -1,13 +1,6 @@
 package br.nti.SigaaBiblio.activities;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.json.JSONObject;
-
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -15,27 +8,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 import br.nti.SigaaBiblio.model.Biblioteca;
 import br.nti.SigaaBiblio.model.Emprestimo;
 import br.nti.SigaaBiblio.model.Usuario;
-import br.nti.SigaaBiblio.operations.OperationsFactory;
 import br.nti.SigaaBiblio.operations.Operations;
+import br.nti.SigaaBiblio.operations.OperationsFactory;
 import br.nti.SigaaBiblio.operations.PreferenciasOperation;
 
 import com.nti.SigaaBiblio.R;
-import com.nti.SigaaBiblio.utils.HttpUtils;
 
 
 public class MenuActivity extends Activity {
@@ -182,9 +173,31 @@ public class MenuActivity extends Activity {
 		if(user.isAluno()){
 		
 			String nom[] = user.getNome().split(" ");
-			situacaoUsuario = user.getMatricula()+"\n"+nom[0]+" "+nom[1]+ "\n"
-			+user.getCurso().substring(0, user.getCurso().length() > 18 ? 18 : user.getCurso().length());
-		
+			situacaoUsuario = user.getMatricula()+"\n"+nom[0]+" "+nom[1];//+ "\n";
+			
+			String curso = user.getCurso();//.substring(0, user.getCurso().length() > 18 ? 18 : user.getCurso().length());
+			String cursoShort = curso.substring(0, curso.indexOf('/'));
+			String cursoTokens[] = cursoShort.split(" ");
+			int cont = 0;
+			int sum = 0;
+			int ultimo = 0;
+			for(int i=0;i<cursoTokens.length;i++){
+				sum = sum + cursoTokens[i].length();
+				cont++;
+				if(sum > 15){
+					cont-=2;
+					String soFar = "";
+					for(int j = 0;j<=cont;j++)
+						soFar = soFar + " " + cursoTokens[ultimo+j]; 
+					
+					situacaoUsuario = situacaoUsuario + "\n" + soFar.trim();
+					cont=0;
+					ultimo=i+1;
+					sum=0;
+				}
+			}
+			situacaoUsuario = situacaoUsuario + "\n" + cursoTokens[cursoTokens.length-1]; 
+			
 		}else{
 			situacaoUsuario = user.getNome()+"\n"+user.getUnidade();
 		}

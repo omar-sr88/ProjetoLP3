@@ -16,6 +16,12 @@
         android:orientation="horizontal"
         android:id="@+id/login_header" >
 
+        <ScrollView
+        android:id="@+id/scrollViewx0"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:scrollbars="none" 
+        >
         <TextView
             android:id="@+id/textViewSituacaoUsuario1"
             android:layout_width="wrap_content"
@@ -23,7 +29,9 @@
             android:layout_marginLeft="20dp"
             android:text="Dados do usuário"
             android:textColor="@android:color/white"
-            android:textSize="15dp" />
+            android:textSize="15dp" 
+            android:layout_gravity="center_vertical"/>
+        </ScrollView>
         
         <ImageView
             android:id="@+id/imageView1"

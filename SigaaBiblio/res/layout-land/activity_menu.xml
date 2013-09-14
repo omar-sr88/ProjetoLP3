@@ -3,12 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MenuActivity" >
+    tools:context=".MenuActivity" 
+    android:id="@+id/login_body" >
     
     <LinearLayout 
+        
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/login_header" >
+       
 	    <LinearLayout
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
@@ -17,6 +21,10 @@
 	        android:gravity="center"
 	        android:orientation="horizontal" >
 	
+	        <ScrollView
+        android:id="@+id/scrollViewx0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
 	        <TextView
 	            android:id="@+id/textViewSituacaoUsuario1"
 	            android:layout_width="wrap_content"
@@ -25,7 +33,7 @@
 	            android:text="Dados do usuário"
 	            android:textColor="@android:color/white"
 	            android:textSize="23dp" />
-	
+		</ScrollView>
 	        <ImageButton
 	            android:id="@+id/imageButton1"
 	            android:layout_width="75dp"
