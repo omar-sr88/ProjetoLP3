@@ -47,8 +47,7 @@ public class CambridgeActivity extends Activity {
 
 			//caso tenha espaco em branco 
 			inputString = inputString.replace(" ","%20");
-			
-			
+					
 			
 			final String url = "http://www.lib.cam.ac.uk/api/aquabrowser/abSearchThin.cgi?searchArg="
 					+ inputString.trim() + "&format=json&resultsPage=1";
