@@ -43,14 +43,22 @@
 				android:listSelector="@android:color/transparent"		            
 	            >
 	        </ListView>
-
+			
+	        <Button
+	    		android:id="@+id/buttonFacebook"
+	    		android:layout_width="230dp"
+	    		android:layout_height="wrap_content"
+	   			android:layout_gravity="center"
+  				android:layout_marginTop="20dp"
+	   			android:text="Achei!!"
+	   			android:drawableRight="@drawable/facebook" />
 	        
 	        <Button
 	    		android:id="@+id/buttonVerifDisp"
 	    		android:layout_width="230dp"
 	    		android:layout_height="wrap_content"
 	   			android:layout_gravity="center"
-  				android:layout_marginTop="50dp"
+  				android:layout_marginTop="10dp"
 	   			android:text="Verificar Disponibilidade" />
 	        
 	    </LinearLayout>

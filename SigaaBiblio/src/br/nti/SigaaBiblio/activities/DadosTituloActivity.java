@@ -2,17 +2,22 @@ package br.nti.SigaaBiblio.activities;
 
 import java.util.ArrayList;
 
+import org.brickred.socialauth.android.SocialAuthAdapter;
+
 import br.nti.SigaaBiblio.model.Artigo;
 import br.nti.SigaaBiblio.model.ExemplarLivro;
 import br.nti.SigaaBiblio.model.Livro;
 
-import com.nti.SigaaBiblio.R;
-import com.nti.SigaaBiblio.R.layout;
-import com.nti.SigaaBiblio.R.menu;
+import org.brickred.socialauth.android.DialogListener;
+import org.brickred.socialauth.android.SocialAuthAdapter.*;
+import org.brickred.socialauth.android.SocialAuthError;
+import org.brickred.socialauth.android.SocialAuthListener;
 
+import com.nti.SigaaBiblio.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,14 +27,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 public class DadosTituloActivity extends Activity {
 
 	Button buttonVerifDisp;
 	Artigo artigo;
 	Livro livro;
-
+	SocialAuthAdapter adapter;
+	Button share;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,8 +44,18 @@ public class DadosTituloActivity extends Activity {
 		setContentView(R.layout.activity_dados_titulo);
 		setBackground();
 		String[] values= new String[]{""};
-							artigo = (Artigo) getIntent().getExtras().getParcelable("ExemplarArtigo");
+		artigo = (Artigo) getIntent().getExtras().getParcelable("ExemplarArtigo");
 		
+		share = (Button) findViewById(R.id.buttonFacebook);
+		adapter = new SocialAuthAdapter(new ResponseListener());
+		adapter.addProvider(Provider.FACEBOOK, R.drawable.facebook);
+		adapter.enable(share);
+
+		
+		Log.d("ShareButton", "Authentication Successful");
+
+		// Get name of provider after authentication
+
 		if(artigo!=null){
 			values = new String[] { "Autores Secundários: "+artigo.getAutoresSecundarios(), 
 					"Intervalo de Páginas: "+artigo.getPaginas(),
@@ -50,6 +67,9 @@ public class DadosTituloActivity extends Activity {
 		else{
 			livro=(Livro) getIntent().getExtras().getParcelable("InformacoesLivro");
 			if(livro!=null){
+				livro.setTitulo(livro.getTitulo().replace("null", ""));
+				livro.setAssunto(livro.getAssunto().replace("#$&", " "));
+				
 				values = new String[] { "Registro no Sistema: "+livro.getRegistroNoSistema(), 
 						"Número da Chamada: "+livro.getNumeroChamada(),
 						"Título: "+ livro.getTitulo(),
@@ -165,6 +185,70 @@ public class DadosTituloActivity extends Activity {
 
 		}
 
+	
+	private final class ResponseListener implements DialogListener{
+		
+		
+		@Override
+		public void onComplete(Bundle values) {
+
+			Log.d("ShareButton", "Authentication Successful");
+
+			// Get name of provider after authentication
+			share = (Button) findViewById(R.id.buttonFacebook);
+
+			if (adapter.getCurrentProvider() == null)
+				adapter.enable(share);
+
+			if (artigo != null) {
+				adapter.updateStatus("Encontrei o Artigo "
+						+ artigo.getTitulo()
+						+ (!artigo.getBiblioteca().isEmpty() ? ""
+								: " na Biblioteca " + artigo.getBiblioteca())
+						+ " Pelo SigaaBiblio!", new MessageListener(), false);
+			} else {
+				ExemplarLivro ex = livro.getExemplares().get(0);
+				adapter.updateStatus("Encontrei o Livro: " + livro.getTitulo().replace("/", "")+"," +
+						(!ex.getBiblioteca().isEmpty() ? " em: "+ex.getBiblioteca() : "" )
+						+ " \nPelo SigaaBiblio!", new MessageListener(), false);
+			}
+
+		}
+
+		@Override
+		public void onError(SocialAuthError error) {
+			//Toast.makeText(DadosTituloActivity.this, "Sua mensagem já foi enviada!", Toast.LENGTH_LONG).show();
+		}
+
+		@Override
+		public void onCancel() {
+			Log.d("ShareButton", "Authentication Cancelled");
+		}
+
+		@Override
+		public void onBack() {
+			Log.d("Share-Button", "Dialog Closed by pressing Back Key");
+		}
+	
+
+	}
+
+	// To get status of message after authentication
+	private final class MessageListener implements SocialAuthListener<Integer> {
+		@Override
+		public void onExecute(String provider, Integer t) {
+			Integer status = t;
+			if (status.intValue() == 200 || status.intValue() == 201 || status.intValue() == 204)
+				Toast.makeText(DadosTituloActivity.this, "Mensagem Postada no Facebook!", Toast.LENGTH_LONG).show();
+			else
+				Toast.makeText(DadosTituloActivity.this, "Mensagem não Postada!", Toast.LENGTH_LONG).show();
+		}
+
+		@Override
+		public void onError(SocialAuthError e) {
+
+		}
+	}
 
 
 
