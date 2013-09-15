@@ -30,7 +30,7 @@
     <string name="title_dados_titulo">Dados do Título</string>
     <string name="title_activity_dados_titulo">DadosTitulo</string>
     <string name="title_activity_exemplares">ExemplaresActivity</string>
-    <string name="title_exemplares">Exemplares de %s</string>
+    <string name="title_exemplares">Exemplares</string>
     <string name="title_activity_selecionar_historico">SelecionarHistoricoActivity</string>
     <string name="title_activity_historico_emprestimos">HIstoricoEmprestimosActivity</string>
     <string name="titleHistorico">Historico de Empréstimos</string>
